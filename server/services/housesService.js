@@ -14,12 +14,12 @@ class HousesService {
 	}
 
 	async getHousesWithPagination(page = 1) {
-		if (!page || page < 0) throw new Error('Указана несуществующая страница')
+		if (!page || page < 1 || isNaN(page))
+			throw new Error('Указана несуществующая страница')
 
 		const offset = (page - 1) * 20
-		if (!offset) throw new Error('Указана несуществующая страница')
 
-		const houses = await Houses.findAndCountAll({
+		const houses = await Houses.findAll({
 			limit: 20,
 			offset: offset,
 			include: [
