@@ -1,0 +1,81 @@
+.house {
+	overflow: hidden;
+	flex-basis: 33%;
+	height: 320px;
+	text-align: center;
+	position: relative;
+	padding-top: 20px;
+	border-radius: 5px;
+}
+
+@media (max-width: 992px) {
+	.house {
+		flex-basis: 50%;
+	}
+}
+
+@keyframes animationLike {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.2);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.favorites {
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	top: 32px;
+	left: 32px;
+	cursor: pointer;
+	z-index: 3;
+	background: #97a3af;
+	border-radius: 50%;
+	background-image: url(../../../public/images/like-disabled.png);
+	background-size: cover;
+	background-position: center;
+}
+
+.favorites.active {
+	background-image: url(../../../public/images/like-active.png);
+	background-size: cover;
+	background-position: center;
+	animation: animationLike 0.5s ease;
+}
+
+.house-item__image {
+	width: 90%;
+	height: 100%;
+	position: relative;
+	margin: 0 auto;
+	object-fit: cover;
+	transition: 0.2s ease-in-out;
+	border-radius: 5px;
+	object-position: center;
+	background: #eeeeee url(../images/no-house-img.svg) 50% 50% no-repeat;
+	z-index: 2;
+}
+
+.house-item__content {
+	position: absolute;
+	width: 90%;
+	left: 5%;
+	padding: 10px 15px;
+	bottom: 0;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.4);
+	transition: 0.1s ease-in-out;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	z-index: 3;
+}
+
+.house-item__content-info {
+	text-align: left;
+	word-break: break-word;
+}

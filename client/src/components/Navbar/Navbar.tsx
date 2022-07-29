@@ -1,15 +1,19 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import {
 	Nav,
 	NavDropdown,
 	Navbar as NavbarElement,
 	Container,
 } from 'react-bootstrap'
+import { useAppSelector, useAppDispatch } from '../../store/hook'
+import { changeUserAuth } from '../../store/slices/userSlice'
 import { Link, useLocation } from 'react-router-dom'
 import './style.css'
 
 const Navbar: FC = () => {
-	const [isUserAuth, setIsUserAuth] = useState(false)
+	const isUserAuth: boolean = useAppSelector(state => state.user.user.isAuth)
+	const dispatch = useAppDispatch()
+	const loginAndLogout = () => dispatch(changeUserAuth(!isUserAuth))
 	const { pathname } = useLocation()
 
 	return (
@@ -18,7 +22,7 @@ const Navbar: FC = () => {
 				variant='light'
 				expand='md'
 				bg='white'
-				className='border-bottom sticky-top'
+				className='border-bottom fixed-top'
 			>
 				<Container>
 					<Link to='/' className='navbar-brand'>
@@ -71,11 +75,14 @@ const Navbar: FC = () => {
 										}
 										id='navbarDropdown'
 									>
-										<NavDropdown.Item href='/account/profile'>
+										<Link className='dropdown-item' to='/account/profile'>
 											Личный кабинет
-										</NavDropdown.Item>
+										</Link>
 										<NavDropdown.Divider />
-										<NavDropdown.Item href='/account/logout'>
+										<NavDropdown.Item
+											href='/account/logout'
+											onClick={loginAndLogout}
+										>
 											Выйти
 										</NavDropdown.Item>
 									</NavDropdown>
@@ -86,7 +93,11 @@ const Navbar: FC = () => {
 											</Link>
 										</Nav.Item>
 										<Nav.Item>
-											<Link to='/account/logout' className='nav-link'>
+											<Link
+												to='/account/logout'
+												className='nav-link'
+												onClick={loginAndLogout}
+											>
 												Выйти
 											</Link>
 										</Nav.Item>
@@ -106,6 +117,7 @@ const Navbar: FC = () => {
 										<Link
 											className='nav-link btn btn-primary ms-md-3 w-100'
 											to='/account/login'
+											onClick={loginAndLogout}
 										>
 											Вход
 										</Link>

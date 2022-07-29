@@ -22,6 +22,7 @@ const App: FC = () => {
 			</Route>
 			<Route path='account' element={<Layout />}>
 				<Route index element={<Profile />} />
+				<Route path='profile' element={<Profile />} />
 				<Route path='register' element={<Register />} />
 				<Route path='login' element={<Login />} />
 			</Route>

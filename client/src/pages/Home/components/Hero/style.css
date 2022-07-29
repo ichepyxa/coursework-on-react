@@ -1,0 +1,71 @@
+.hero {
+	width: 100%;
+	height: calc(100vh - 4.3rem);
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	background: #7b491c;
+}
+
+.hero video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: 1;
+}
+
+.hero::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 2;
+}
+
+.hero-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 3;
+	color: #fff;
+}
+
+.hero-content h1 {
+	font-size: calc(2.5rem + 1.5vw);
+}
+
+.hero-content h5 {
+	font-weight: 300;
+	padding: 0 5px;
+	max-width: 500px;
+}
+
+.hero-content a {
+	display: flex;
+	align-items: center;
+}
+
+.hero-content a svg {
+	margin-right: 10px;
+}
+
+.icon-scroll {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	bottom: 0;
+	left: 50%;
+	background: url(../../../../../public/images/Icon--scroll.gif);
+	background-position: center;
+	background-size: cover;
+	height: 80px;
+	width: 60px;
+	z-index: 4;
+}
