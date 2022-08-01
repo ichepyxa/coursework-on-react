@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique: true,
 		},
 		email: {
 			type: DataTypes.STRING,
@@ -26,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
 	})
 
 	Users.associate = function (models) {
+		Users.hasOne(models.Tokens, {
+			as: 'tokens',
+			foreignKey: 'userId',
+			onDelete: 'cascade',
+		})
 		Users.hasMany(models.Users_Favorites_Houses, {
 			as: 'users',
 			foreignKey: 'userId',

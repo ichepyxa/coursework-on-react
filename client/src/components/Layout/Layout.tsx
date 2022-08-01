@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import { Toast } from 'react-bootstrap'
 import { Outlet } from 'react-router-dom'
 import Footer from '../Footer/Footer'
 import Navbar from '../Navbar/Navbar'
@@ -6,6 +7,7 @@ import './style.css'
 
 const Layout: FC = () => {
 	const [isLoading, setIsLoading] = useState(false)
+	const [isNotificationShow, setIsNotificationShow] = useState(true)
 
 	return (
 		<>
@@ -21,15 +23,23 @@ const Layout: FC = () => {
 							<div className='loader-content__second'></div>
 							<div className='loader-content__third'></div>
 						</div>
-						{/* <div className='spinner-border' role='status'>
-							<span className='visually-hidden'>Загрузка...</span>
-						</div> */}
 					</div>
 				) : (
 					<Outlet />
 				)}
 			</main>
 			<Footer />
+			<Toast
+				show={isNotificationShow}
+				onClose={() => setIsNotificationShow(!isNotificationShow)}
+				delay={5000}
+				bg={'success' || 'danger'}
+				autohide
+			>
+				<Toast.Body className='text-white'>
+					Woohoo, you're reading this text in a Toast!
+				</Toast.Body>
+			</Toast>
 		</>
 	)
 }

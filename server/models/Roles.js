@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 						onDelete: 'cascade',
 					})
 			)
-			.finally(() => Roles.hasOne(models.Users, options))
+			.finally(() => Roles.hasMany(models.Users, options))
 	}
 
 	return Roles

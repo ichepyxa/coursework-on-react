@@ -11,9 +11,10 @@ import { Link, useLocation } from 'react-router-dom'
 import './style.css'
 
 const Navbar: FC = () => {
-	const isUserAuth: boolean = useAppSelector(state => state.user.user.isAuth)
-	const dispatch = useAppDispatch()
-	const loginAndLogout = () => dispatch(changeUserAuth(!isUserAuth))
+	const isUserAuth = true
+	// const user = useAuth()
+	// const dispatch = useAppDispatch()
+	// const loginAndLogout = () => dispatch(changeUserAuth(!isUserAuth))
 	const { pathname } = useLocation()
 
 	return (
@@ -81,7 +82,7 @@ const Navbar: FC = () => {
 										<NavDropdown.Divider />
 										<NavDropdown.Item
 											href='/account/logout'
-											onClick={loginAndLogout}
+											// onClick={loginAndLogout}
 										>
 											Выйти
 										</NavDropdown.Item>
@@ -96,7 +97,7 @@ const Navbar: FC = () => {
 											<Link
 												to='/account/logout'
 												className='nav-link'
-												onClick={loginAndLogout}
+												// onClick={loginAndLogout}
 											>
 												Выйти
 											</Link>
@@ -117,7 +118,7 @@ const Navbar: FC = () => {
 										<Link
 											className='nav-link btn btn-primary ms-md-3 w-100'
 											to='/account/login'
-											onClick={loginAndLogout}
+											// onClick={loginAndLogout}
 										>
 											Вход
 										</Link>

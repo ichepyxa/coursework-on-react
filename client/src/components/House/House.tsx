@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 import { IHouse } from '../../pages/Home/components/RecommendedHouses/RecommendedHouses'
 
+import './style.css'
+
 const House: FC<IHouse> = ({
 	isFavorite,
 	image,

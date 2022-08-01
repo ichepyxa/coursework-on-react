@@ -23,13 +23,32 @@ const RecommendedHouses: FC = () => {
 			isFavorite: true,
 			image: '',
 		},
+		{
+			id: 2,
+			title: 'fdfgg',
+			link: 'fdgdgd',
+			price: 270,
+			category: 'fdgdf',
+			isFavorite: true,
+			image: '',
+		},
+		{
+			id: 3,
+			title: 'fdfgg',
+			link: 'fdgdgd',
+			price: 270,
+			category: 'fdgdf',
+			isFavorite: true,
+			image: '',
+		},
 	]
 
 	return (
 		<Container className='py-3'>
 			<h2 className='text-center'>Рекомендуемые места отдыха</h2>
 			<div className='houses d-md-flex align-items-center justify-content-between flex-wrap'>
-				{houses && houses.map((house: IHouse) => <House {...house} />)}
+				{houses &&
+					houses.map((house: IHouse) => <House key={house.id} {...house} />)}
 			</div>
 		</Container>
 	)
