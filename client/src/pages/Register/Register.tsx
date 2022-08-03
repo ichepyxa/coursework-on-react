@@ -1,7 +1,60 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import AuthService from '../../sevices/authService'
+import { useAppDispatch } from '../../store/hook'
+import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 
 const Register: FC = () => {
-	return <div>Register</div>
+	const dispatch = useAppDispatch()
+	const [username, setUsername] = useState<string>('')
+	const [email, setEmail] = useState<string>('')
+	const [password, setPassword] = useState<string>('')
+
+	const handleRegistration = async (
+		username: string,
+		email: string,
+		password: string
+	) => {
+		dispatch(setIsLoading(true))
+		try {
+			const response = await AuthService.registration(username, email, password)
+			localStorage.setItem('token', response.data.accessToken)
+			dispatch(setUser(response.data.user))
+			dispatch(setIsAuth(true))
+		} catch (error: any) {
+			console.log(error.response?.data?.message)
+		} finally {
+			dispatch(setIsLoading(false))
+		}
+	}
+
+	return (
+		<div>
+			<input
+				type='text'
+				placeholder='username'
+				value={username}
+				onChange={e => setUsername(e.target.value)}
+				required
+			/>
+			<input
+				type='email'
+				placeholder='email'
+				value={email}
+				onChange={e => setEmail(e.target.value)}
+				required
+			/>
+			<input
+				type='password'
+				placeholder='password'
+				value={password}
+				onChange={e => setPassword(e.target.value)}
+				required
+			/>
+			<button onClick={() => handleRegistration(username, email, password)}>
+				Login
+			</button>
+		</div>
+	)
 }
 
 export default Register

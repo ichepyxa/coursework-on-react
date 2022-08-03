@@ -1,13 +1,44 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Toast } from 'react-bootstrap'
 import { Outlet } from 'react-router-dom'
+import axios from 'axios'
+import { API_URL } from '../../constants/apiUrl'
+import { IUser, IUserResponse } from '../../models'
+import { useAppSelector, useAppDispatch } from '../../store/hook'
+import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 import Footer from '../Footer/Footer'
 import Navbar from '../Navbar/Navbar'
 import './style.css'
 
 const Layout: FC = () => {
-	const [isLoading, setIsLoading] = useState(false)
+	const dispatch = useAppDispatch()
+	const isLoading = useAppSelector(state => state.user.isLoading)
 	const [isNotificationShow, setIsNotificationShow] = useState(true)
+
+	const checkAuth = async () => {
+		dispatch(setIsLoading(true))
+		try {
+			const response = await axios.get<IUserResponse>(
+				`${API_URL}/users/refresh`,
+				{
+					withCredentials: true,
+				}
+			)
+			localStorage.setItem('token', response.data.accessToken)
+			dispatch(setUser(response.data.user))
+			dispatch(setIsAuth(true))
+		} catch (error: any) {
+			console.log(error.response?.data?.message)
+		} finally {
+			dispatch(setIsLoading(false))
+		}
+	}
+
+	useEffect(() => {
+		if (localStorage.getItem('token')) {
+			checkAuth()
+		}
+	}, [])
 
 	return (
 		<>

@@ -1,5 +1,5 @@
 import { useAppSelector } from '../store/hook'
-import { User } from '../store/slices/userSlice'
+import { IUser } from '../models'
 
 export const useAuth = () => {
 	const {
@@ -9,8 +9,7 @@ export const useAuth = () => {
 		activationLink,
 		isActivated,
 		isPassedTest,
-		isAuth,
-	}: User = useAppSelector(state => state.user.user)
+	}: IUser = useAppSelector(state => state.user.user)
 
 	return {
 		id,
@@ -19,6 +18,5 @@ export const useAuth = () => {
 		activationLink,
 		isActivated,
 		isPassedTest,
-		isAuth,
 	}
 }

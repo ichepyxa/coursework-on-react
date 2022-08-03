@@ -1,17 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-export type User = {
-	id: number | undefined
-	username: string | undefined
-	email: string | undefined
-	activationLink: string | undefined
-	isActivated: boolean | undefined
-	isPassedTest: boolean | undefined
-	isAuth: boolean
-}
+import { IUser } from '../../models'
 
 type UserState = {
-	user: User
+	user: IUser
+	isLoading: boolean
+	isAuth: boolean
 }
 
 const initialState: UserState = {
@@ -22,25 +15,26 @@ const initialState: UserState = {
 		activationLink: undefined,
 		isActivated: undefined,
 		isPassedTest: undefined,
-		isAuth: false,
 	},
+	isLoading: false,
+	isAuth: false,
 }
 
 const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setUser(state, action: PayloadAction<User>) {
+		setIsLoading(state, action: PayloadAction<boolean>) {
+			state.isLoading = action.payload
+		},
+		setIsAuth(state, action: PayloadAction<boolean>) {
+			state.isAuth = action.payload
+		},
+		setUser(state, action: PayloadAction<IUser>) {
 			state.user = action.payload
-		},
-		removeUser(state) {
-			state.user = {} as User
-		},
-		changeUserAuth(state, action: PayloadAction<boolean>) {
-			state.user.isAuth = action.payload
 		},
 	},
 })
 
-export const { setUser, removeUser, changeUserAuth } = userSlice.actions
+export const { setUser, setIsAuth, setIsLoading } = userSlice.actions
 export default userSlice.reducer

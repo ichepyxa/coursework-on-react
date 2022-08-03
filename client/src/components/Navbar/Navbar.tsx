@@ -1,21 +1,40 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import {
 	Nav,
 	NavDropdown,
 	Navbar as NavbarElement,
 	Container,
 } from 'react-bootstrap'
-import { useAppSelector, useAppDispatch } from '../../store/hook'
-import { changeUserAuth } from '../../store/slices/userSlice'
+import AuthService from '../../sevices/authService'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
+import { IUser } from '../../models'
 import { Link, useLocation } from 'react-router-dom'
 import './style.css'
 
 const Navbar: FC = () => {
-	const isUserAuth = true
-	// const user = useAuth()
-	// const dispatch = useAppDispatch()
-	// const loginAndLogout = () => dispatch(changeUserAuth(!isUserAuth))
+	const dispatch = useAppDispatch()
+	const [pageIsLoading, setPageIsLoading] = useState<boolean>(true)
+	const isAuth = useAppSelector(state => state.user.isAuth)
 	const { pathname } = useLocation()
+
+	const handleLogout = async () => {
+		dispatch(setIsLoading(true))
+		try {
+			await AuthService.logout()
+			localStorage.removeItem('token')
+			dispatch(setUser({} as IUser))
+			dispatch(setIsAuth(false))
+		} catch (error: any) {
+			console.log(error.response?.data?.message)
+		} finally {
+			dispatch(setIsLoading(false))
+		}
+	}
+
+	useEffect(() => {
+		setPageIsLoading(false)
+	}, [isAuth])
 
 	return (
 		<header className='header' id='header'>
@@ -61,7 +80,9 @@ const Navbar: FC = () => {
 								</Link>
 							</Nav.Item>
 							<div className='divider'></div>
-							{isUserAuth ? (
+							{pageIsLoading ? (
+								<div className='dot-flashing ms-md-auto me-md-0 my-4 my-md-0 mx-auto'></div>
+							) : isAuth ? (
 								<>
 									<NavDropdown
 										className='ms-auto'
@@ -80,10 +101,7 @@ const Navbar: FC = () => {
 											Личный кабинет
 										</Link>
 										<NavDropdown.Divider />
-										<NavDropdown.Item
-											href='/account/logout'
-											// onClick={loginAndLogout}
-										>
+										<NavDropdown.Item onClick={handleLogout}>
 											Выйти
 										</NavDropdown.Item>
 									</NavDropdown>
@@ -94,13 +112,7 @@ const Navbar: FC = () => {
 											</Link>
 										</Nav.Item>
 										<Nav.Item>
-											<Link
-												to='/account/logout'
-												className='nav-link'
-												// onClick={loginAndLogout}
-											>
-												Выйти
-											</Link>
+											<Nav.Link onClick={handleLogout}>Выйти</Nav.Link>
 										</Nav.Item>
 									</Nav>
 								</>
@@ -109,7 +121,7 @@ const Navbar: FC = () => {
 									<Nav.Item>
 										<Link
 											className='nav-link btn btn-outline-primary w-100'
-											to='/account/register'
+											to='/account/registration'
 										>
 											Регистрация
 										</Link>
@@ -118,7 +130,6 @@ const Navbar: FC = () => {
 										<Link
 											className='nav-link btn btn-primary ms-md-3 w-100'
 											to='/account/login'
-											// onClick={loginAndLogout}
 										>
 											Вход
 										</Link>

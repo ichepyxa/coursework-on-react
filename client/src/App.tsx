@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
@@ -10,8 +10,16 @@ import Houses from './pages/Houses/Houses'
 import Test from './pages/Test/Test'
 import NotFound from './pages/NotFound/NotFound'
 import './App.css'
+import { useAppSelector } from './store/hook'
 
 const App: FC = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(true)
+	const isAuth = useAppSelector(state => state.user.isAuth)
+
+	useEffect(() => {
+		setIsLoading(false)
+	}, [isAuth])
+
 	return (
 		<Routes>
 			<Route path='/' element={<Layout />}>
@@ -23,8 +31,11 @@ const App: FC = () => {
 			<Route path='account' element={<Layout />}>
 				<Route index element={<Profile />} />
 				<Route path='profile' element={<Profile />} />
-				<Route path='register' element={<Register />} />
-				<Route path='login' element={<Login />} />
+				<Route
+					path='registration'
+					element={!isAuth ? <Register /> : <Profile />}
+				/>
+				<Route path='login' element={!isAuth ? <Login /> : <Profile />} />
 			</Route>
 			<Route path='*' element={<NotFound />} />
 		</Routes>

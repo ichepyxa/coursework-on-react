@@ -1,3 +1,12 @@
+export interface IUser {
+	id: number | undefined
+	username: string | undefined
+	email: string | undefined
+	activationLink: string | undefined
+	isActivated: boolean | undefined
+	isPassedTest: boolean | undefined
+}
+
 export interface IUserResponse {
 	accessToken: string
 	refreshToken: string
@@ -5,14 +14,19 @@ export interface IUserResponse {
 		id: number
 		username: string
 		email: string
-		password: string
 		activationLink: string
 		isActivated: boolean
 		isPassedTest: boolean
 	}
 }
 
-export interface IUserLogin {
-	email: string
-	password: string
-}
+// export interface IUserLoginRequest {
+// 	email: string
+// 	password: string
+// }
+
+// export interface IUserRegistrationRequest {
+// 	username: string
+// 	email: string
+// 	password: string
+// }

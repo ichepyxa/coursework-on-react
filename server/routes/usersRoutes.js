@@ -8,7 +8,7 @@ router.get('/users/activate/:link', UsersController.activateUser)
 router.get('/users/refresh', UsersController.refresh)
 router.get('/users/logout', UsersController.logoutUsers)
 router.post(
-	'/users/register',
+	'/users/registration',
 	body('username').isLength({ min: 3, max: 15 }),
 	body('email').isEmail(),
 	body('password').isLength({ min: 6, max: 20 }),
