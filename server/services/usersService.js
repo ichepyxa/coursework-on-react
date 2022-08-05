@@ -13,15 +13,17 @@ class UsersService {
 		email,
 		activationLink,
 		isActivated,
-		isPassedTest
+		isPassedTest,
+		roleId
 	) {
 		const payload = {
-			id: id,
+			id,
 			username,
 			email,
 			activationLink,
 			isActivated,
 			isPassedTest,
+			roleId,
 		}
 
 		const tokens = TokenService.generateTokens(payload)
@@ -83,7 +85,8 @@ class UsersService {
 			user.email,
 			user.activationLink,
 			user.isActivated,
-			user.isPassedTest
+			user.isPassedTest,
+			user.roleId
 		)
 		return response
 	}
@@ -107,7 +110,8 @@ class UsersService {
 			user.email,
 			user.activationLink,
 			user.isActivated,
-			user.isPassedTest
+			user.isPassedTest,
+			user.roleId
 		)
 		return response
 	}
@@ -140,7 +144,8 @@ class UsersService {
 			user.email,
 			user.activationLink,
 			user.isActivated,
-			user.isPassedTest
+			user.isPassedTest,
+			user.roleId
 		)
 		return response
 	}

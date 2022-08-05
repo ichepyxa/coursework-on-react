@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
 							name: 'roleId',
 							defaultValue: res.id,
 						},
-						onDelete: 'cascade',
 					})
 			)
 			.catch(
@@ -28,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
 							name: 'roleId',
 							defaultValue: null,
 						},
-						onDelete: 'cascade',
 					})
 			)
 			.finally(() => Roles.hasMany(models.Users, options))

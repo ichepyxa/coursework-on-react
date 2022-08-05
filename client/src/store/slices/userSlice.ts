@@ -15,6 +15,7 @@ const initialState: UserState = {
 		activationLink: undefined,
 		isActivated: undefined,
 		isPassedTest: undefined,
+		roleId: undefined,
 	},
 	isLoading: false,
 	isAuth: false,

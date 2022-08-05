@@ -13,12 +13,7 @@ import './App.css'
 import { useAppSelector } from './store/hook'
 
 const App: FC = () => {
-	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const isAuth = useAppSelector(state => state.user.isAuth)
-
-	useEffect(() => {
-		setIsLoading(false)
-	}, [isAuth])
 
 	return (
 		<Routes>

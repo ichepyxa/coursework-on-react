@@ -2,11 +2,17 @@ const Router = require('express')
 const router = new Router()
 const UsersController = require('../controllers/usersController')
 const { body } = require('express-validator')
+const authMiddleware = require('../middlewares/authMiddleware')
+const roleMiddleware = require('../middlewares/roleMiddleware')
 
-router.get('/users', UsersController.getAllUsers)
-router.get('/users/activate/:link', UsersController.activateUser)
+router.get('/users', roleMiddleware(['ADMIN']), UsersController.getAllUsers)
+router.get(
+	'/users/activate/:link',
+	authMiddleware,
+	UsersController.activateUser
+)
 router.get('/users/refresh', UsersController.refresh)
-router.get('/users/logout', UsersController.logoutUsers)
+router.get('/users/logout', authMiddleware, UsersController.logoutUsers)
 router.post(
 	'/users/registration',
 	body('username').isLength({ min: 3, max: 15 }),

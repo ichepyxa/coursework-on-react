@@ -1,0 +1,9 @@
+.faq .accordion {
+	width: 50% !important;
+}
+
+@media (max-width: 768px) {
+	.faq .accordion {
+		width: 100% !important;
+	}
+}

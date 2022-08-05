@@ -5,6 +5,7 @@ export interface IUser {
 	activationLink: string | undefined
 	isActivated: boolean | undefined
 	isPassedTest: boolean | undefined
+	roleId: number | undefined
 }
 
 export interface IUserResponse {
@@ -17,6 +18,7 @@ export interface IUserResponse {
 		activationLink: string
 		isActivated: boolean
 		isPassedTest: boolean
+		roleId: number
 	}
 }
 
