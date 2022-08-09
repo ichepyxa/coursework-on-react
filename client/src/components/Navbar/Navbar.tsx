@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hook'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 import { IUser } from '../../models'
 import { Link, useLocation } from 'react-router-dom'
+import { setNotification } from '../../store/slices/notificationSlice'
 import './style.css'
 
 const Navbar: FC = () => {
@@ -25,8 +26,15 @@ const Navbar: FC = () => {
 			localStorage.removeItem('token')
 			dispatch(setUser({} as IUser))
 			dispatch(setIsAuth(false))
+			dispatch(
+				setNotification({
+					message: 'Вы вышли из аккаунта',
+					isError: false,
+					errors: [],
+				})
+			)
 		} catch (error: any) {
-			console.log(error.response?.data?.message)
+			dispatch(setNotification({ ...error.response?.data, isError: true }))
 		} finally {
 			dispatch(setIsLoading(false))
 		}
@@ -37,67 +45,67 @@ const Navbar: FC = () => {
 	}, [isAuth])
 
 	return (
-		<header className='header' id='header'>
+		<header className="header" id="header">
 			<NavbarElement
-				variant='light'
-				expand='md'
-				bg='white'
-				className='border-bottom fixed-top'
+				variant="light"
+				expand="md"
+				bg="white"
+				className="border-bottom fixed-top"
 			>
 				<Container>
-					<Link to='/' className='navbar-brand'>
+					<Link to="/" className="navbar-brand">
 						<img
-							src='/images/horizontal-logo.png'
-							height='40'
-							className='d-inline-block align-top'
-							alt='SearchHoliday Logo'
+							src="/images/horizontal-logo.png"
+							height="40"
+							className="d-inline-block align-top"
+							alt="SearchHoliday Logo"
 						/>
 					</Link>
-					<NavbarElement.Toggle aria-controls='navbarContent' />
-					<NavbarElement.Collapse id='navbarContent'>
+					<NavbarElement.Toggle aria-controls="navbarContent" />
+					<NavbarElement.Collapse id="navbarContent">
 						<Nav
-							className='me-auto w-100 align-items-md-center'
+							className="me-auto w-100 align-items-md-center"
 							style={{ margin: '5px 0' }}
 						>
 							<Nav.Item className={pathname === '/' ? 'active' : ''}>
-								<Link to='/' className='nav-link'>
+								<Link to="/" className="nav-link">
 									Главная
 								</Link>
 							</Nav.Item>
 							<Nav.Item className={pathname === '/houses' ? 'active' : ''}>
-								<Link to='/houses' className='nav-link'>
+								<Link to="/houses" className="nav-link">
 									Места отдыха
 								</Link>
 							</Nav.Item>
 							<Nav.Item className={pathname === '/test' ? 'active' : ''}>
-								<Link to='/test' className='nav-link'>
+								<Link to="/test" className="nav-link">
 									Тест
 								</Link>
 							</Nav.Item>
 							<Nav.Item className={pathname === '/about' ? 'active' : ''}>
-								<Link to='/about' className='nav-link'>
+								<Link to="/about" className="nav-link">
 									О нас
 								</Link>
 							</Nav.Item>
-							<div className='divider'></div>
+							<div className="divider"></div>
 							{pageIsLoading ? (
-								<div className='dot-flashing ms-md-auto me-md-0 my-4 my-md-0 mx-auto'></div>
+								<div className="dot-flashing ms-md-auto me-md-0 my-4 my-md-0 mx-auto"></div>
 							) : isAuth ? (
 								<>
 									<NavDropdown
-										className='ms-auto'
+										className="ms-auto"
 										title={
 											<img
-												src='/images/no-user-img.png'
-												alt='user'
-												width='32'
-												height='32'
-												className='rounded-circle me-2 d-inline'
+												src="/images/no-user-img.png"
+												alt="user"
+												width="32"
+												height="32"
+												className="rounded-circle me-2 d-inline"
 											/>
 										}
-										id='navbarDropdown'
+										id="navbarDropdown"
 									>
-										<Link className='dropdown-item' to='/account/profile'>
+										<Link className="dropdown-item" to="/account/profile">
 											Личный кабинет
 										</Link>
 										<NavDropdown.Divider />
@@ -105,9 +113,9 @@ const Navbar: FC = () => {
 											Выйти
 										</NavDropdown.Item>
 									</NavDropdown>
-									<Nav className='navbar-nav--mobile d-md-flex d-md-none'>
+									<Nav className="navbar-nav--mobile d-md-flex d-md-none">
 										<Nav.Item>
-											<Link to='/account/profile' className='nav-link'>
+											<Link to="/account/profile" className="nav-link">
 												Личный кабинет
 											</Link>
 										</Nav.Item>
@@ -117,19 +125,19 @@ const Navbar: FC = () => {
 									</Nav>
 								</>
 							) : (
-								<Nav className='ms-md-auto d-flex flex-sm-column flex-md-row gap-2'>
+								<Nav className="ms-md-auto d-flex flex-sm-column flex-md-row gap-2">
 									<Nav.Item>
 										<Link
-											className='nav-link btn btn-outline-primary w-100'
-											to='/account/registration'
+											className="nav-link btn btn-outline-primary w-100"
+											to="/account/registration"
 										>
 											Регистрация
 										</Link>
 									</Nav.Item>
 									<Nav.Item>
 										<Link
-											className='nav-link btn btn-primary ms-md-3 w-100'
-											to='/account/login'
+											className="nav-link btn btn-primary ms-md-3 w-100"
+											to="/account/login"
 										>
 											Вход
 										</Link>

@@ -22,6 +22,17 @@ export interface IUserResponse {
 	}
 }
 
+export interface IHouse {
+	id: number
+	title: string
+	link: string
+	category: string
+	location: string
+	price: number
+	description: string
+	images: []
+}
+
 // export interface IUserLoginRequest {
 // 	email: string
 // 	password: string

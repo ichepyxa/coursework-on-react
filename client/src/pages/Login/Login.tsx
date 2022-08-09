@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import AuthService from '../../sevices/authService'
 import { useAppDispatch } from '../../store/hook'
+import { setNotification } from '../../store/slices/notificationSlice'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 
 const Login: FC = () => {
@@ -15,8 +16,15 @@ const Login: FC = () => {
 			localStorage.setItem('token', response.data.accessToken)
 			dispatch(setUser(response.data.user))
 			dispatch(setIsAuth(true))
+			dispatch(
+				setNotification({
+					message: 'Успешный вход',
+					isError: false,
+					errors: [],
+				})
+			)
 		} catch (error: any) {
-			console.log(error.response?.data?.message)
+			dispatch(setNotification({ ...error.response?.data, isError: true }))
 		} finally {
 			dispatch(setIsLoading(false))
 		}
@@ -25,15 +33,15 @@ const Login: FC = () => {
 	return (
 		<div>
 			<input
-				type='email'
-				placeholder='email'
+				type="email"
+				placeholder="email"
 				value={email}
 				onChange={e => setEmail(e.target.value)}
 				required
 			/>
 			<input
-				type='password'
-				placeholder='password'
+				type="password"
+				placeholder="password"
 				value={password}
 				onChange={e => setPassword(e.target.value)}
 				required

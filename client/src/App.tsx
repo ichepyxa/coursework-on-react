@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useSearchParams } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
@@ -14,25 +14,28 @@ import { useAppSelector } from './store/hook'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
+	const [searchParams, setSearchParams] = useSearchParams()
+	let page = searchParams.get('page')
+	if (!page) page = '1'
 
 	return (
 		<Routes>
-			<Route path='/' element={<Layout />}>
+			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
-				<Route path='about' element={<About />} />
-				<Route path='houses' element={<Houses />} />
-				<Route path='test' element={<Test />} />
+				<Route path="about" element={<About />} />
+				<Route path="houses" element={<Houses page={page} />} />
+				<Route path="test" element={<Test />} />
 			</Route>
-			<Route path='account' element={<Layout />}>
+			<Route path="account" element={<Layout />}>
 				<Route index element={<Profile />} />
-				<Route path='profile' element={<Profile />} />
+				<Route path="profile" element={<Profile />} />
 				<Route
-					path='registration'
+					path="registration"
 					element={!isAuth ? <Register /> : <Profile />}
 				/>
-				<Route path='login' element={!isAuth ? <Login /> : <Profile />} />
+				<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
 			</Route>
-			<Route path='*' element={<NotFound />} />
+			<Route path="*" element={<NotFound />} />
 		</Routes>
 	)
 }

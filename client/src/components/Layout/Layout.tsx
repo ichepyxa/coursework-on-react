@@ -1,19 +1,21 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Toast } from 'react-bootstrap'
+import React, { FC, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import axios from 'axios'
 import { API_URL } from '../../constants/apiUrl'
-import { IUser, IUserResponse } from '../../models'
+import { IUserResponse } from '../../models'
 import { useAppSelector, useAppDispatch } from '../../store/hook'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
+import { setNotification } from '../../store/slices/notificationSlice'
 import Footer from '../Footer/Footer'
 import Navbar from '../Navbar/Navbar'
+import Toast from '../Toast/Toast'
 import './style.css'
+import Loader from '../Loader/Loader'
 
 const Layout: FC = () => {
 	const dispatch = useAppDispatch()
-	const isLoading = useAppSelector(state => state.user.isLoading)
-	const [isNotificationShow, setIsNotificationShow] = useState(true)
+	const { isLoading } = useAppSelector(state => state.user)
+	const notification = useAppSelector(state => state.notification)
 
 	const checkAuth = async () => {
 		dispatch(setIsLoading(true))
@@ -27,8 +29,15 @@ const Layout: FC = () => {
 			localStorage.setItem('token', response.data.accessToken)
 			dispatch(setUser(response.data.user))
 			dispatch(setIsAuth(true))
+			// dispatch(
+			// 	setNotification({
+			// 		message: 'С возвращением',
+			// 		isError: false,
+			// 		errors: [],
+			// 	})
+			// )
 		} catch (error: any) {
-			console.log(error.response?.data?.message)
+			dispatch(setNotification({ ...error.response?.data, isError: true }))
 		} finally {
 			dispatch(setIsLoading(false))
 		}
@@ -43,34 +52,19 @@ const Layout: FC = () => {
 	return (
 		<>
 			<Navbar />
-			<main className='main' id='main'>
-				{isLoading ? (
-					<div
-						id='loader'
-						className='d-flex justify-content-center align-items-center w-100'
-					>
-						<div className='loader-content'>
-							<div className='loader-content__first'></div>
-							<div className='loader-content__second'></div>
-							<div className='loader-content__third'></div>
-						</div>
-					</div>
-				) : (
-					<Outlet />
-				)}
+			<main className="main" id="main">
+				{isLoading ? <Loader /> : <Outlet />}
 			</main>
 			<Footer />
-			<Toast
-				show={isNotificationShow}
-				onClose={() => setIsNotificationShow(!isNotificationShow)}
-				delay={5000}
-				bg={'success' || 'danger'}
-				autohide
-			>
-				<Toast.Body className='text-white'>
-					Woohoo, you're reading this text in a Toast!
-				</Toast.Body>
-			</Toast>
+			{notification.message ? (
+				<Toast
+					message={notification.message}
+					isError={notification.isError}
+					isVisible={true}
+				/>
+			) : (
+				<></>
+			)}
 		</>
 	)
 }

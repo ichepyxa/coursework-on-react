@@ -1,0 +1,14 @@
+.toast {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 200;
+}
+
+@media (max-width: 576px) {
+  .toast,
+  .toast__body {
+    width: calc(92vw) !important;
+    max-width: calc(92vw) !important;
+  }
+}
