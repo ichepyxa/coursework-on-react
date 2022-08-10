@@ -1,5 +1,5 @@
-import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
+import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import House from '../../../../components/House/House'
 import { API_URL } from '../../../../constants/apiUrl'
@@ -13,9 +13,7 @@ const RecommendedHouses: FC = () => {
 			const response = await axios.get<IHouse[]>(`${API_URL}/houses?page=1`)
 			let filterResponse: IHouse[] = []
 			response.data.forEach((item, index) => {
-				if (index < 5) {
-					filterResponse.push(item)
-				}
+				if (index < 6) filterResponse.push(item)
 			})
 			return filterResponse
 		} catch (error: any) {

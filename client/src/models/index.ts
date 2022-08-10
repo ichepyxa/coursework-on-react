@@ -32,14 +32,3 @@ export interface IHouse {
 	description: string
 	images: []
 }
-
-// export interface IUserLoginRequest {
-// 	email: string
-// 	password: string
-// }
-
-// export interface IUserRegistrationRequest {
-// 	username: string
-// 	email: string
-// 	password: string
-// }

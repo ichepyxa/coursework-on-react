@@ -1,5 +1,5 @@
-import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
+import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import House from '../../components/House/House'
 import Loader from '../../components/Loader/Loader'
@@ -16,7 +16,7 @@ const Houses: FC<{ page: string | null }> = ({ page = '1' }) => {
 			const response = await axios.get<IHouse[]>(
 				`${API_URL}/houses?page=${page}`
 			)
-			console.log(response.data)
+
 			return response.data
 		} catch (error: any) {
 			return [] as IHouse[]
@@ -33,11 +33,11 @@ const Houses: FC<{ page: string | null }> = ({ page = '1' }) => {
 
 	return (
 		<Container className="py-3">
+			<h2 className="text-center mt-4">Места отдыха</h2>
 			{isLoading ? (
 				<Loader />
 			) : houses.length > 0 ? (
 				<>
-					<h2 className="text-center mt-4">Места отдыха</h2>
 					<div className="houses d-md-flex align-items-center justify-content-around flex-wrap">
 						{houses.map((house: IHouse) => (
 							<House key={house.id} {...house} />

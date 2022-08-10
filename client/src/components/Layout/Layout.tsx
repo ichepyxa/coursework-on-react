@@ -11,6 +11,7 @@ import Navbar from '../Navbar/Navbar'
 import Toast from '../Toast/Toast'
 import './style.css'
 import Loader from '../Loader/Loader'
+import Disclamer from '../Disclamer/Disclamer'
 
 const Layout: FC = () => {
 	const dispatch = useAppDispatch()
@@ -65,6 +66,7 @@ const Layout: FC = () => {
 			) : (
 				<></>
 			)}
+			<Disclamer />
 		</>
 	)
 }
