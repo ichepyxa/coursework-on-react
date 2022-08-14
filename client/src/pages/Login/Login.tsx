@@ -42,6 +42,16 @@ const Login: FC = () => {
 					})
 				)
 			} catch (error: any) {
+				if (error.response.status === 0) {
+					return dispatch(
+						setNotification({
+							message: 'Проблемы с соединением',
+							errors: [],
+							isError: true,
+						})
+					)
+				}
+
 				dispatch(setNotification({ ...error.response?.data, isError: true }))
 			} finally {
 				dispatch(setIsLoading(false))

@@ -28,7 +28,7 @@ const RecommendedHouses: FC = () => {
 	}, [])
 
 	return (
-		<Container className="py-3">
+		<Container className="py-3" as="section">
 			<h2 className="text-center">Рекомендуемые места отдыха</h2>
 			<div className="houses d-md-flex align-items-center justify-content-around flex-wrap">
 				{recommendedHouses &&

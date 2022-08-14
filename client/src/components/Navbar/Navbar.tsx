@@ -19,6 +19,19 @@ const Navbar: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
 	const { pathname } = useLocation()
 
+	const openNav = (e: any) => {
+		const content = document.getElementById('navbarContent')
+		content?.removeAttribute('hidden')
+	}
+
+	const toggleNavOnClickButton = () => {
+		const content = document.getElementById('navbarContent')
+		const toggler = document.querySelector('.navbar-toggler')
+		content?.setAttribute('hidden', '')
+		content?.classList.remove('show')
+		toggler?.classList.add('collapsed')
+	}
+
 	const handleLogout = async () => {
 		dispatch(setIsLoading(true))
 		try {
@@ -34,6 +47,16 @@ const Navbar: FC = () => {
 				})
 			)
 		} catch (error: any) {
+			if (error.response.status === 0) {
+				return dispatch(
+					setNotification({
+						message: 'Проблемы с соединением',
+						errors: [],
+						isError: true,
+					})
+				)
+			}
+
 			dispatch(setNotification({ ...error.response?.data, isError: true }))
 		} finally {
 			dispatch(setIsLoading(false))
@@ -61,14 +84,21 @@ const Navbar: FC = () => {
 							alt="SearchHoliday Logo"
 						/>
 					</Link>
-					<NavbarElement.Toggle aria-controls="navbarContent" />
+					<NavbarElement.Toggle
+						aria-controls="navbarContent"
+						onClick={e => openNav(e)}
+					/>
 					<NavbarElement.Collapse id="navbarContent">
 						<Nav
 							className="me-auto w-100 align-items-md-center"
 							style={{ margin: '5px 0' }}
 						>
 							<Nav.Item className={pathname === '/' ? 'active' : ''}>
-								<Link to="/" className="nav-link">
+								<Link
+									to="/"
+									className="nav-link"
+									onClick={toggleNavOnClickButton}
+								>
 									Главная
 								</Link>
 							</Nav.Item>
