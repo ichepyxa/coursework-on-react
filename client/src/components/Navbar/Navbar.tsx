@@ -19,19 +19,6 @@ const Navbar: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
 	const { pathname } = useLocation()
 
-	const openNav = (e: any) => {
-		const content = document.getElementById('navbarContent')
-		content?.removeAttribute('hidden')
-	}
-
-	const toggleNavOnClickButton = () => {
-		const content = document.getElementById('navbarContent')
-		const toggler = document.querySelector('.navbar-toggler')
-		content?.setAttribute('hidden', '')
-		content?.classList.remove('show')
-		toggler?.classList.add('collapsed')
-	}
-
 	const handleLogout = async () => {
 		dispatch(setIsLoading(true))
 		try {
@@ -84,21 +71,14 @@ const Navbar: FC = () => {
 							alt="SearchHoliday Logo"
 						/>
 					</Link>
-					<NavbarElement.Toggle
-						aria-controls="navbarContent"
-						onClick={e => openNav(e)}
-					/>
+					<NavbarElement.Toggle aria-controls="navbarContent" />
 					<NavbarElement.Collapse id="navbarContent">
 						<Nav
 							className="me-auto w-100 align-items-md-center"
 							style={{ margin: '5px 0' }}
 						>
 							<Nav.Item className={pathname === '/' ? 'active' : ''}>
-								<Link
-									to="/"
-									className="nav-link"
-									onClick={toggleNavOnClickButton}
-								>
+								<Link to="/" className="nav-link">
 									Главная
 								</Link>
 							</Nav.Item>

@@ -16,14 +16,13 @@ const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
 	const [searchParams, setSearchParams] = useSearchParams()
 	let page = searchParams.get('page')
-	if (!page) page = '1'
 
 	return (
 		<Routes>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
 				<Route path="about" element={<About />} />
-				<Route path="houses" element={<Houses page={page} />} />
+				<Route path="houses" element={<Houses page={!page ? '1' : page} />} />
 				<Route path="test" element={<Test />} />
 			</Route>
 			<Route path="account" element={<Layout />}>
