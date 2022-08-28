@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-	const Roles = sequelize.define('Users_Roles', {
+	const Roles = sequelize.define('users_roles', {
+		roleId: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true,
+		},
 		role: {
 			type: DataTypes.STRING,
 			defaultValue: 'USER',
@@ -7,29 +12,27 @@ module.exports = (sequelize, DataTypes) => {
 	})
 
 	Roles.associate = function (models) {
-		let options
-		Roles.findOne({ where: { role: 'USER' } })
-			.then(
-				res =>
-					(options = {
-						as: 'users',
-						foreignKey: {
-							name: 'roleId',
-							defaultValue: res.id,
-						},
-					})
-			)
-			.catch(
-				() =>
-					(options = {
-						as: 'users',
-						foreignKey: {
-							name: 'roleId',
-							defaultValue: null,
-						},
-					})
-			)
-			.finally(() => Roles.hasMany(models.Users, options))
+		Roles.hasOne(models.users, {
+			as: 'users',
+			foreignKey: {
+				name: 'roleId',
+				defaultValue: null,
+			},
+		})
+
+		// Roles.findOne({ where: { role: 'USER' } })
+		// 	.then(res => (options.foreignKey.defaultValue = res.id))
+		// 	.finally(() => Roles.hasOne(models.users, options))
+		// .catch(
+		// 	() =>
+		// 		(options = {
+		// 			as: 'users',
+		// 			foreignKey: {
+		// 				name: 'role_id',
+		// 				defaultValue: null,
+		// 			},
+		// 		})
+		// )
 	}
 
 	return Roles

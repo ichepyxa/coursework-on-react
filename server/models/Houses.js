@@ -1,7 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-	const Houses = sequelize.define('Houses', {
-		title: DataTypes.STRING,
-		link: DataTypes.STRING,
+	const Houses = sequelize.define('houses', {
+		houseId: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true,
+		},
+		name: DataTypes.STRING,
 		category: DataTypes.STRING,
 		location: DataTypes.STRING,
 		price: DataTypes.INTEGER,
@@ -9,14 +13,14 @@ module.exports = (sequelize, DataTypes) => {
 	})
 
 	Houses.associate = function (models) {
-		Houses.hasMany(models.Houses_Images, {
+		Houses.hasMany(models.houses_images, {
 			as: 'images',
 			foreignKey: 'houseId',
 			onDelete: 'cascade',
 		})
 
-		Houses.hasMany(models.Users_Favorites_Houses, {
-			as: 'houses',
+		Houses.hasMany(models.users_favorites_houses, {
+			as: 'favorites',
 			foreignKey: 'houseId',
 			onDelete: 'cascade',
 		})

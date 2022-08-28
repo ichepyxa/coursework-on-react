@@ -1,6 +1,6 @@
 const APIError = require('../exceptions/apiExceptions')
 const TokenService = require('../services/tokenService')
-const { Users_Roles } = require('../models')
+const { Users_Roles: UsersRoles } = require('../models')
 
 module.exports = function (roles) {
 	return async function (req, res, next) {
@@ -24,7 +24,7 @@ module.exports = function (roles) {
 				return next(APIError.UnautorizedError())
 			}
 
-			const userRole = await Users_Roles.findByPk(userData.roleId)
+			const userRole = await UsersRoles.findByPk(userData.roleId)
 			if (!userRole) {
 				return next(APIError.UnautorizedError())
 			}

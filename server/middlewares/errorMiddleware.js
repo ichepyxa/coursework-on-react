@@ -9,5 +9,9 @@ module.exports = function (err, req, res, next) {
 			.json({ message: err.message, errors: err.errors })
 	}
 
+	if (err.message !== '') {
+		return res.status(500).json({ message: err.message })
+	}
+
 	return res.status(500).json({ message: 'Непредвиденная ошибка' })
 }

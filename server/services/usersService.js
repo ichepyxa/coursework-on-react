@@ -1,4 +1,7 @@
-const { Users, Users_Favorites_Houses, Users_Roles } = require('../models')
+const {
+	users: Users,
+	users_favorites_houses: UsersFavoritesHouses,
+} = require('../models')
 const bcypt = require('bcrypt')
 const uuid = require('uuid')
 const mailService = require('./mailService')
@@ -40,17 +43,14 @@ class UsersService {
 		return users
 	}
 
-	// async getUsersById(id) {
-	// 	if (!id) throw APIError.BadRequest('Не указан ID')
-
-	// 	const user = await Users.findByPk(id)
-	// 	return user
-	// }
-
 	async activateUser(activationLink) {
 		const user = await Users.findOne({ where: { activationLink } })
 		if (!activationLink && !user) {
 			throw APIError.BadRequest('Некорректная ссылка активации')
+		}
+
+		if (user.isActivated === true) {
+			throw APIError.BadRequest('Аккаунт уже активирован')
 		}
 
 		user.isActivated = true
@@ -150,22 +150,16 @@ class UsersService {
 		return response
 	}
 
-	// async updateUsers(id, user) {
-	// 	if (!id) throw APIError.BadRequest('Не указан ID')
-	// 	if (!user) throw APIError.BadRequest('Не верный формат')
+	async getFavoritesHouses(user) {
+		if (!user) {
+			throw APIError.UnautorizedError()
+		}
 
-	// 	const hashPassword = await bcypt.hash(user.password, 10)
-
-	// 	await Users.update({ ...user, password: hashPassword }, { where: { id } })
-	// 	return await Users.findByPk(id)
-	// }
-
-	// async deleteUsers(id) {
-	// 	if (!id) throw APIError.BadRequest('Не указан ID')
-
-	// 	const deleteUser = await Users.destroy({ where: { id } })
-	// 	return deleteUser
-	// }
+		const houses = await UsersFavoritesHouses.findAll({
+			where: { userid: user.id },
+		})
+		return houses
+	}
 }
 
 module.exports = new UsersService()

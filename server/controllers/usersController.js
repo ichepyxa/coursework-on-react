@@ -4,6 +4,13 @@ const { validationResult } = require('express-validator')
 const APIError = require('../exceptions/apiExceptions')
 
 class UsersController {
+	addRefreshTokenInCookie(refreshToken) {
+		res.cookie('refreshToken', refreshToken, {
+			maxAge: 30 * 24 * 60 * 60 * 1000,
+			httpOnly: true,
+		})
+	}
+
 	async getAllUsers(req, res, next) {
 		try {
 			const users = await UsersService.getAllUsers()
@@ -12,15 +19,6 @@ class UsersController {
 			next(error)
 		}
 	}
-
-	// async getUsersById(req, res, next) {
-	// 	try {
-	// 		const user = await UsersService.getUsersById(req.params.id)
-	// 		res.json(user)
-	// 	} catch (error) {
-	// 		next(error)
-	// 	}
-	// }
 
 	async activateUser(req, res, next) {
 		try {
@@ -46,10 +44,7 @@ class UsersController {
 			const { username, email, password } = req.body
 			const user = await UsersService.registerUsers(username, email, password)
 
-			res.cookie('refreshToken', user.refreshToken, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
-				httpOnly: true,
-			})
+			this.addRefreshTokenInCookie(user.refreshToken)
 			res.json(user)
 		} catch (error) {
 			next(error)
@@ -66,10 +61,7 @@ class UsersController {
 			const { email, password } = req.body
 			const user = await UsersService.loginUsers(email, password)
 
-			res.cookie('refreshToken', user.refreshToken, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
-				httpOnly: true,
-			})
+			this.addRefreshTokenInCookie(user.refreshToken)
 			res.json(user)
 		} catch (error) {
 			next(error)
@@ -93,33 +85,21 @@ class UsersController {
 			const { refreshToken } = req.cookies
 			const tokenData = await UsersService.refresh(refreshToken)
 
-			res.cookie('refreshToken', tokenData.refreshToken, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
-				httpOnly: true,
-			})
+			this.addRefreshTokenInCookie(tokenData.refreshToken)
 			res.json(tokenData)
 		} catch (error) {
 			next(error)
 		}
 	}
 
-	// async updateUsers(req, res, next) {
-	// 	try {
-	// 		const updateUser = await UsersService.updateUsers(req.params.id, req.body)
-	// 		res.json(updateUser)
-	// 	} catch (error) {
-	// 		next(error)
-	// 	}
-	// }
-
-	// async deleteUsers(req, res, next) {
-	// 	try {
-	// 		const deleteUser = await UsersService.deleteUsers(req.params.id)
-	// 		res.json(deleteUser)
-	// 	} catch (error) {
-	// 		next(error)
-	// 	}
-	// }
+	async getFavoritesHouses(req, res, next) {
+		try {
+			const houses = await UsersService.getFavoritesHouses(req.user)
+			res.json(houses)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new UsersController()

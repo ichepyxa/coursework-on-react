@@ -18,7 +18,7 @@ router.put(
 	HousesController.updateHouse
 )
 router.put(
-	'/houses/images/:houseId',
+	'/houses/images/:imageId',
 	roleMiddleware(['ADMIN']),
 	HousesController.updateHouseImages
 )
@@ -28,7 +28,7 @@ router.delete(
 	HousesController.deleteHouse
 )
 router.delete(
-	'/houses/images/:houseId',
+	'/houses/images/:imageId',
 	roleMiddleware(['ADMIN']),
 	HousesController.deleteHouseImages
 )

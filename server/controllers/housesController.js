@@ -14,7 +14,7 @@ class HousesController {
 
 			res.json(houses)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
@@ -23,7 +23,7 @@ class HousesController {
 			const house = await HousesService.getHouseById(req.params.id)
 			res.json(house)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
@@ -32,7 +32,7 @@ class HousesController {
 			const newHouse = await HousesService.createHouse(req.body)
 			res.json(newHouse)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
@@ -41,7 +41,7 @@ class HousesController {
 			const newImage = await HousesService.createHouseImages(req.body)
 			res.json(newImage)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
@@ -53,20 +53,19 @@ class HousesController {
 			)
 			res.json(updateHouse)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
 	async updateHouseImages(req, res, next) {
 		try {
 			const updateHouseImages = await HousesService.updateHouseImages(
-				req.params.houseId,
-				req.query.imageId,
+				req.params.imageId,
 				req.body
 			)
 			res.json(updateHouseImages)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
@@ -75,19 +74,18 @@ class HousesController {
 			const deleteHouse = await HousesService.deleteHouse(req.params.id)
 			res.json(deleteHouse)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 
 	async deleteHouseImages(req, res, next) {
 		try {
 			const deleteHouseImages = await HousesService.deleteHouseImages(
-				req.params.houseId,
-				req.query.imageId
+				req.params.imageId
 			)
 			res.json(deleteHouseImages)
 		} catch (error) {
-			console.log(error)
+			next(error)
 		}
 	}
 }

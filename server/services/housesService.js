@@ -1,11 +1,11 @@
-const { Houses, Houses_Images } = require('../models')
+const { houses: Houses, houses_images: HousesImages } = require('../models')
 
 class HousesService {
 	async getAllHouses() {
 		const houses = await Houses.findAll({
 			include: [
 				{
-					model: Houses_Images,
+					model: HousesImages,
 					as: 'images',
 				},
 			],
@@ -24,7 +24,7 @@ class HousesService {
 			offset: offset,
 			include: [
 				{
-					model: Houses_Images,
+					model: HousesImages,
 					as: 'images',
 				},
 			],
@@ -32,13 +32,13 @@ class HousesService {
 		return houses
 	}
 
-	async getHouseById(id) {
-		if (!id) throw new Error('Не указан ID')
+	async getHouseById(houseId) {
+		if (!houseId) throw new Error('Не указан ID дома')
 
-		const house = await Houses.findByPk(id, {
+		const house = await Houses.findByPk(houseId, {
 			include: [
 				{
-					model: Houses_Images,
+					model: HousesImages,
 					as: 'images',
 				},
 			],
@@ -56,47 +56,45 @@ class HousesService {
 	async createHouseImages(houseImage) {
 		if (!houseImage) throw new Error('Не верный формат')
 
-		const newImage = await Houses_Images.create(houseImage)
+		const newImage = await HousesImages.create(houseImage)
 		return newImage
 	}
 
-	async updateHouse(id, house) {
-		if (!id) throw new Error('Не указан ID')
+	async updateHouse(houseId, house) {
+		if (!houseId) throw new Error('Не указан ID дома')
 		if (!house) throw new Error('Не верный формат')
 
-		await Houses.update(house, { where: { id } })
-		return await Houses.findByPk(id, {
+		await Houses.update(house, { where: { houseId } })
+		return await Houses.findByPk(houseId, {
 			include: [
 				{
-					model: Houses_Images,
+					model: HousesImages,
 					as: 'images',
 				},
 			],
 		})
 	}
 
-	async updateHouseImages(houseId, id, house) {
-		if (!houseId) throw new Error('Не указан ID дома')
-		if (!id) throw new Error('Не указан ID картинки')
+	async updateHouseImages(imageId, house) {
+		if (!imageId) throw new Error('Не указан ID картинки')
 		if (!house) throw new Error('Не верный формат')
 
-		await Houses_Images.update(house, { where: { id, houseId } })
-		return await Houses_Images.findOne({ where: { id, houseId } })
+		await HousesImages.update(house, { where: { imageId } })
+		return await HousesImages.findOne({ where: { imageId } })
 	}
 
-	async deleteHouse(id) {
-		if (!id) throw new Error('Не указан ID')
+	async deleteHouse(houseId) {
+		if (!houseId) throw new Error('Не указан ID дома')
 
-		const deleteHouse = await Houses.destroy({ where: { id } })
+		const deleteHouse = await Houses.destroy({ where: { houseId } })
 		return deleteHouse
 	}
 
-	async deleteHouseImages(houseId, id) {
-		if (!houseId) throw new Error('Не указан ID дома')
-		if (!id) throw new Error('Не указан ID картинки')
+	async deleteHouseImages(imageId) {
+		if (!imageId) throw new Error('Не указан ID картинки')
 
 		const deleteHouseImages = await Houses_Images.destroy({
-			where: { id, houseId },
+			where: { imageId },
 		})
 		return deleteHouseImages
 	}

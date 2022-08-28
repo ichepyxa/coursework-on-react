@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-	const Users = sequelize.define('Users', {
+	const Users = sequelize.define('users', {
+		userId: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true,
+		},
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -25,13 +30,14 @@ module.exports = (sequelize, DataTypes) => {
 	})
 
 	Users.associate = function (models) {
-		Users.hasOne(models.Tokens, {
+		Users.hasOne(models.tokens, {
 			as: 'tokens',
 			foreignKey: 'userId',
 			onDelete: 'cascade',
 		})
-		Users.hasMany(models.Users_Favorites_Houses, {
-			as: 'users',
+
+		Users.hasMany(models.users_favorites_houses, {
+			as: 'favorites',
 			foreignKey: 'userId',
 			onDelete: 'cascade',
 		})
