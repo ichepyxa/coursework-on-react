@@ -28,6 +28,7 @@ api.interceptors.response.use(
 				const response = await axios.get<IUserResponse>(`${API_URL}/refresh`, {
 					withCredentials: true,
 				})
+				console.log(response);
 				localStorage.setItem('token', response.data.accessToken)
 				return api.request(originalRequest)
 			} catch (error) {

@@ -3,7 +3,7 @@ import { IUser } from '../models'
 
 export const useAuth = () => {
 	const {
-		id,
+		userId,
 		username,
 		email,
 		activationLink,
@@ -12,7 +12,7 @@ export const useAuth = () => {
 	}: IUser = useAppSelector(state => state.user.user)
 
 	return {
-		id,
+		userId,
 		username,
 		email,
 		activationLink,

@@ -4,7 +4,7 @@ import { IHouse } from '../../models'
 
 import './style.css'
 
-const House: FC<IHouse> = ({ images, title, category, price, link }) => {
+const House: FC<IHouse> = ({ houseId, images, name, category, price }) => {
 	return (
 		<div className="house">
 			{true ? (
@@ -12,29 +12,32 @@ const House: FC<IHouse> = ({ images, title, category, price, link }) => {
 			) : (
 				<div className="favorites house-item__favorites"></div>
 			)}
+
 			{images.length > 0 ? (
-				<div className="house-item__image"></div>
+				<img className="house-item__image" src={images[0].image} alt={name} />
 			) : (
-				// <img className="house-item__image" src={images} alt={title} />
 				<div className="house-item__image"></div>
+				// <div className="house-item__image"></div>
 			)}
 
 			<div
 				className={`house-item__content ${
-					title.length > 20 ? 'd-xxl-flex' : 'd-xl-flex'
+					name.length > 20 ? 'd-xxl-flex' : 'd-xl-flex'
 				} justify-content-between align-items-end`}
 			>
 				<div className="house-item__content-info">
-					{title.length > 20 ? (
-						<h4 className="house-item__content-info__title">{title}</h4>
+					{name.length > 20 ? (
+						<h4 className="house-item__content-info__title">{name}</h4>
 					) : (
-						<h3 className="house-item__content-info__title">{title}</h3>
+						<h3 className="house-item__content-info__title">{name}</h3>
 					)}
 					<h5 className="house-item__content-info__type">{category}</h5>
-					<span className="house-item__content-price d-block">{price}</span>
+					<span className="house-item__content-price d-block">
+						{price > 0 ? `Цена от: ${price} руб.` : 'Цену нужно уточнять'}
+					</span>
 				</div>
 				<Link
-					to={`/houses/description?url=${link}`}
+					to={`/houses/description/${houseId}`}
 					className="house-item__content-btn btn btn-primary mt-2"
 				>
 					Подробнее

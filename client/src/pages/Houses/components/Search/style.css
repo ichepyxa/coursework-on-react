@@ -1,0 +1,13 @@
+@media (max-width: 768px) {
+	.search-area {
+		margin-bottom: 1rem;
+	}
+
+	.search-title {
+		margin-bottom: 1rem;
+	}
+
+	.search-btn {
+		width: 100%;
+	}
+}

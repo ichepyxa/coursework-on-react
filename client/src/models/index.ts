@@ -1,5 +1,5 @@
 export interface IUser {
-	id: number | undefined
+	userId: number | undefined
 	username: string | undefined
 	email: string | undefined
 	activationLink: string | undefined
@@ -11,24 +11,25 @@ export interface IUser {
 export interface IUserResponse {
 	accessToken: string
 	refreshToken: string
-	user: {
-		id: number
-		username: string
-		email: string
-		activationLink: string
-		isActivated: boolean
-		isPassedTest: boolean
-		roleId: number
-	}
+	user: IUser
 }
 
 export interface IHouse {
-	id: number
-	title: string
-	link: string
+	houseId: number
+	name: string
 	category: string
 	location: string
 	price: number
 	description: string
-	images: []
+	images: IHouseImage[]
+}
+
+export interface IHouseResponse {
+	count: number,
+	houses: IHouse[]
+}
+
+export interface IHouseImage {
+	imageId: number,
+	image: string
 }

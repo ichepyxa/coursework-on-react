@@ -3,16 +3,18 @@ import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import House from '../../../../components/House/House'
 import { API_URL } from '../../../../constants/apiUrl'
-import { IHouse } from '../../../../models'
+import { IHouse, IHouseResponse } from '../../../../models'
 
 const RecommendedHouses: FC = () => {
 	const [houses, setHouses] = useState<IHouse[]>([])
 
 	const getRecommendedHouses = async () => {
 		try {
-			const response = await axios.get<IHouse[]>(`${API_URL}/houses?page=1`)
+			const response = await axios.get<IHouseResponse>(
+				`${API_URL}/houses?page=1`
+			)
 			let filterResponse: IHouse[] = []
-			response.data.forEach((item, index) => {
+			response.data.houses.forEach((item, index) => {
 				if (index < 6) filterResponse.push(item)
 			})
 			return filterResponse
@@ -29,13 +31,13 @@ const RecommendedHouses: FC = () => {
 
 	return (
 		<>
-			{houses.length > 0 ? (
+			{houses?.length > 0 ? (
 				<Container className="py-3" as="section">
 					<h2 className="text-center">Рекомендуемые места отдыха</h2>
 					<div className="houses d-md-flex align-items-center justify-content-around flex-wrap">
 						{houses &&
 							houses.map((house: IHouse) => (
-								<House key={house.id} {...house} />
+								<House key={house.houseId} {...house} />
 							))}
 					</div>
 				</Container>

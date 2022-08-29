@@ -1,0 +1,5 @@
+@media (max-width: 360px) {
+	.pagination .page-item * {
+		font-size: 10px;
+	}
+}

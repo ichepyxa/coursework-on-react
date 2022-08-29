@@ -1,4 +1,8 @@
-const { houses: Houses, houses_images: HousesImages } = require('../models')
+const {
+	houses: Houses,
+	houses_images: HousesImages,
+	sequelize,
+} = require('../models')
 
 class HousesService {
 	async getAllHouses() {
@@ -17,10 +21,11 @@ class HousesService {
 		if (!page || page < 1 || isNaN(page))
 			throw new Error('Указана несуществующая страница')
 
-		const offset = (page - 1) * 20
+		const limit = 15
+		const offset = (page - 1) * limit
 
 		const houses = await Houses.findAll({
-			limit: 20,
+			limit: limit,
 			offset: offset,
 			include: [
 				{
@@ -29,7 +34,13 @@ class HousesService {
 				},
 			],
 		})
-		return houses
+
+		const housesCount = await sequelize.query(
+			'SELECT COUNT(*) as count FROM houses',
+			{ plain: true }
+		)
+
+		return { count: Math.ceil(housesCount.count / limit), houses }
 	}
 
 	async getHouseById(houseId) {
@@ -53,10 +64,14 @@ class HousesService {
 		return newHouse
 	}
 
-	async createHouseImages(houseImage) {
+	async createHouseImages(houseId, houseImage) {
+		if (!houseId) throw new Error('Не указан ID дома')
 		if (!houseImage) throw new Error('Не верный формат')
 
-		const newImage = await HousesImages.create(houseImage)
+		const houseFromDB = await Houses.findByPk(houseId)
+		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		const newImage = await HousesImages.create({ image: houseImage, houseId })
 		return newImage
 	}
 
@@ -64,7 +79,10 @@ class HousesService {
 		if (!houseId) throw new Error('Не указан ID дома')
 		if (!house) throw new Error('Не верный формат')
 
-		await Houses.update(house, { where: { houseId } })
+		const houseFromDB = await Houses.findByPk(houseId)
+		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		await Houses.update({ ...house, houseId }, { where: { houseId } })
 		return await Houses.findByPk(houseId, {
 			include: [
 				{
@@ -75,16 +93,22 @@ class HousesService {
 		})
 	}
 
-	async updateHouseImages(imageId, house) {
+	async updateHouseImages(imageId, image) {
 		if (!imageId) throw new Error('Не указан ID картинки')
-		if (!house) throw new Error('Не верный формат')
+		if (!image) throw new Error('Не верный формат')
 
-		await HousesImages.update(house, { where: { imageId } })
+		const imageFromDB = await HousesImages.findByPk(imageId)
+		if (!imageFromDB) throw new Error('Не верный ID картинки')
+
+		await HousesImages.update({ image }, { where: { imageId } })
 		return await HousesImages.findOne({ where: { imageId } })
 	}
 
 	async deleteHouse(houseId) {
 		if (!houseId) throw new Error('Не указан ID дома')
+
+		const houseFromDB = await Houses.findByPk(houseId)
+		if (!houseFromDB) throw new Error('Не верный ID дома')
 
 		const deleteHouse = await Houses.destroy({ where: { houseId } })
 		return deleteHouse
@@ -93,7 +117,10 @@ class HousesService {
 	async deleteHouseImages(imageId) {
 		if (!imageId) throw new Error('Не указан ID картинки')
 
-		const deleteHouseImages = await Houses_Images.destroy({
+		const imageFromDB = await HousesImages.findByPk(imageId)
+		if (!imageFromDB) throw new Error('Не верный ID картинки')
+
+		const deleteHouseImages = await HousesImages.destroy({
 			where: { imageId },
 		})
 		return deleteHouseImages

@@ -20,7 +20,7 @@ class HousesController {
 
 	async getHouseById(req, res, next) {
 		try {
-			const house = await HousesService.getHouseById(req.params.id)
+			const house = await HousesService.getHouseById(req.params.houseId)
 			res.json(house)
 		} catch (error) {
 			next(error)
@@ -38,7 +38,10 @@ class HousesController {
 
 	async createHouseImages(req, res, next) {
 		try {
-			const newImage = await HousesService.createHouseImages(req.body)
+			const newImage = await HousesService.createHouseImages(
+				req.params.houseId,
+				req.body.image
+			)
 			res.json(newImage)
 		} catch (error) {
 			next(error)
@@ -48,7 +51,7 @@ class HousesController {
 	async updateHouse(req, res, next) {
 		try {
 			const updateHouse = await HousesService.updateHouse(
-				req.params.id,
+				req.params.houseId,
 				req.body
 			)
 			res.json(updateHouse)
@@ -61,7 +64,7 @@ class HousesController {
 		try {
 			const updateHouseImages = await HousesService.updateHouseImages(
 				req.params.imageId,
-				req.body
+				req.body.image
 			)
 			res.json(updateHouseImages)
 		} catch (error) {
@@ -71,7 +74,7 @@ class HousesController {
 
 	async deleteHouse(req, res, next) {
 		try {
-			const deleteHouse = await HousesService.deleteHouse(req.params.id)
+			const deleteHouse = await HousesService.deleteHouse(req.params.houseId)
 			res.json(deleteHouse)
 		} catch (error) {
 			next(error)

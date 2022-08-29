@@ -11,7 +11,7 @@ const TokenService = require('./tokenService')
 
 class UsersService {
 	async generateResponse(
-		id,
+		userId,
 		username,
 		email,
 		activationLink,
@@ -20,7 +20,7 @@ class UsersService {
 		roleId
 	) {
 		const payload = {
-			id,
+			userId,
 			username,
 			email,
 			activationLink,
@@ -30,7 +30,7 @@ class UsersService {
 		}
 
 		const tokens = TokenService.generateTokens(payload)
-		await TokenService.saveRefreshToken(id, tokens.refreshToken)
+		await TokenService.saveRefreshToken(userId, tokens.refreshToken)
 
 		return {
 			...tokens,
@@ -57,7 +57,7 @@ class UsersService {
 		await user.save()
 	}
 
-	async registerUsers(username, email, password) {
+	async registrationUsers(username, email, password) {
 		const candidate = await Users.findOne({ where: { email } })
 		if (candidate) {
 			throw APIError.BadRequest(
@@ -80,7 +80,7 @@ class UsersService {
 		)
 
 		const response = await this.generateResponse(
-			user.id,
+			user.userId,
 			user.username,
 			user.email,
 			user.activationLink,
@@ -105,7 +105,7 @@ class UsersService {
 		}
 
 		const response = await this.generateResponse(
-			user.id,
+			user.userId,
 			user.username,
 			user.email,
 			user.activationLink,
@@ -137,9 +137,9 @@ class UsersService {
 			throw APIError.UnautorizedError()
 		}
 
-		const user = await Users.findOne({ where: { id: userData.id } })
+		const user = await Users.findOne({ where: { userId: userData.userId } })
 		const response = await this.generateResponse(
-			user.id,
+			user.userId,
 			user.username,
 			user.email,
 			user.activationLink,
@@ -156,7 +156,7 @@ class UsersService {
 		}
 
 		const houses = await UsersFavoritesHouses.findAll({
-			where: { userid: user.id },
+			where: { userId: user.userId },
 		})
 		return houses
 	}

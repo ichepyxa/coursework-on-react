@@ -3,14 +3,14 @@ const UsersService = require('../services/usersService')
 const { validationResult } = require('express-validator')
 const APIError = require('../exceptions/apiExceptions')
 
-class UsersController {
-	addRefreshTokenInCookie(refreshToken) {
-		res.cookie('refreshToken', refreshToken, {
-			maxAge: 30 * 24 * 60 * 60 * 1000,
-			httpOnly: true,
-		})
-	}
+function addRefreshTokenInCookie(res, refreshToken) {
+	res.cookie('refreshToken', refreshToken, {
+		maxAge: 30 * 24 * 60 * 60 * 1000,
+		httpOnly: true,
+	})
+}
 
+class UsersController {
 	async getAllUsers(req, res, next) {
 		try {
 			const users = await UsersService.getAllUsers()
@@ -22,6 +22,10 @@ class UsersController {
 
 	async activateUser(req, res, next) {
 		try {
+			if (!req.user) {
+				throw new APIError.UnautorizedError()
+			}
+
 			const activationLink = req.params.link
 			await UsersService.activateUser(activationLink)
 
@@ -31,7 +35,7 @@ class UsersController {
 		}
 	}
 
-	async registerUsers(req, res, next) {
+	async registrationUsers(req, res, next) {
 		try {
 			const errors = validationResult(req)
 			if (!errors.isEmpty()) {
@@ -42,9 +46,13 @@ class UsersController {
 			}
 
 			const { username, email, password } = req.body
-			const user = await UsersService.registerUsers(username, email, password)
+			const user = await UsersService.registrationUsers(
+				username,
+				email,
+				password
+			)
 
-			this.addRefreshTokenInCookie(user.refreshToken)
+			addRefreshTokenInCookie(res, user.refreshToken)
 			res.json(user)
 		} catch (error) {
 			next(error)
@@ -61,7 +69,7 @@ class UsersController {
 			const { email, password } = req.body
 			const user = await UsersService.loginUsers(email, password)
 
-			this.addRefreshTokenInCookie(user.refreshToken)
+			addRefreshTokenInCookie(res, user.refreshToken)
 			res.json(user)
 		} catch (error) {
 			next(error)
@@ -85,7 +93,7 @@ class UsersController {
 			const { refreshToken } = req.cookies
 			const tokenData = await UsersService.refresh(refreshToken)
 
-			this.addRefreshTokenInCookie(tokenData.refreshToken)
+			addRefreshTokenInCookie(res, tokenData.refreshToken)
 			res.json(tokenData)
 		} catch (error) {
 			next(error)

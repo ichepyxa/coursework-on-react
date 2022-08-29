@@ -9,7 +9,7 @@ type UserState = {
 
 const initialState: UserState = {
 	user: {
-		id: undefined,
+		userId: undefined,
 		username: undefined,
 		email: undefined,
 		activationLink: undefined,

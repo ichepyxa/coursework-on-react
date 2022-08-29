@@ -23,7 +23,7 @@ router.post(
 	body('username').isLength({ min: 3, max: 15 }),
 	body('email').isEmail(),
 	body('password').isLength({ min: 6, max: 20 }),
-	UsersController.registerUsers
+	UsersController.registrationUsers
 )
 router.post(
 	'/users/login',

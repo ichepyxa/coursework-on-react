@@ -14,9 +14,9 @@ const Home: FC = () => {
 		<>
 			<Hero />
 			<Benefits />
+			<InteractiveMap />
 			<RecommendedHouses />
 			<Advice />
-			<InteractiveMap />
 			<FAQ />
 			<Map />
 		</>

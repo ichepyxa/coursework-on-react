@@ -29,6 +29,7 @@ db.sequelize
 		// 		'jnadsnklm gajfamkт ывтпьдф ьылплтфыд ьпфбыд пщфыждьпбвыфж пщшжфопьлдыф паыовдтешцйтплваьыьплуткцштпшт3щшщц3й3ощ2 ешташщдтвлчьщш о4з23щопльдыфжв asmglk sgnlkmsg kgnsl gmasgk am;gm',
 		// 	houses_id: 2,
 		// })
+		// db.users_roles.create({})
 		app.listen(config.PORT, async () => {
 			console.log(`Server was started on port ${config.PORT}`)
 		})
