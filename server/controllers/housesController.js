@@ -3,11 +3,11 @@ const HousesService = require('../services/housesService')
 class HousesController {
 	async getAllHouses(req, res, next) {
 		try {
-			let page = req.query.page
+			let { page, name, region } = req.query
 			let houses
 
-			if (page) {
-				houses = await HousesService.getHousesWithPagination(page)
+			if (page || name || region) {
+				houses = await HousesService.getHousesWithParams(page, name, region)
 			} else {
 				houses = await HousesService.getAllHouses()
 			}

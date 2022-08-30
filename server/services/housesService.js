@@ -3,6 +3,17 @@ const {
 	houses_images: HousesImages,
 	sequelize,
 } = require('../models')
+const { Op } = require('sequelize')
+
+const Regions = {
+	1: '',
+	2: 'Минская область',
+	3: 'Брестская область',
+	4: 'Витебская область',
+	5: 'Гомельская область',
+	6: 'Гродненская область',
+	7: 'Могилевская область',
+}
 
 class HousesService {
 	async getAllHouses() {
@@ -17,7 +28,7 @@ class HousesService {
 		return houses
 	}
 
-	async getHousesWithPagination(page = 1) {
+	async getHousesWithParams(page = 1, name = '', region = 1) {
 		if (!page || page < 1 || isNaN(page))
 			throw new Error('Указана несуществующая страница')
 
@@ -25,6 +36,14 @@ class HousesService {
 		const offset = (page - 1) * limit
 
 		const houses = await Houses.findAll({
+			where: {
+				name: {
+					[Op.like]: `%${name}%`,
+				},
+				location: {
+					[Op.like]: `${Regions[region]}%`,
+				},
+			},
 			limit: limit,
 			offset: offset,
 			include: [
@@ -36,7 +55,7 @@ class HousesService {
 		})
 
 		const housesCount = await sequelize.query(
-			'SELECT COUNT(*) as count FROM houses',
+			`SELECT COUNT(*) as count FROM houses WHERE location LIKE '${Regions[region]}%' AND name LIKE '%${name}%'`,
 			{ plain: true }
 		)
 

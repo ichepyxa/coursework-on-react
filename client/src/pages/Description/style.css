@@ -1,0 +1,6 @@
+.description img {
+	display: block;
+	width: 50%;
+	max-height: 500px;
+	margin: 0 auto 50px;
+}

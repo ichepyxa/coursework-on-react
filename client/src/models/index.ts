@@ -22,6 +22,8 @@ export interface IHouse {
 	price: number
 	description: string
 	images: IHouseImage[]
+	createdAt: string
+	updatedAt: string
 }
 
 export interface IHouseResponse {

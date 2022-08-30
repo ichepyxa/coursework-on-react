@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Routes, Route, useSearchParams } from 'react-router-dom'
+import React, { FC } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
@@ -11,18 +11,18 @@ import Test from './pages/Test/Test'
 import NotFound from './pages/NotFound/NotFound'
 import './App.css'
 import { useAppSelector } from './store/hook'
+import Description from './pages/Description/Description'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
-	const [searchParams, setSearchParams] = useSearchParams()
-	let page = searchParams.get('page')
 
 	return (
 		<Routes>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
 				<Route path="about" element={<About />} />
-				<Route path="houses" element={<Houses page={!page ? '1' : page} />} />
+				<Route path="houses" element={<Houses />} />
+				<Route path="houses/:houseId" element={<Description />} />
 				<Route path="test" element={<Test />} />
 			</Route>
 			<Route path="account" element={<Layout />}>

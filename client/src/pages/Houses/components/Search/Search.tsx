@@ -1,23 +1,33 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import createHref from '../../../../helpers/createHref'
+import { useSearchParams } from '../../../../hooks/useSearchParams'
 
 import './style.css'
 
 const Search: FC = () => {
-	const { search } = useLocation()
+	const navigate = useNavigate()
+	const { name, page, region } = useSearchParams()
 
-	const urlParams = new URLSearchParams(search)
+	const [inputName, setInputName] = useState<string>(name)
+	const [selectRegion, setSelectRegion] = useState<string | number>(region)
 
-	let region = urlParams.get('region') ?? 1
-	const [name, setName] = useState<string>(urlParams.get('name') ?? '')
+	const filterBtnClick = (name: string, region: string | number) =>
+		navigate(createHref(1, name, region))
+
+	useEffect(() => {
+		setInputName(name)
+		setSelectRegion(region)
+	}, [name, page, region])
 
 	return (
 		<div className="search d-md-flex align-items-end justify-content-between gap-5 my-4">
 			<div className="search-area d-flex flex-column w-100">
 				<h5>Область</h5>
 				<select
-					defaultValue={region || 1}
+					value={selectRegion}
+					onChange={e => setSelectRegion(e.target.value)}
 					className="search-area__select form-select"
 				>
 					<option value="1">Любая</option>
@@ -35,11 +45,15 @@ const Search: FC = () => {
 					type="text"
 					className="search-title__input form-control"
 					placeholder="Название"
-					value={name}
-					onChange={e => setName(e.target.value)}
+					value={inputName}
+					onChange={e => setInputName(e.target.value)}
 				/>
 			</div>
-			<Button variant="primary" className="search-btn">
+			<Button
+				variant="primary"
+				className="search-btn"
+				onClick={() => filterBtnClick(inputName, selectRegion)}
+			>
 				Отфильтровать
 			</Button>
 		</div>

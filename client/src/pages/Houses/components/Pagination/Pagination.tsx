@@ -1,71 +1,79 @@
 import React, { FC } from 'react'
 import { Pagination as PaginationElement } from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import createHref from '../../../../helpers/createHref'
+import { useSearchParams } from '../../../../hooks/useSearchParams'
 
 import './style.css'
 
 const Pagination: FC<{ countPage: number }> = ({ countPage }) => {
-	const { search } = useLocation()
+	const navigate = useNavigate()
 
-	const urlParams = new URLSearchParams(search)
-
-	const maxPage = countPage
-	let currentPage = urlParams.get('page') ?? 1
-	currentPage = currentPage === '' ? 1 : currentPage
+	const { name, page, region } = useSearchParams()
+	const newUrl = (page: number) => createHref(page, name, region)
+	const paginationItemClick = (href: string) => navigate(href)
 
 	return (
-		<PaginationElement className="d-flex align-items-center justify-content-center">
-			{currentPage <= 3 ? (
+		<PaginationElement className="d-flex align-items-center justify-content-center mt-5">
+			{page <= 3 ? (
 				<></>
 			) : (
-				<PaginationElement.Item href="/houses?page=1">1</PaginationElement.Item>
+				<PaginationElement.Item onClick={() => paginationItemClick(newUrl(1))}>
+					1
+				</PaginationElement.Item>
 			)}
-			{currentPage < 5 ? <></> : <PaginationElement.Ellipsis disabled />}
+			{page < 5 ? <></> : <PaginationElement.Ellipsis disabled />}
 
-			{currentPage < 3 ? (
+			{page < 3 ? (
 				<></>
 			) : (
-				<PaginationElement.Item href={`/houses?page=${+currentPage - 2}`}>
-					{+currentPage - 2}
+				<PaginationElement.Item
+					onClick={() => paginationItemClick(newUrl(+page - 2))}
+				>
+					{+page - 2}
 				</PaginationElement.Item>
 			)}
 
-			{currentPage < 2 ? (
+			{page < 2 ? (
 				<></>
 			) : (
-				<PaginationElement.Item href={`/houses?page=${+currentPage - 1}`}>
-					{+currentPage - 1}
+				<PaginationElement.Item
+					onClick={() => paginationItemClick(newUrl(+page - 1))}
+				>
+					{+page - 1}
 				</PaginationElement.Item>
 			)}
 
-			<PaginationElement.Item active>{currentPage}</PaginationElement.Item>
+			<PaginationElement.Item active>{page}</PaginationElement.Item>
 
-			{currentPage >= maxPage - 1 ? (
+			{page >= countPage - 1 ? (
 				<></>
 			) : (
-				<PaginationElement.Item href={`/houses?page=${+currentPage + 1}`}>
-					{+currentPage + 1}
+				<PaginationElement.Item
+					onClick={() => paginationItemClick(newUrl(+page + 1))}
+				>
+					{+page + 1}
 				</PaginationElement.Item>
 			)}
-			{currentPage >= maxPage - 2 ? (
+			{page >= countPage - 2 ? (
 				<></>
 			) : (
-				<PaginationElement.Item href={`/houses?page=${+currentPage + 2}`}>
-					{+currentPage + 2}
+				<PaginationElement.Item
+					onClick={() => paginationItemClick(newUrl(+page + 2))}
+				>
+					{+page + 2}
 				</PaginationElement.Item>
 			)}
 
-			{maxPage - 3 <= currentPage ? (
-				<></>
-			) : (
-				<PaginationElement.Ellipsis disabled />
-			)}
+			{countPage - 3 <= page ? <></> : <PaginationElement.Ellipsis disabled />}
 
-			{currentPage >= maxPage ? (
+			{page >= countPage ? (
 				<></>
 			) : (
-				<PaginationElement.Item href={`/houses?page=${maxPage}`}>
-					{maxPage}
+				<PaginationElement.Item
+					onClick={() => paginationItemClick(newUrl(countPage))}
+				>
+					{countPage}
 				</PaginationElement.Item>
 			)}
 		</PaginationElement>

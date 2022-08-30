@@ -14,10 +14,13 @@ const House: FC<IHouse> = ({ houseId, images, name, category, price }) => {
 			)}
 
 			{images.length > 0 ? (
-				<img className="house-item__image" src={images[0].image} alt={name} />
+				<img
+					className="house-item__image"
+					src={images[Math.floor(Math.random() * images.length)].image}
+					alt={name}
+				/>
 			) : (
 				<div className="house-item__image"></div>
-				// <div className="house-item__image"></div>
 			)}
 
 			<div
@@ -33,11 +36,17 @@ const House: FC<IHouse> = ({ houseId, images, name, category, price }) => {
 					)}
 					<h5 className="house-item__content-info__type">{category}</h5>
 					<span className="house-item__content-price d-block">
-						{price > 0 ? `Цена от: ${price} руб.` : 'Цену нужно уточнять'}
+						{price > 0 ? (
+							<span>
+								Цена от: <strong>{price}</strong> BYN
+							</span>
+						) : (
+							'Цену нужно уточнять'
+						)}
 					</span>
 				</div>
 				<Link
-					to={`/houses/description/${houseId}`}
+					to={`/houses/${houseId}`}
 					className="house-item__content-btn btn btn-primary mt-2"
 				>
 					Подробнее

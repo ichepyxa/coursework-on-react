@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
-import House from '../../../../components/House/House'
 import { API_URL } from '../../../../constants/apiUrl'
 import { IHouse, IHouseResponse } from '../../../../models'
+import HousesElement from '../../../../components/HousesElement/HousesElement'
 
 const RecommendedHouses: FC = () => {
 	const [houses, setHouses] = useState<IHouse[]>([])
@@ -13,10 +13,17 @@ const RecommendedHouses: FC = () => {
 			const response = await axios.get<IHouseResponse>(
 				`${API_URL}/houses?page=1`
 			)
-			let filterResponse: IHouse[] = []
-			response.data.houses.forEach((item, index) => {
-				if (index < 6) filterResponse.push(item)
-			})
+
+			const houses = response.data.houses
+			const filterResponse: IHouse[] = []
+
+			while (filterResponse.length < 6) {
+				const item = houses[Math.floor(Math.random() * houses.length)]
+				if (filterResponse.includes(item)) continue
+
+				filterResponse.push(item)
+			}
+
 			return filterResponse
 		} catch (error: any) {
 			return [] as IHouse[]
@@ -32,14 +39,9 @@ const RecommendedHouses: FC = () => {
 	return (
 		<>
 			{houses?.length > 0 ? (
-				<Container className="py-3" as="section">
+				<Container className="py-4" as="section">
 					<h2 className="text-center">Рекомендуемые места отдыха</h2>
-					<div className="houses d-md-flex align-items-center justify-content-around flex-wrap">
-						{houses &&
-							houses.map((house: IHouse) => (
-								<House key={house.houseId} {...house} />
-							))}
-					</div>
+					<HousesElement houses={houses} />
 				</Container>
 			) : (
 				<></>

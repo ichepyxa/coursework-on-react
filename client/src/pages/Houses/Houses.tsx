@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import axios from 'axios'
-import { Button, Container } from 'react-bootstrap'
-import House from '../../components/House/House'
+import { Container } from 'react-bootstrap'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
 import { IHouse, IHouseResponse } from '../../models'
@@ -9,18 +8,21 @@ import { useAppDispatch } from '../../store/hook'
 import { setNotification } from '../../store/slices/notificationSlice'
 import Search from './components/Search/Search'
 import Pagination from './components/Pagination/Pagination'
+import { useSearchParams } from '../../hooks/useSearchParams'
+import HousesElement from '../../components/HousesElement/HousesElement'
 
-const Houses: FC<{ page: string | null }> = ({ page = '1' }) => {
+const Houses: FC = () => {
 	const dispatch = useAppDispatch()
 	const [houses, setHouses] = useState<IHouse[]>([])
 	const [countPage, setCountPage] = useState<number>(0)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const { name, page, region } = useSearchParams()
 
 	const getHouses = async () => {
 		setIsLoading(true)
 		try {
 			const response = await axios.get<IHouseResponse>(
-				`${API_URL}/houses?page=${page}`
+				`${API_URL}/houses?page=${page}&name=${name}&region=${region}`
 			)
 
 			return response.data
@@ -52,7 +54,7 @@ const Houses: FC<{ page: string | null }> = ({ page = '1' }) => {
 			setCountPage(data.count)
 			setHouses(data.houses as IHouse[])
 		})
-	}, [])
+	}, [page, name, region])
 
 	return (
 		<Container className="py-3">
@@ -63,11 +65,7 @@ const Houses: FC<{ page: string | null }> = ({ page = '1' }) => {
 				<Loader />
 			) : houses.length > 0 ? (
 				<>
-					<div className="houses d-md-flex align-items-center justify-content-around flex-wrap mb-5">
-						{houses.map((house: IHouse) => (
-							<House key={house.houseId} {...house} />
-						))}
-					</div>
+					<HousesElement houses={houses} />
 					<Pagination countPage={countPage} />
 				</>
 			) : (
