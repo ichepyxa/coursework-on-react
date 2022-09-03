@@ -1,12 +1,13 @@
 import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
 import { IHouse } from '../../models'
 import { useAppDispatch } from '../../store/hook'
 import { setNotification } from '../../store/slices/notificationSlice'
+import Images from './components/Images/Images'
 
 import './style.css'
 
@@ -58,32 +59,45 @@ const Description: FC = () => {
 		<Container as="section" className="description py-4">
 			{isLoading ? (
 				<Loader />
-			) : Object.keys(house).length > 0 ? (
+			) : house !== null && Object.keys(house).length > 0 ? (
 				<>
+					<h2 className="text-center mt-2 mb-4">
+						{house.category} {house.name}
+					</h2>
 					{house.images.length > 0 ? (
-						<img src={house.images[0].image} alt={house.name} />
+						<Images name={house.name} images={house.images} />
 					) : (
-						<div className="house-item__image"></div>
+						<div className="house-description__image"></div>
 					)}
 
-					<h2>{house.name}</h2>
-					<span>{house.location}</span>
-					<span>{house.price}</span>
-					<hr />
+					<div className="house-description__info d-lg-flex justify-content-between">
+						<p>
+							<strong>Местонахождение:</strong> {house.location}
+						</p>
+						<p>
+							<strong>Цена:</strong> от {house.price} BYN
+						</p>
+					</div>
+					<h6 className="d-inline-block">
+						<strong>Описание:</strong>
+					</h6>
 					{house.description.length > 0 ? (
-						<p>{house.description}</p>
+						<span className="word-break"> {house.description}</span>
 					) : (
-						<p>Описание отсутвует</p>
+						<span> Описание отсутвует</span>
 					)}
-					<em>
-						Дата изменения:{' '}
-						<strong>{new Date(house.updatedAt).toLocaleString()}</strong>
-					</em>
+					<p className="mt-4 font-italic">
+						<strong>Дата изменения: </strong>
+						{new Date(house.updatedAt).toLocaleString()}
+					</p>
 				</>
 			) : (
-				<>
-					<h4 className="mt-5 text-center">Что-то пошло не так.</h4>
-				</>
+				<div className="mt-5 d-flex justify-content-center align-items-center flex-column">
+					<h4 className="mb-4 text-center">Такой дом не найден.</h4>
+					<Link className="btn btn-primary" to="/houses">
+						Вернуться к домам
+					</Link>
+				</div>
 			)}
 		</Container>
 	)

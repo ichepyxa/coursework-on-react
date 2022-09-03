@@ -58,7 +58,7 @@ const Navbar: FC = () => {
 		<header className="header" id="header">
 			<NavbarElement
 				variant="light"
-				expand="md"
+				expand="lg"
 				bg="white"
 				className="border-bottom fixed-top"
 			>
@@ -74,7 +74,7 @@ const Navbar: FC = () => {
 					<NavbarElement.Toggle aria-controls="navbarContent" />
 					<NavbarElement.Collapse id="navbarContent">
 						<Nav
-							className="me-auto w-100 align-items-md-center"
+							className="me-auto w-100 align-items-lg-center"
 							style={{ margin: '5px 0' }}
 						>
 							<Nav.Item className={pathname === '/' ? 'active' : ''}>
@@ -99,7 +99,7 @@ const Navbar: FC = () => {
 							</Nav.Item>
 							<div className="divider"></div>
 							{pageIsLoading ? (
-								<div className="dot-flashing ms-md-auto me-md-0 my-4 my-md-0 mx-auto"></div>
+								<div className="dot-flashing ms-lg-auto me-lg-0 my-4 my-lg-0 mx-auto"></div>
 							) : isAuth ? (
 								<>
 									<NavDropdown
@@ -123,7 +123,7 @@ const Navbar: FC = () => {
 											Выйти
 										</NavDropdown.Item>
 									</NavDropdown>
-									<Nav className="navbar-nav--mobile d-md-flex d-md-none">
+									<Nav className="navbar-nav--mobile d-lg-flex d-lg-none">
 										<Nav.Item>
 											<Link to="/account/profile" className="nav-link">
 												Личный кабинет
@@ -135,7 +135,7 @@ const Navbar: FC = () => {
 									</Nav>
 								</>
 							) : (
-								<Nav className="ms-md-auto d-flex flex-sm-column flex-md-row gap-2">
+								<Nav className="ms-lg-auto d-flex flex-md-column flex-lg-row gap-2">
 									<Nav.Item>
 										<Link
 											className="nav-link btn btn-outline-primary w-100"
@@ -146,7 +146,7 @@ const Navbar: FC = () => {
 									</Nav.Item>
 									<Nav.Item>
 										<Link
-											className="nav-link btn btn-primary ms-md-3 w-100"
+											className="nav-link btn btn-primary ms-lg-3 w-100"
 											to="/account/login"
 										>
 											Вход

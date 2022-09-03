@@ -43,7 +43,7 @@
 	left: -5.1rem;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 991px) {
 	.navbar-nav > .nav-item > .nav-link {
 		padding-left: 1rem;
 		padding-right: 1rem;

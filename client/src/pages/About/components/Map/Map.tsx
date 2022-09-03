@@ -18,8 +18,8 @@ const Map: FC = () => {
 			.marker([52.40669, 30.90868])
 			.addTo(map)
 			.bindPopup(
-				`<div>
-          <img class="d-block mx-auto" src="http://uoggmk.by/wp-content/themes/ggmk/img/logo.png" alt="logo" style="max-width: 110px; height: auto;" />
+				`<div style="position: relative;" >
+          <img class="d-block mx-auto" src="http://uoggmk.by/wp-content/themes/ggmk/img/logo.png" alt="logo" style="max-width: 55px;position: absolute;height: auto;bottom: 0;right: 0;" />
           <h6 class="text-center">Машиностроительный колледж</h6>
           <span><strong>Адрес: </strong>г. Гомель, ул. Объездная, 2</span>
           <br>

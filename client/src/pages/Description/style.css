@@ -1,6 +1,13 @@
-.description img {
+.house-description__image {
 	display: block;
 	width: 50%;
 	max-height: 500px;
 	margin: 0 auto 50px;
+	object-fit: cover;
+	transition: 0.2s ease-in-out;
+	border-radius: 5px;
+	object-position: center;
+	background: url(../../../public/images/no-house-img.svg) #eeeeee 50% 50%
+		no-repeat;
+	z-index: 2;
 }

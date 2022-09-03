@@ -9,6 +9,7 @@ export const useAuth = () => {
 		activationLink,
 		isActivated,
 		isPassedTest,
+		roleId,
 	}: IUser = useAppSelector(state => state.user.user)
 
 	return {
@@ -18,5 +19,6 @@ export const useAuth = () => {
 		activationLink,
 		isActivated,
 		isPassedTest,
+		roleId,
 	}
 }
