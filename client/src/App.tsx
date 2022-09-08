@@ -12,6 +12,9 @@ import NotFound from './pages/NotFound/NotFound'
 import './App.css'
 import { useAppSelector } from './store/hook'
 import Description from './pages/Description/Description'
+import Favorites from './pages/Favorites/Favorites'
+import TestResult from './pages/TestResult/TestResult'
+import Booking from './components/Booking/Booking'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -21,19 +24,34 @@ const App: FC = () => {
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
 				<Route path="about" element={<About />} />
-				<Route path="houses" element={<Houses />} />
-				<Route path="houses/:houseId" element={<Description />} />
+				<Route path="houses">
+					<Route index element={<Houses />} />
+					<Route path=":houseId" element={<Description />} />
+				</Route>
 				<Route path="test" element={<Test />} />
+				<Route path="account">
+					<Route index element={!isAuth ? <Login /> : <Profile />} />
+					<Route path="profile">
+						<Route index element={!isAuth ? <Login /> : <Profile />} />
+						<Route
+							path="favorites"
+							element={!isAuth ? <Login /> : <Favorites />}
+						/>
+						<Route path="test" element={!isAuth ? <Login /> : <TestResult />} />
+						<Route path="booking" element={!isAuth ? <Login /> : <Booking />} />
+					</Route>
+					<Route
+						path="changepassword"
+						element={!isAuth ? <Login /> : <Profile />}
+					/>
+					<Route
+						path="registration"
+						element={!isAuth ? <Register /> : <Profile />}
+					/>
+					<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
+				</Route>
 			</Route>
-			<Route path="account" element={<Layout />}>
-				<Route index element={<Profile />} />
-				<Route path="profile" element={<Profile />} />
-				<Route
-					path="registration"
-					element={!isAuth ? <Register /> : <Profile />}
-				/>
-				<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
-			</Route>
+
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	)

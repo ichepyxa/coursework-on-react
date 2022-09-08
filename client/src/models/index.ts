@@ -24,10 +24,24 @@ export interface IHouse {
 	images: IHouseImage[]
 	createdAt: string
 	updatedAt: string
+	isFavorite: boolean
+}
+
+export interface IHouseFavorites {
+	favoritesId: number
+	userId: number
+	houseId: number
+	createdAt: string
+	updatedAt: string
 }
 
 export interface IHouseResponse {
 	count: number,
+	houses: IHouse[]
+}
+
+export interface IHouseFavoritesResponse {
+	length: any
 	houses: IHouse[]
 }
 

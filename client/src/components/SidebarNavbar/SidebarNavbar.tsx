@@ -1,0 +1,63 @@
+import React, { FC } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+
+const SidebarNav: FC = () => {
+	const { pathname } = useLocation()
+
+	const changeActiveLink = (path: string) => {
+		if (
+			path === '/account/profile' &&
+			(pathname === '/account/login' ||
+				pathname === '/account/registration' ||
+				pathname === '/account')
+		) {
+			return 'nav-link active'
+		}
+
+		return path === pathname ? 'nav-link active' : 'nav-link link-dark'
+	}
+
+	return (
+		<div className="d-flex flex-column flex-shrink-0 p-4">
+			<span className="fs-4">Личный кабинет</span>
+			<hr />
+			<ul className="nav nav-pills flex-column mb-auto">
+				<li className="nav-item">
+					<Link
+						to="/account/profile"
+						className={changeActiveLink('/account/profile')}
+					>
+						Профиль
+					</Link>
+				</li>
+				<li>
+					<Link
+						to="/account/profile/favorites"
+						className={changeActiveLink('/account/profile/favorites')}
+					>
+						Избранное
+					</Link>
+				</li>
+				<li>
+					<Link
+						to="/account/profile/test"
+						className={changeActiveLink('/account/profile/test')}
+					>
+						Тест
+					</Link>
+				</li>
+				<li>
+					<Link
+						to="/account/profile/booking"
+						className={changeActiveLink('/account/profile/booking')}
+					>
+						Бронирование
+					</Link>
+				</li>
+			</ul>
+			{/* <hr /> */}
+		</div>
+	)
+}
+
+export default SidebarNav

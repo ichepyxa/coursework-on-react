@@ -1,4 +1,6 @@
 const {
+	users: Users,
+	users_favorites_houses: UsersFavoritesHouses,
 	houses: Houses,
 	houses_images: HousesImages,
 	sequelize,

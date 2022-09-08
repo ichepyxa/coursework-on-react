@@ -21,11 +21,21 @@ const Houses: FC = () => {
 	const getHouses = async () => {
 		setIsLoading(true)
 		try {
-			const response = await axios.get<IHouseResponse>(
-				`${API_URL}/houses?page=${page}&name=${name}&region=${region}`
-			)
+			await axios
+				.get<IHouseResponse>(
+					`${API_URL}/houses?page=${page}&name=${name}&region=${region}`
+				)
+				.then(response => {
+					if (
+						response.data.houses === undefined ||
+						response.data.houses === ([] as IHouse[])
+					) {
+						return setHouses([] as IHouse[])
+					}
 
-			return response.data
+					setCountPage(response.data.count)
+					setHouses(response.data.houses as IHouse[])
+				})
 		} catch (error: any) {
 			if (error.response.status === 0) {
 				dispatch(
@@ -39,21 +49,13 @@ const Houses: FC = () => {
 			}
 
 			dispatch(setNotification({ ...error.response?.data, isError: true }))
-			return {} as IHouseResponse
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
 	useEffect(() => {
-		getHouses().then(data => {
-			if (data === undefined || data.houses === []) {
-				return setHouses([] as IHouse[])
-			}
-
-			setCountPage(data.count)
-			setHouses(data.houses as IHouse[])
-		})
+		getHouses()
 	}, [page, name, region])
 
 	return (

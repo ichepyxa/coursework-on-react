@@ -31,5 +31,15 @@ router.post(
 	body('password').isLength({ min: 6, max: 20 }),
 	UsersController.loginUsers
 )
+router.post(
+	'/users/favoritesHouses',
+	authMiddleware,
+	UsersController.createFavoritesHouses
+)
+router.delete(
+	'/users/favoritesHouses/:houseId',
+	authMiddleware,
+	UsersController.deleteFavoritesHouses
+)
 
 module.exports = router

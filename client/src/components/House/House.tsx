@@ -1,16 +1,64 @@
 import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
-import { IHouse } from '../../models'
+import { Link, useNavigate } from 'react-router-dom'
+import { API_URL } from '../../constants/apiUrl'
+import api from '../../http'
+import { IHouse, IHouseFavorites } from '../../models'
+import { useAppSelector } from '../../store/hook'
 
 import './style.css'
 
-const House: FC<IHouse> = ({ houseId, images, name, category, price }) => {
+const House: FC<IHouse> = ({
+	houseId,
+	images,
+	name,
+	category,
+	price,
+	isFavorite,
+}) => {
+	const navigate = useNavigate()
+	const { isAuth } = useAppSelector(state => state.user)
+
+	const removeFavoritesHouses = async (e: any) => {
+		await api
+			.delete(`${API_URL}/users/favoritesHouses/${houseId}`)
+			.then(response => {
+				e.target.classList.remove('active')
+			})
+	}
+
+	const addFavoritesHouses = async (e: any) => {
+		return await api
+			.post<IHouseFavorites>(`${API_URL}/users/favoritesHouses`, {
+				houseId,
+			})
+			.then(response => {
+				e.target.classList.add('active')
+			})
+	}
+
+	const toggleFavorites = (e: any) => {
+		if (e.target.classList.contains('active')) {
+			return removeFavoritesHouses(e)
+		}
+
+		addFavoritesHouses(e)
+	}
+
+	const onClickFavoritesBtn = (e: any) =>
+		isAuth ? toggleFavorites(e) : navigate('/account/login')
+
 	return (
 		<div className="house">
-			{true ? (
-				<div className="favorites house-item__favorites active"></div>
+			{isFavorite ? (
+				<div
+					className="favorites house-item__favorites active"
+					onClick={(e: any) => onClickFavoritesBtn(e)}
+				></div>
 			) : (
-				<div className="favorites house-item__favorites"></div>
+				<div
+					className="favorites house-item__favorites"
+					onClick={(e: any) => onClickFavoritesBtn(e)}
+				></div>
 			)}
 
 			{images.length > 0 ? (

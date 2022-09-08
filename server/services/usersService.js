@@ -1,4 +1,5 @@
 const {
+	houses: Houses,
 	users: Users,
 	users_favorites_houses: UsersFavoritesHouses,
 } = require('../models')
@@ -100,9 +101,7 @@ class UsersService {
 		}
 
 		const isCorrectPassword = await bcypt.compare(password, user.password)
-		if (!isCorrectPassword) {
-			throw APIError.BadRequest('Неверный пароль')
-		}
+		if (!isCorrectPassword) throw APIError.BadRequest('Неверный пароль')
 
 		const response = await this.generateResponse(
 			user.userId,
@@ -117,25 +116,19 @@ class UsersService {
 	}
 
 	async logoutUsers(refreshToken) {
-		if (!refreshToken) {
-			throw APIError.UnautorizedError()
-		}
+		if (!refreshToken) throw APIError.UnautorizedError()
 
 		const token = await TokenService.removeToken(refreshToken)
 		return token
 	}
 
 	async refresh(refreshToken) {
-		if (!refreshToken) {
-			throw APIError.UnautorizedError()
-		}
+		if (!refreshToken) throw APIError.UnautorizedError()
 
 		const userData = TokenService.validateRefreshToken(refreshToken)
 		const tokenFromDB = await TokenService.findToken(refreshToken)
 
-		if (!userData || !tokenFromDB) {
-			throw APIError.UnautorizedError()
-		}
+		if (!userData || !tokenFromDB) throw APIError.UnautorizedError()
 
 		const user = await Users.findOne({ where: { userId: userData.userId } })
 		const response = await this.generateResponse(
@@ -151,14 +144,63 @@ class UsersService {
 	}
 
 	async getFavoritesHouses(user) {
-		if (!user) {
-			throw APIError.UnautorizedError()
-		}
+		if (!user) throw APIError.UnautorizedError()
 
 		const houses = await UsersFavoritesHouses.findAll({
 			where: { userId: user.userId },
 		})
-		return houses
+
+		const favoritesHouses = []
+		await houses.forEach(async house => {
+			await Houses.findByPk(house.houseId).then(data => {
+				// console.log(data)
+				favoritesHouses.push(data)
+			})
+		})
+
+		return { houses: favoritesHouses }
+	}
+
+	async createFavoritesHouses(user, houseId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!houseId) throw new Error('Не указан ID дома')
+
+		const houseFromDB = await Houses.findOne({
+			where: { houseId },
+		})
+		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		const dublicate = await UsersFavoritesHouses.findOne({
+			where: {
+				userId: user.userId,
+				houseId,
+			},
+		})
+		if (dublicate) throw new Error('Такой дом уже в избранном')
+
+		const favoriteHouse = await UsersFavoritesHouses.create({
+			userId: user.userId,
+			houseId,
+		})
+		return { house: favoriteHouse }
+	}
+
+	async deleteFavoritesHouses(user, houseId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!houseId) throw new Error('Не указан ID дома')
+
+		const houseFromDB = await Houses.findOne({
+			where: { houseId },
+		})
+		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		const favoriteHouse = await UsersFavoritesHouses.destroy({
+			where: {
+				userId: user.userId,
+				houseId,
+			},
+		})
+		return favoriteHouse
 	}
 }
 
