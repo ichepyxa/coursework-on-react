@@ -11,11 +11,6 @@ router.get(
 	authMiddleware,
 	UsersController.activateUser
 )
-router.get(
-	'/users/favoritesHouses',
-	authMiddleware,
-	UsersController.getFavoritesHouses
-)
 router.get('/users/refresh', UsersController.refresh)
 router.get('/users/logout', authMiddleware, UsersController.logoutUsers)
 router.post(
@@ -30,16 +25,6 @@ router.post(
 	body('email').isEmail(),
 	body('password').isLength({ min: 6, max: 20 }),
 	UsersController.loginUsers
-)
-router.post(
-	'/users/favoritesHouses',
-	authMiddleware,
-	UsersController.createFavoritesHouses
-)
-router.delete(
-	'/users/favoritesHouses/:houseId',
-	authMiddleware,
-	UsersController.deleteFavoritesHouses
 )
 
 module.exports = router

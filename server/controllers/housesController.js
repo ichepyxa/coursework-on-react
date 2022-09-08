@@ -91,6 +91,39 @@ class HousesController {
 			next(error)
 		}
 	}
+
+	async getFavoritesHouses(req, res, next) {
+		try {
+			const houses = await HousesService.getFavoritesHouses(req.user)
+			res.json(houses)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async createFavoritesHouses(req, res, next) {
+		try {
+			const house = await HousesService.createFavoritesHouses(
+				req.user,
+				req.body.houseId
+			)
+			res.json(house)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async deleteFavoritesHouses(req, res, next) {
+		try {
+			const house = await HousesService.deleteFavoritesHouses(
+				req.user,
+				req.params.houseId
+			)
+			res.json(house)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new HousesController()

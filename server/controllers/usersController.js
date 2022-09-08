@@ -99,40 +99,6 @@ class UsersController {
 			next(error)
 		}
 	}
-
-	async getFavoritesHouses(req, res, next) {
-		try {
-			const houses = await UsersService.getFavoritesHouses(req.user)
-			console.log(houses)
-			res.json(houses)
-		} catch (error) {
-			next(error)
-		}
-	}
-
-	async createFavoritesHouses(req, res, next) {
-		try {
-			const house = await UsersService.createFavoritesHouses(
-				req.user,
-				req.body.houseId
-			)
-			res.json(house)
-		} catch (error) {
-			next(error)
-		}
-	}
-
-	async deleteFavoritesHouses(req, res, next) {
-		try {
-			const house = await UsersService.deleteFavoritesHouses(
-				req.user,
-				req.params.houseId
-			)
-			res.json(house)
-		} catch (error) {
-			next(error)
-		}
-	}
 }
 
 module.exports = new UsersController()

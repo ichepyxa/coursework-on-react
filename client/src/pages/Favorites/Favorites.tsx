@@ -7,7 +7,6 @@ import { API_URL } from '../../constants/apiUrl'
 import { IHouse, IHouseFavoritesResponse } from '../../models'
 import { useAppDispatch } from '../../store/hook'
 import { setNotification } from '../../store/slices/notificationSlice'
-import axios from 'axios'
 import Loader from '../../components/Loader/Loader'
 import { Link } from 'react-router-dom'
 
@@ -22,17 +21,16 @@ const Favorites: FC = () => {
 		setIsLoading(true)
 		try {
 			await api
-				.get<IHouseFavoritesResponse>(`${API_URL}/users/favoritesHouses`)
-				.then(async response => {
-					response.data.houses.forEach(async item => {
-						await axios
-							.get<IHouse>(`${API_URL}/houses/${item.houseId}`)
-							.then(async item => {
-								console.log(item)
-								await setHouses(oldHouses => [...oldHouses, item.data])
-								console.log(houses)
-							})
-					})
+				.get<IHouseFavoritesResponse>(`${API_URL}/houses/favoritesHouses`)
+				.then(response => {
+					if (
+						response.data.houses === undefined ||
+						response.data.houses === ([] as IHouse[])
+					) {
+						return setHouses([] as IHouse[])
+					}
+
+					setHouses(response.data.houses)
 				})
 		} catch (error: any) {
 			if (error.response.status === 0) {
@@ -61,7 +59,7 @@ const Favorites: FC = () => {
 			<SidebarNavbar />
 			{isLoading ? (
 				<Loader />
-			) : houses.length > 0 ? (
+			) : houses !== ([] as IHouse[]) && houses.length > 0 ? (
 				<div className="mt-lg-4 w-100">
 					<h2 className="text-center">Избранные места отдыха</h2>
 					<HousesElement houses={houses} />

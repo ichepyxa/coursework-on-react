@@ -64,6 +64,7 @@ const Description: FC = () => {
 					<h2 className="text-center mt-2 mb-4">
 						{house.category} {house.name}
 					</h2>
+
 					{house.images.length > 0 ? (
 						<Images name={house.name} images={house.images} />
 					) : (

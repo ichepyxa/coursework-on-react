@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../../constants/apiUrl'
 import api from '../../http'
-import { IHouse, IHouseFavorites } from '../../models'
+import { IHouse, IHouseFavoritesResponse } from '../../models'
 import { useAppSelector } from '../../store/hook'
 
 import './style.css'
@@ -13,14 +13,14 @@ const House: FC<IHouse> = ({
 	name,
 	category,
 	price,
-	isFavorite,
+	isFavorite = false,
 }) => {
 	const navigate = useNavigate()
 	const { isAuth } = useAppSelector(state => state.user)
 
 	const removeFavoritesHouses = async (e: any) => {
 		await api
-			.delete(`${API_URL}/users/favoritesHouses/${houseId}`)
+			.delete(`${API_URL}/houses/favoritesHouses/${houseId}`)
 			.then(response => {
 				e.target.classList.remove('active')
 			})
@@ -28,7 +28,7 @@ const House: FC<IHouse> = ({
 
 	const addFavoritesHouses = async (e: any) => {
 		return await api
-			.post<IHouseFavorites>(`${API_URL}/users/favoritesHouses`, {
+			.post<IHouseFavoritesResponse>(`${API_URL}/houses/favoritesHouses`, {
 				houseId,
 			})
 			.then(response => {
@@ -61,7 +61,7 @@ const House: FC<IHouse> = ({
 				></div>
 			)}
 
-			{images.length > 0 ? (
+			{images?.length > 0 ? (
 				<img
 					className="house-item__image"
 					src={images[Math.floor(Math.random() * images.length)].image}
@@ -86,7 +86,7 @@ const House: FC<IHouse> = ({
 					<span className="house-item__content-price d-block">
 						{price > 0 ? (
 							<span>
-								Цена от: <strong>{price}</strong> BYN
+								Цена: <strong>{price}</strong> BYN
 							</span>
 						) : (
 							'Цену нужно уточнять'

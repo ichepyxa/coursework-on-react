@@ -1,5 +1,4 @@
 const {
-	users: Users,
 	users_favorites_houses: UsersFavoritesHouses,
 	houses: Houses,
 	houses_images: HousesImages,
@@ -145,6 +144,67 @@ class HousesService {
 			where: { imageId },
 		})
 		return deleteHouseImages
+	}
+
+	async getFavoritesHouses(user) {
+		if (!user) throw APIError.UnautorizedError()
+
+		const houses = await UsersFavoritesHouses.findAll({
+			where: { userId: user.userId },
+		})
+
+		const favoritesHouses = []
+		let i = 0
+		while (i < houses.length) {
+			await this.getHouseById(houses[i].houseId).then(data => {
+				favoritesHouses.push(data)
+				i++
+			})
+		}
+
+		return { houses: favoritesHouses }
+	}
+
+	async createFavoritesHouses(user, houseId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!houseId) throw new Error('Не указан ID дома')
+
+		const houseFromDB = await Houses.findOne({
+			where: { houseId },
+		})
+		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		const dublicate = await UsersFavoritesHouses.findOne({
+			where: {
+				userId: user.userId,
+				houseId,
+			},
+		})
+		if (dublicate) throw new Error('Такой дом уже в избранном')
+
+		const favoriteHouse = await UsersFavoritesHouses.create({
+			userId: user.userId,
+			houseId,
+		})
+		return { house: favoriteHouse }
+	}
+
+	async deleteFavoritesHouses(user, houseId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!houseId) throw new Error('Не указан ID дома')
+
+		const houseFromDB = await Houses.findOne({
+			where: { houseId },
+		})
+		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		const favoriteHouse = await UsersFavoritesHouses.destroy({
+			where: {
+				userId: user.userId,
+				houseId,
+			},
+		})
+		return favoriteHouse
 	}
 }
 
