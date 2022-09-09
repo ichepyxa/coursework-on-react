@@ -48,7 +48,16 @@ const Description: FC = () => {
 			) : house !== null && Object.keys(house).length > 0 ? (
 				<>
 					<h2 className="text-center mt-2 mb-4">
-						{house.category} {house.name}
+						{house.name
+							.toLowerCase()
+							.includes(
+								house.category
+									.substring(0, house.category.length - 1)
+									.toLowerCase()
+							)
+							? ''
+							: house.category}{' '}
+						{house.name}
 					</h2>
 
 					{house.images.length > 0 ? (

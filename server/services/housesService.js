@@ -5,16 +5,7 @@ const {
 	sequelize,
 } = require('../models')
 const { Op } = require('sequelize')
-
-const Regions = {
-	1: '',
-	2: 'Минская область',
-	3: 'Брестская область',
-	4: 'Витебская область',
-	5: 'Гомельская область',
-	6: 'Гродненская область',
-	7: 'Могилевская область',
-}
+const Regions = require('../constants/Regions')
 
 class HousesService {
 	async getAllHouses() {
@@ -56,7 +47,7 @@ class HousesService {
 		})
 
 		const housesCount = await sequelize.query(
-			`SELECT COUNT(*) as count FROM houses WHERE location LIKE '${Regions[region]}%' AND name LIKE '%${name}%'`,
+			`SELECT COUNT(*) as count FROM houses WHERE location LIKE '%${Regions[region]}%' AND name LIKE '%${name}%'`,
 			{ plain: true }
 		)
 
