@@ -73,12 +73,12 @@ const House: FC<IHouse> = ({
 
 			<div
 				className={`house-item__content ${
-					name.length > 15 ? 'd-xxl-flex' : 'd-xl-flex'
+					name.length > 17 ? 'd-xxl-flex' : 'd-xl-flex'
 				} justify-content-between align-items-end`}
 			>
 				<div className="house-item__content-info">
 					<h3 className="house-item__content-info__title">
-						{name.length > 15 ? `${name.substring(0, 15)}...` : name}
+						{name.length > 17 ? `${name.substring(0, 17)}...` : name}
 					</h3>
 					<h6 className="house-item__content-info__type">{category}</h6>
 					<span className="house-item__content-price d-block">

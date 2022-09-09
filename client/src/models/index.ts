@@ -49,3 +49,24 @@ export interface IHouseImage {
 	imageId: number,
 	image: string
 }
+
+export interface ISight {
+	sightId: number
+	name: string
+	category: string
+	location: string
+	description: string
+	images: ISightImage[]
+	createdAt: string
+	updatedAt: string
+}
+
+export interface ISightsResponse {
+	count: number,
+	sights: ISight[]
+}
+
+export interface ISightImage {
+	imageId: number,
+	image: string
+}

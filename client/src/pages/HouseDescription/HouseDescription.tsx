@@ -11,7 +11,7 @@ import Images from './components/Images/Images'
 
 import './style.css'
 
-const Description: FC = () => {
+const HouseDescription: FC = () => {
 	const dispatch = useAppDispatch()
 	const params = useParams()
 
@@ -99,4 +99,4 @@ const Description: FC = () => {
 	)
 }
 
-export default Description
+export default HouseDescription

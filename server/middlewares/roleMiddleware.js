@@ -25,7 +25,6 @@ module.exports = function (roles) {
 			}
 
 			const userRole = await UsersRoles.findByPk(userData.roleId)
-			console.log(userRole)
 			if (!userRole) {
 				return next(APIError.UnautorizedError())
 			}

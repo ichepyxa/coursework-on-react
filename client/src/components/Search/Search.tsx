@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import createHref from '../../../../helpers/createHref'
-import { useSearchParams } from '../../../../hooks/useSearchParams'
+import createHref from '../../helpers/createHref'
+import { useSearchParams } from '../../hooks/useSearchParams'
 
 import './style.css'
 
-const Search: FC = () => {
+const Search: FC<{ pageHrefPath: string }> = ({ pageHrefPath }) => {
 	const navigate = useNavigate()
 	const { name, page, region } = useSearchParams()
 
@@ -14,7 +14,7 @@ const Search: FC = () => {
 	const [selectRegion, setSelectRegion] = useState<string | number>(region)
 
 	const filterBtnClick = (name: string, region: string | number) =>
-		navigate(createHref(1, name, region))
+		navigate(createHref(pageHrefPath, 1, name, region))
 
 	useEffect(() => {
 		setInputName(name)

@@ -11,10 +11,12 @@ import Test from './pages/Test/Test'
 import NotFound from './pages/NotFound/NotFound'
 import './App.css'
 import { useAppSelector } from './store/hook'
-import Description from './pages/Description/Description'
+import HouseDescription from './pages/HouseDescription/HouseDescription'
 import Favorites from './pages/Favorites/Favorites'
 import TestResult from './pages/TestResult/TestResult'
 import Booking from './components/Booking/Booking'
+import Sights from './pages/Sights/Sights'
+import SightDescription from './pages/SightDescription/SightDescription'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -26,11 +28,11 @@ const App: FC = () => {
 				<Route path="about" element={<About />} />
 				<Route path="houses">
 					<Route index element={<Houses />} />
-					<Route path=":houseId" element={<Description />} />
+					<Route path=":houseId" element={<HouseDescription />} />
 				</Route>
 				<Route path="sights">
-					<Route index element={<Houses />} />
-					<Route path=":sightId" element={<Description />} />
+					<Route index element={<Sights />} />
+					<Route path=":sightId" element={<SightDescription />} />
 				</Route>
 				<Route path="test" element={<Test />} />
 				<Route path="account">

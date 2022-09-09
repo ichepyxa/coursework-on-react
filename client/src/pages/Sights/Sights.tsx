@@ -3,39 +3,39 @@ import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
-import { IHouse, IHouseResponse } from '../../models'
+import { ISight, ISightsResponse } from '../../models'
 import { useAppDispatch } from '../../store/hook'
 import Search from '../../components/Search/Search'
 import Pagination from '../../components/Pagination/Pagination'
 import { useSearchParams } from '../../hooks/useSearchParams'
-import HousesElement from '../../components/HousesElement/HousesElement'
+import SightsElement from '../../components/SightsElement/SightsElement'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
-const Houses: FC = () => {
+const Sights: FC = () => {
 	const dispatch = useAppDispatch()
-	const [houses, setHouses] = useState<IHouse[]>([])
+	const [sights, setSights] = useState<ISight[]>([])
 	const [countPage, setCountPage] = useState<number>(0)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const { name, page, region } = useSearchParams()
-	const pageHrefPath = 'houses'
+	const pageHrefPath = 'sights'
 
-	const getHouses = async () => {
+	const getSights = async () => {
 		setIsLoading(true)
 		try {
 			await axios
-				.get<IHouseResponse>(
+				.get<ISightsResponse>(
 					`${API_URL}/${pageHrefPath}?page=${page}&name=${name}&region=${region}`
 				)
 				.then(response => {
 					if (
-						response.data.houses === undefined ||
-						response.data.houses === ([] as IHouse[])
+						response.data.sights === undefined ||
+						response.data.sights === ([] as ISight[])
 					) {
-						return setHouses([] as IHouse[])
+						return setSights([] as ISight[])
 					}
 
 					setCountPage(response.data.count)
-					setHouses(response.data.houses as IHouse[])
+					setSights(response.data.sights as ISight[])
 				})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
@@ -45,19 +45,19 @@ const Houses: FC = () => {
 	}
 
 	useEffect(() => {
-		getHouses()
+		getSights()
 	}, [page, name, region])
 
 	return (
 		<Container className="py-3">
-			<h2 className="text-center mt-4">Места отдыха</h2>
+			<h2 className="text-center mt-4">Достопримечательности</h2>
 			<Search pageHrefPath={pageHrefPath} />
 
 			{isLoading ? (
 				<Loader />
-			) : houses.length > 0 ? (
+			) : sights.length > 0 ? (
 				<>
-					<HousesElement houses={houses} />
+					<SightsElement sights={sights} />
 					<Pagination pageHrefPath={pageHrefPath} countPage={countPage} />
 				</>
 			) : (
@@ -74,4 +74,4 @@ const Houses: FC = () => {
 	)
 }
 
-export default Houses
+export default Sights

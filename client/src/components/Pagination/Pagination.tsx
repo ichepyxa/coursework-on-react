@@ -1,16 +1,19 @@
 import React, { FC } from 'react'
 import { Pagination as PaginationElement } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import createHref from '../../../../helpers/createHref'
-import { useSearchParams } from '../../../../hooks/useSearchParams'
+import createHref from '../../helpers/createHref'
+import { useSearchParams } from '../../hooks/useSearchParams'
 
 import './style.css'
 
-const Pagination: FC<{ countPage: number }> = ({ countPage }) => {
+const Pagination: FC<{ pageHrefPath: string; countPage: number }> = ({
+	pageHrefPath,
+	countPage,
+}) => {
 	const navigate = useNavigate()
 
 	const { name, page, region } = useSearchParams()
-	const newUrl = (page: number) => createHref(page, name, region)
+	const newUrl = (page: number) => createHref(pageHrefPath, page, name, region)
 	const paginationItemClick = (href: string) => navigate(href)
 
 	return (

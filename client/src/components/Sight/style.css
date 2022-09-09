@@ -1,4 +1,4 @@
-.house {
+.sight {
 	overflow: hidden;
 	flex-basis: 33%;
 	height: 320px;
@@ -9,12 +9,12 @@
 	transition: transform 0.2s ease-in-out; /* Experiment animation */
 }
 
-.house:hover {
+.sight:hover {
 	transform: scale(1.03); /* Experiment animation */
 }
 
 @media (max-width: 992px) {
-	.house {
+	.sight {
 		flex-basis: 50%;
 	}
 }
@@ -31,29 +31,7 @@
 	}
 }
 
-.favorites {
-	position: absolute;
-	width: 32px;
-	height: 32px;
-	top: 32px;
-	left: 32px;
-	cursor: pointer;
-	z-index: 3;
-	background: #97a3af;
-	border-radius: 50%;
-	background-image: url(../../../public/images/like-disabled.png);
-	background-size: cover;
-	background-position: center;
-}
-
-.favorites.active {
-	background-image: url(../../../public/images/like-active.png);
-	background-size: cover;
-	background-position: center;
-	animation: animationLike 0.5s ease;
-}
-
-.house-item__image {
+.sight-item__image {
 	display: block;
 	width: 90%;
 	height: 100%;
@@ -68,7 +46,7 @@
 	z-index: 2;
 }
 
-.house-item__content {
+.sight-item__content {
 	position: absolute;
 	width: 90%;
 	left: 5%;
@@ -82,7 +60,7 @@
 	z-index: 3;
 }
 
-.house-item__content-info {
+.sight-item__content-info {
 	text-align: left;
 	word-break: break-word;
 }
