@@ -6,8 +6,6 @@ import Hero from './components/Hero/Hero'
 import InteractiveMap from './components/InteractiveMap/InteractiveMap'
 import RecommendedHouses from './components/RecommendedHouses/RecommendedHouses'
 
-import './style.css'
-
 const Home: FC = () => {
 	return (
 		<>

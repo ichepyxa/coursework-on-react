@@ -4,36 +4,35 @@ import { Container } from 'react-bootstrap'
 import { API_URL } from '../../../../constants/apiUrl'
 import { IHouse, IHouseResponse } from '../../../../models'
 import HousesElement from '../../../../components/HousesElement/HousesElement'
+import { Link } from 'react-router-dom'
 
 const RecommendedHouses: FC = () => {
 	const [houses, setHouses] = useState<IHouse[]>([])
 
 	const getRecommendedHouses = async () => {
 		try {
-			const response = await axios.get<IHouseResponse>(
-				`${API_URL}/houses?page=1`
-			)
+			await axios
+				.get<IHouseResponse>(`${API_URL}/houses?page=1`)
+				.then(response => {
+					const houses = response.data.houses
+					const filterResponse: IHouse[] = []
 
-			const houses = response.data.houses
-			const filterResponse: IHouse[] = []
+					while (filterResponse.length < 6) {
+						const item = houses[Math.floor(Math.random() * houses.length)]
+						if (filterResponse.includes(item)) continue
 
-			while (filterResponse.length < 6) {
-				const item = houses[Math.floor(Math.random() * houses.length)]
-				if (filterResponse.includes(item)) continue
+						filterResponse.push(item)
+					}
 
-				filterResponse.push(item)
-			}
-
-			return filterResponse
+					setHouses(filterResponse)
+				})
 		} catch (error: any) {
-			return [] as IHouse[]
+			setHouses([] as IHouse[])
 		}
 	}
 
 	useEffect(() => {
-		getRecommendedHouses().then(data => {
-			return setHouses(data)
-		})
+		getRecommendedHouses()
 	}, [])
 
 	return (
@@ -42,6 +41,11 @@ const RecommendedHouses: FC = () => {
 				<Container className="py-4" as="section">
 					<h2 className="text-center">Рекомендуемые места отдыха</h2>
 					<HousesElement houses={houses} />
+					<div className="mt-4 d-flex justify-content-center align-items-center">
+						<Link to="/houses" className="btn btn-outline-primary">
+							Смотреть больше
+						</Link>
+					</div>
 				</Container>
 			) : (
 				<></>

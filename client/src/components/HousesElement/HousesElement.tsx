@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { IHouse, IHouseFavorites, IHouseFavoritesResponse } from '../../models'
+import { IHouse, IHouseFavoritesResponse } from '../../models'
 import House from '../House/House'
 import { useAppSelector } from '../../store/hook'
 import { API_URL } from '../../constants/apiUrl'
@@ -42,8 +42,6 @@ const HousesElement: FC<{ houses: IHouse[] }> = ({ houses }) => {
 					)
 				)
 			})
-
-			console.log(newHouses)
 		}
 	}, [favoritesHouses])
 

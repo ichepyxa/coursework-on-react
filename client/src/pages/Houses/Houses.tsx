@@ -5,11 +5,11 @@ import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
 import { IHouse, IHouseResponse } from '../../models'
 import { useAppDispatch } from '../../store/hook'
-import { setNotification } from '../../store/slices/notificationSlice'
 import Search from './components/Search/Search'
 import Pagination from './components/Pagination/Pagination'
 import { useSearchParams } from '../../hooks/useSearchParams'
 import HousesElement from '../../components/HousesElement/HousesElement'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 const Houses: FC = () => {
 	const dispatch = useAppDispatch()
@@ -37,18 +37,7 @@ const Houses: FC = () => {
 					setHouses(response.data.houses as IHouse[])
 				})
 		} catch (error: any) {
-			if (error.response.status === 0) {
-				dispatch(
-					setNotification({
-						message: 'Проблемы с соединением',
-						errors: [],
-						isError: true,
-					})
-				)
-				return
-			}
-
-			dispatch(setNotification({ ...error.response?.data, isError: true }))
+			displayTroubleConnectionError(dispatch, error)
 		} finally {
 			setIsLoading(false)
 		}

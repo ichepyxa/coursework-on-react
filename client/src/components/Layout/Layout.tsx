@@ -5,13 +5,13 @@ import { API_URL } from '../../constants/apiUrl'
 import { IUserResponse } from '../../models'
 import { useAppSelector, useAppDispatch } from '../../store/hook'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
-import { setNotification } from '../../store/slices/notificationSlice'
 import Footer from '../Footer/Footer'
 import Navbar from '../Navbar/Navbar'
 import Toast from '../Toast/Toast'
 import './style.css'
 import Loader from '../Loader/Loader'
 import Disclamer from '../Disclamer/Disclamer'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 const Layout: FC = () => {
 	const dispatch = useAppDispatch()
@@ -21,15 +21,15 @@ const Layout: FC = () => {
 	const checkAuth = async () => {
 		dispatch(setIsLoading(true))
 		try {
-			const response = await axios.get<IUserResponse>(
-				`${API_URL}/users/refresh`,
-				{
+			await axios
+				.get<IUserResponse>(`${API_URL}/users/refresh`, {
 					withCredentials: true,
-				}
-			)
-			localStorage.setItem('token', response.data.accessToken)
-			dispatch(setUser(response.data.user))
-			dispatch(setIsAuth(true))
+				})
+				.then(response => {
+					localStorage.setItem('token', response.data.accessToken)
+					dispatch(setUser(response.data.user))
+					dispatch(setIsAuth(true))
+				})
 			// dispatch(
 			// 	setNotification({
 			// 		message: 'С возвращением',
@@ -38,17 +38,7 @@ const Layout: FC = () => {
 			// 	})
 			// )
 		} catch (error: any) {
-			if (error.response.status === 0) {
-				return dispatch(
-					setNotification({
-						message: 'Проблемы с соединением',
-						errors: [],
-						isError: true,
-					})
-				)
-			}
-
-			dispatch(setNotification({ ...error.response?.data, isError: true }))
+			displayTroubleConnectionError(dispatch, error)
 		} finally {
 			dispatch(setIsLoading(false))
 		}

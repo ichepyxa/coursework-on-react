@@ -25,6 +25,7 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
+	position: absolute;
 	max-height: 30px;
 	background-color: #0d6efd;
 	border-radius: 20px;

@@ -9,6 +9,7 @@ import { setNotification } from '../../store/slices/notificationSlice'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 import Input from '../../components/Input/Input'
 import './style.css'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 const Login: FC = () => {
 	const dispatch = useAppDispatch()
@@ -30,29 +31,20 @@ const Login: FC = () => {
 		if (isValidEmail && isValidPassword) {
 			dispatch(setIsLoading(true))
 			try {
-				const response = await AuthService.login(email, password)
-				localStorage.setItem('token', response.data.accessToken)
-				dispatch(setUser(response.data.user))
-				dispatch(setIsAuth(true))
-				dispatch(
-					setNotification({
-						message: 'Успешный вход',
-						isError: false,
-						errors: [],
-					})
-				)
-			} catch (error: any) {
-				if (error.response.status === 0) {
-					return dispatch(
+				await AuthService.login(email, password).then(response => {
+					localStorage.setItem('token', response.data.accessToken)
+					dispatch(setUser(response.data.user))
+					dispatch(setIsAuth(true))
+					dispatch(
 						setNotification({
-							message: 'Проблемы с соединением',
+							message: 'Успешный вход',
+							isError: false,
 							errors: [],
-							isError: true,
 						})
 					)
-				}
-
-				dispatch(setNotification({ ...error.response?.data, isError: true }))
+				})
+			} catch (error: any) {
+				displayTroubleConnectionError(dispatch, error)
 			} finally {
 				dispatch(setIsLoading(false))
 			}

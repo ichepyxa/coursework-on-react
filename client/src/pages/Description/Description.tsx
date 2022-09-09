@@ -4,9 +4,9 @@ import { Container } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 import { IHouse } from '../../models'
 import { useAppDispatch } from '../../store/hook'
-import { setNotification } from '../../store/slices/notificationSlice'
 import Images from './components/Images/Images'
 
 import './style.css'
@@ -21,38 +21,24 @@ const Description: FC = () => {
 	const getHouse = async () => {
 		setIsLoading(true)
 		try {
-			const response = await axios.get<IHouse>(
-				`${API_URL}/houses/${params.houseId}`
-			)
+			await axios
+				.get<IHouse>(`${API_URL}/houses/${params.houseId}`)
+				.then(response => {
+					if (response.data === undefined || response.data === ({} as IHouse)) {
+						return setHouse({} as IHouse)
+					}
 
-			return response.data
+					setHouse(response.data as IHouse)
+				})
 		} catch (error: any) {
-			if (error.response.status === 0) {
-				dispatch(
-					setNotification({
-						message: 'Проблемы с соединением',
-						errors: [],
-						isError: true,
-					})
-				)
-				return
-			}
-
-			dispatch(setNotification({ ...error.response?.data, isError: true }))
-			return {} as IHouse
+			displayTroubleConnectionError(dispatch, error)
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
 	useEffect(() => {
-		getHouse().then(data => {
-			if (data === undefined || data === ({} as IHouse)) {
-				return setHouse({} as IHouse)
-			}
-
-			setHouse(data as IHouse)
-		})
+		getHouse()
 	}, [])
 
 	return (
@@ -71,24 +57,24 @@ const Description: FC = () => {
 						<div className="house-description__image"></div>
 					)}
 
-					<div className="house-description__info d-lg-flex justify-content-between">
-						<p>
-							<strong>Местонахождение:</strong> {house.location}
-						</p>
-						<p>
-							<strong>Цена:</strong> от {house.price} BYN
-						</p>
-					</div>
-					<h6 className="d-inline-block">
-						<strong>Описание:</strong>
-					</h6>
+					<p className="fs-5">
+						<span className="fw-bold text-uppercase">Цена:</span> от{' '}
+						{house.price} BYN за дом
+					</p>
+					<p className="fs-5">
+						<span className="fw-bold text-uppercase">Местонахождение:</span>{' '}
+						{house.location}
+					</p>
+					<p className="text-uppercase d-inline-block m-0 fs-5 fw-bold">
+						Описание:
+					</p>
 					{house.description.length > 0 ? (
-						<span className="word-break"> {house.description}</span>
+						<span className="word-break fs-5"> {house.description}</span>
 					) : (
-						<span> Описание отсутвует</span>
+						<span className="fs-5"> Описание отсутвует</span>
 					)}
-					<p className="mt-4 font-italic">
-						<strong>Дата изменения: </strong>
+					<p className="text-uppercase mt-4 fs-5 font-italic">
+						<span className="fw-bold">Дата изменения: </span>
 						{new Date(house.updatedAt).toLocaleString()}
 					</p>
 				</>

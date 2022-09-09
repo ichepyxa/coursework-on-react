@@ -5,6 +5,7 @@ import Input from '../../components/Input/Input'
 import checkIsValidEmail from '../../helpers/checkIsValidEmail'
 import checkIsValidPassword from '../../helpers/checkIsValidPassword'
 import checkIsValidUsername from '../../helpers/checkIsValidUsername'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 import AuthService from '../../sevices/authService'
 import { useAppDispatch } from '../../store/hook'
 import { setNotification } from '../../store/slices/notificationSlice'
@@ -33,33 +34,22 @@ const Register: FC = () => {
 		if (isValidUsername && isValidEmail && isValidPassword) {
 			dispatch(setIsLoading(true))
 			try {
-				const response = await AuthService.registration(
-					username,
-					email,
-					password
-				)
-				localStorage.setItem('token', response.data.accessToken)
-				dispatch(setUser(response.data.user))
-				dispatch(setIsAuth(true))
-				dispatch(
-					setNotification({
-						message: 'Успешная регистрация',
-						isError: false,
-						errors: [],
-					})
+				await AuthService.registration(username, email, password).then(
+					response => {
+						localStorage.setItem('token', response.data.accessToken)
+						dispatch(setUser(response.data.user))
+						dispatch(setIsAuth(true))
+						dispatch(
+							setNotification({
+								message: 'Успешная регистрация',
+								isError: false,
+								errors: [],
+							})
+						)
+					}
 				)
 			} catch (error: any) {
-				if (error.response.status === 0) {
-					return dispatch(
-						setNotification({
-							message: 'Проблемы с соединением',
-							errors: [],
-							isError: true,
-						})
-					)
-				}
-
-				dispatch(setNotification({ ...error.response?.data, isError: true }))
+				displayTroubleConnectionError(dispatch, error)
 			} finally {
 				dispatch(setIsLoading(false))
 			}

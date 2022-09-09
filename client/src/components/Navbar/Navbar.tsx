@@ -12,6 +12,7 @@ import { IUser } from '../../models'
 import { Link, useLocation } from 'react-router-dom'
 import { setNotification } from '../../store/slices/notificationSlice'
 import './style.css'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 const Navbar: FC = () => {
 	const dispatch = useAppDispatch()
@@ -22,29 +23,20 @@ const Navbar: FC = () => {
 	const handleLogout = async () => {
 		dispatch(setIsLoading(true))
 		try {
-			await AuthService.logout()
-			localStorage.removeItem('token')
-			dispatch(setUser({} as IUser))
-			dispatch(setIsAuth(false))
-			dispatch(
-				setNotification({
-					message: 'Вы вышли из аккаунта',
-					isError: false,
-					errors: [],
-				})
-			)
-		} catch (error: any) {
-			if (error.response.status === 0) {
-				return dispatch(
+			await AuthService.logout().then(() => {
+				localStorage.removeItem('token')
+				dispatch(setUser({} as IUser))
+				dispatch(setIsAuth(false))
+				dispatch(
 					setNotification({
-						message: 'Проблемы с соединением',
+						message: 'Вы вышли из аккаунта',
+						isError: false,
 						errors: [],
-						isError: true,
 					})
 				)
-			}
-
-			dispatch(setNotification({ ...error.response?.data, isError: true }))
+			})
+		} catch (error: any) {
+			displayTroubleConnectionError(dispatch, error)
 		} finally {
 			dispatch(setIsLoading(false))
 		}
@@ -87,6 +79,11 @@ const Navbar: FC = () => {
 									Места отдыха
 								</Link>
 							</Nav.Item>
+							<Nav.Item className={pathname === '/sights' ? 'active' : ''}>
+								<Link to="/sights" className="nav-link">
+									Достопримечательности
+								</Link>
+							</Nav.Item>
 							<Nav.Item className={pathname === '/test' ? 'active' : ''}>
 								<Link to="/test" className="nav-link">
 									Тест
@@ -106,7 +103,7 @@ const Navbar: FC = () => {
 										className="ms-auto"
 										title={
 											<img
-												src="/images/no-user-img.png"
+												src="/images/no-user-bg-img.png"
 												alt="user"
 												width="32"
 												height="32"

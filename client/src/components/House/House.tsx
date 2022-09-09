@@ -21,7 +21,7 @@ const House: FC<IHouse> = ({
 	const removeFavoritesHouses = async (e: any) => {
 		await api
 			.delete(`${API_URL}/houses/favoritesHouses/${houseId}`)
-			.then(response => {
+			.then(() => {
 				e.target.classList.remove('active')
 			})
 	}
@@ -31,7 +31,7 @@ const House: FC<IHouse> = ({
 			.post<IHouseFavoritesResponse>(`${API_URL}/houses/favoritesHouses`, {
 				houseId,
 			})
-			.then(response => {
+			.then(() => {
 				e.target.classList.add('active')
 			})
 	}
@@ -64,7 +64,7 @@ const House: FC<IHouse> = ({
 			{images?.length > 0 ? (
 				<img
 					className="house-item__image"
-					src={images[Math.floor(Math.random() * images.length)].image}
+					src={images[0].image} //Math.floor(Math.random() * images.length)
 					alt={name}
 				/>
 			) : (
@@ -73,16 +73,14 @@ const House: FC<IHouse> = ({
 
 			<div
 				className={`house-item__content ${
-					name.length > 20 ? 'd-xxl-flex' : 'd-xl-flex'
+					name.length > 15 ? 'd-xxl-flex' : 'd-xl-flex'
 				} justify-content-between align-items-end`}
 			>
 				<div className="house-item__content-info">
-					{name.length > 20 ? (
-						<h4 className="house-item__content-info__title">{name}</h4>
-					) : (
-						<h3 className="house-item__content-info__title">{name}</h3>
-					)}
-					<h5 className="house-item__content-info__type">{category}</h5>
+					<h3 className="house-item__content-info__title">
+						{name.length > 15 ? `${name.substring(0, 15)}...` : name}
+					</h3>
+					<h6 className="house-item__content-info__type">{category}</h6>
 					<span className="house-item__content-price d-block">
 						{price > 0 ? (
 							<span>

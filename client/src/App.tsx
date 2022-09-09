@@ -28,6 +28,10 @@ const App: FC = () => {
 					<Route index element={<Houses />} />
 					<Route path=":houseId" element={<Description />} />
 				</Route>
+				<Route path="sights">
+					<Route index element={<Houses />} />
+					<Route path=":sightId" element={<Description />} />
+				</Route>
 				<Route path="test" element={<Test />} />
 				<Route path="account">
 					<Route index element={!isAuth ? <Login /> : <Profile />} />

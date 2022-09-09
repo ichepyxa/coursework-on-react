@@ -3,6 +3,8 @@ import { Container } from 'react-bootstrap'
 import SidebarNavbar from '../../components/SidebarNavbar/SidebarNavbar'
 import { useAuth } from '../../hooks/useAuth'
 
+import './style.css'
+
 const Profile: FC = () => {
 	const { email, username } = useAuth()
 
@@ -10,9 +12,9 @@ const Profile: FC = () => {
 		<Container className="d-flex gap-5 py-3 flex-lg-row flex-column">
 			<SidebarNavbar />
 			<div className="mt-lg-4 text-center">
-				<div className="userPanel-img mx-auto mb-2 ">
+				<div className="mx-auto mb-2 ">
 					<img
-						className="border-primary border border-1 rounded-circle"
+						className="avatar border-primary border border-1 rounded-circle"
 						src="/images/no-user-bg-img.png"
 						alt="userImg"
 					/>

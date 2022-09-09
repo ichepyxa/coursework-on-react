@@ -6,9 +6,9 @@ import SidebarNavbar from '../../components/SidebarNavbar/SidebarNavbar'
 import { API_URL } from '../../constants/apiUrl'
 import { IHouse, IHouseFavoritesResponse } from '../../models'
 import { useAppDispatch } from '../../store/hook'
-import { setNotification } from '../../store/slices/notificationSlice'
 import Loader from '../../components/Loader/Loader'
 import { Link } from 'react-router-dom'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 import './style.css'
 
@@ -33,18 +33,7 @@ const Favorites: FC = () => {
 					setHouses(response.data.houses)
 				})
 		} catch (error: any) {
-			if (error.response.status === 0) {
-				dispatch(
-					setNotification({
-						message: 'Проблемы с соединением',
-						errors: [],
-						isError: true,
-					})
-				)
-				return
-			}
-
-			dispatch(setNotification({ ...error.response?.data, isError: true }))
+			displayTroubleConnectionError(dispatch, error)
 		} finally {
 			setIsLoading(false)
 		}

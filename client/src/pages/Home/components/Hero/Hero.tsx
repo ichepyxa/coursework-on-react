@@ -25,7 +25,7 @@ const Hero: FC = () => {
 					className="btn text-white btn-primary mt-4 text-center"
 				>
 					<svg
-						enable-background="new 0 0 50 50"
+						enableBackground="new 0 0 50 50"
 						height="24px"
 						id="Layer_1"
 						version="1.1"
@@ -40,15 +40,15 @@ const Hero: FC = () => {
 							fill="none"
 							r="16"
 							stroke="#ffffff"
-							stroke-linecap="round"
-							stroke-miterlimit="10"
-							stroke-width="2"
+							strokeLinecap="round"
+							strokeMiterlimit="10"
+							strokeWidth="2"
 						/>
 						<line
 							fill="none"
 							stroke="#ffffff"
-							stroke-miterlimit="10"
-							stroke-width="4"
+							strokeMiterlimit="10"
+							strokeWidth="4"
 							x1="32.229"
 							x2="45.5"
 							y1="32.229"

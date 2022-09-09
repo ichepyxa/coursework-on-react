@@ -33,7 +33,7 @@
 	margin: 0 !important;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
 	.house-description__images {
 		grid-template-rows: 150px 150px;
 	}

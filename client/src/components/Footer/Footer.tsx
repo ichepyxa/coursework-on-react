@@ -31,6 +31,11 @@ const Footer: FC = () => {
 								Места отдыха
 							</Link>
 						</Nav.Item>
+						<Nav.Item className={pathname === '/sights' ? 'active' : ''}>
+							<Link to="/sights" className="nav-link">
+								Достопримечательности
+							</Link>
+						</Nav.Item>
 						<Nav.Item className={pathname === '/test' ? 'active' : ''}>
 							<Link to="/test" className="nav-link">
 								Тест
