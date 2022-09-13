@@ -1,12 +1,15 @@
 import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import { IHouse } from '../../models'
-import { useAppDispatch } from '../../store/hook'
+import { onClickFavoritesBtn } from '../../helpers/favoritesBtnClicks'
+import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
+import api from '../../http'
+import { IHouse, IHouseFavoritesResponse } from '../../models'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
 import Images from './components/Images/Images'
 
 import './style.css'
@@ -15,8 +18,26 @@ const HouseDescription: FC = () => {
 	const dispatch = useAppDispatch()
 	const params = useParams()
 
+	const navigate = useNavigate()
+	const { isAuth } = useAppSelector(state => state.user)
 	const [house, setHouse] = useState<IHouse>({} as IHouse)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
+
+	const getFavoritesHouses = async () => {
+		await api
+			.get<IHouseFavoritesResponse>(`${API_URL}/houses/favoritesHouses`)
+			.then(response => {
+				if (
+					response.data.houses === undefined ||
+					response.data.houses === ([] as IHouse[])
+				) {
+					return setFavoritesHouses([] as IHouse[])
+				}
+
+				setFavoritesHouses(response.data.houses as IHouse[])
+			})
+	}
 
 	const getHouse = async () => {
 		setIsLoading(true)
@@ -41,6 +62,16 @@ const HouseDescription: FC = () => {
 		getHouse()
 	}, [])
 
+	useEffect(() => {
+		if (isAuth) {
+			getFavoritesHouses()
+		}
+	}, [isAuth])
+
+	useEffect(() => {
+		setHouse(filterFavoritesHouses([house], favoritesHouses)[0])
+	}, [favoritesHouses])
+
 	return (
 		<Container as="section" className="description py-4">
 			{isLoading ? (
@@ -61,9 +92,43 @@ const HouseDescription: FC = () => {
 					</h2>
 
 					{house.images.length > 0 ? (
-						<Images name={house.name} images={house.images} />
+						<div>
+							<Images name={house.name} images={house.images}>
+								{house.isFavorite ? (
+									<div
+										className="favorites house-item__favorites active"
+										onClick={(e: any) =>
+											onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
+										}
+									></div>
+								) : (
+									<div
+										className="favorites house-item__favorites"
+										onClick={(e: any) =>
+											onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
+										}
+									></div>
+								)}
+							</Images>
+						</div>
 					) : (
-						<div className="house-description__image"></div>
+						<div className="house-description__image">
+							{house.isFavorite ? (
+								<div
+									className="favorites house-item__favorites active"
+									onClick={(e: any) =>
+										onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
+									}
+								></div>
+							) : (
+								<div
+									className="favorites house-item__favorites"
+									onClick={(e: any) =>
+										onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
+									}
+								></div>
+							)}
+						</div>
 					)}
 
 					<p className="fs-5">

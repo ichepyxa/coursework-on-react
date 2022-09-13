@@ -22,14 +22,16 @@ const Sight: FC<ISight> = ({ sightId, images, name, category }) => {
 
 			<div
 				className={`sight-item__content ${
-					name.length > 17 ? 'd-xxl-flex' : 'd-xl-flex'
+					name.length > 30 ? 'd-xxl-flex' : 'd-xl-flex'
 				} justify-content-between align-items-end`}
 			>
 				<div className="sight-item__content-info">
-					<h3 className="sight-item__content-info__title">
-						{name.length > 17 ? `${name.substring(0, 17)}...` : name}
-					</h3>
-					<h6 className="sight-item__content-info__type">{newCategory}</h6>
+					<h5 className="sight-item__content-info__title">
+						{name.length > 30 ? `${name.substring(0, 30)}...` : name}
+					</h5>
+					<h6 className="sight-item__content-info__type fw-normal">
+						{newCategory}
+					</h6>
 				</div>
 				<Link
 					to={`/sights/${sightId}`}

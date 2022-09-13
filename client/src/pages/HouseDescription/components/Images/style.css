@@ -17,6 +17,7 @@
 
 .house-description__item:nth-child(1) {
 	grid-area: post-1;
+	position: relative;
 }
 
 .house-description__item:nth-child(2) {

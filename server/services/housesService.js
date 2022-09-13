@@ -65,6 +65,23 @@ class HousesService {
 				},
 			],
 		})
+
+		// let recomendedHouses
+		// if (house) {
+		// 	recomendedHouses = await Houses.findAll({
+		// 		where: {
+		// 			houseId: {
+		// 				[Op.not]: house.houseId,
+		// 			},
+		// 			category: {
+		// 				[Op.like]: `%${house.category}%`,
+		// 			},
+		// 		},
+		// 		limit: 10,
+		// 	})
+		// }
+
+		// return { currentHouse: house, recomendedHouses }
 		return house
 	}
 

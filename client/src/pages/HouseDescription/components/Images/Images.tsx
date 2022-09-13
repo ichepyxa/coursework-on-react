@@ -1,15 +1,17 @@
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 import { IHouseImage } from '../../../../models'
 
 import './style.css'
 
-const Images: FC<{ name: string; images: IHouseImage[] }> = ({
-	name,
-	images,
-}) => {
+const Images: FC<{
+	name: string
+	images: IHouseImage[]
+	children: ReactNode
+}> = ({ name, images, children }) => {
 	return (
 		<div className="house-description__images">
 			<div className="house-description__item">
+				{children}
 				<img
 					className="house-description__image"
 					src={images[0].image}

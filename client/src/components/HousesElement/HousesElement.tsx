@@ -4,6 +4,7 @@ import House from '../House/House'
 import { useAppSelector } from '../../store/hook'
 import { API_URL } from '../../constants/apiUrl'
 import api from '../../http'
+import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
 
 const HousesElement: FC<{ houses: IHouse[] }> = ({ houses }) => {
 	const { isAuth } = useAppSelector(state => state.user)
@@ -32,17 +33,7 @@ const HousesElement: FC<{ houses: IHouse[] }> = ({ houses }) => {
 	}, [isAuth])
 
 	useEffect(() => {
-		if (favoritesHouses.length > 0) {
-			favoritesHouses.forEach(favoriteHouse => {
-				setNewHouses(oldHouses =>
-					oldHouses.map(house =>
-						house.houseId === favoriteHouse.houseId
-							? { ...house, isFavorite: true }
-							: house
-					)
-				)
-			})
-		}
+		setNewHouses(filterFavoritesHouses(houses, favoritesHouses))
 	}, [favoritesHouses])
 
 	return (
