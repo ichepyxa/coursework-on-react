@@ -5,6 +5,7 @@ export interface IUser {
 	activationLink: string | undefined
 	isActivated: boolean | undefined
 	isPassedTest: boolean | undefined
+	avatar: string | undefined
 	roleId: number | undefined
 }
 
@@ -69,4 +70,8 @@ export interface ISightsResponse {
 export interface ISightImage {
 	imageId: number,
 	image: string
+}
+
+export interface IAvatar {
+	avatar: string
 }

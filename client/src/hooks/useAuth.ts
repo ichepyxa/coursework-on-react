@@ -9,8 +9,10 @@ export const useAuth = () => {
 		activationLink,
 		isActivated,
 		isPassedTest,
+		avatar,
 		roleId,
 	}: IUser = useAppSelector(state => state.user.user)
+	const isAuth = useAppSelector(state => state.user.isAuth)
 
 	return {
 		userId,
@@ -19,6 +21,8 @@ export const useAuth = () => {
 		activationLink,
 		isActivated,
 		isPassedTest,
+		avatar,
+		isAuth,
 		roleId,
 	}
 }

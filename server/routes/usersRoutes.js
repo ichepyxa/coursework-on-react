@@ -1,6 +1,7 @@
 const Router = require('express')
 const router = new Router()
 const { body } = require('express-validator')
+const FilesController = require('../controllers/filesController')
 const UsersController = require('../controllers/usersController')
 const authMiddleware = require('../middlewares/authMiddleware')
 const roleMiddleware = require('../middlewares/roleMiddleware')
@@ -20,11 +21,17 @@ router.post(
 	body('password').isLength({ min: 6, max: 20 }),
 	UsersController.registrationUsers
 )
+router.post('/users/uploadAvatar', authMiddleware, FilesController.uploadAvatar)
 router.post(
 	'/users/login',
 	body('email').isEmail(),
 	body('password').isLength({ min: 6, max: 20 }),
 	UsersController.loginUsers
+)
+router.delete(
+	'/users/deleteAvatar',
+	authMiddleware,
+	FilesController.deleteAvatar
 )
 
 module.exports = router

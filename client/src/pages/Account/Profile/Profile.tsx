@@ -1,26 +1,36 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
-import SidebarNavbar from '../../components/SidebarNavbar/SidebarNavbar'
-import { useAuth } from '../../hooks/useAuth'
+import { Link } from 'react-router-dom'
+import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
+import { API_DOMAIN } from '../../../constants/apiUrl'
+import { useAuth } from '../../../hooks/useAuth'
 
 import './style.css'
 
 const Profile: FC = () => {
-	const { email, username } = useAuth()
+	const { email, username, avatar } = useAuth()
 
 	return (
 		<Container className="d-flex gap-5 py-3 flex-lg-row flex-column">
 			<SidebarNavbar />
 			<div className="mt-lg-4 text-center">
-				<div className="mx-auto mb-2 ">
+				<div className="mx-auto mb-2">
 					<img
 						className="avatar border-primary border border-1 rounded-circle"
-						src="/images/no-user-bg-img.png"
+						src={
+							avatar ? `${API_DOMAIN}${avatar}` : '/images/no-user-bg-img.png'
+						}
 						alt="userImg"
 					/>
 				</div>
 				<div className="d-grid gap-3 mx-auto">
-					<h3 className="text-center">{username}</h3>
+					<h3 className="text-center mb-0">{username}</h3>
+					<Link
+						className="avatar-btn mx-auto btn btn-primary"
+						to="/account/uploadAvatar"
+					>
+						Сменить фото
+					</Link>
 				</div>
 			</div>
 			<div className="mt-lg-4 w-100">

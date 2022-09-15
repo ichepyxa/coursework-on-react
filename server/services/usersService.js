@@ -14,6 +14,7 @@ class UsersService {
 		activationLink,
 		isActivated,
 		isPassedTest,
+		avatar,
 		roleId
 	) {
 		const payload = {
@@ -23,6 +24,7 @@ class UsersService {
 			activationLink,
 			isActivated,
 			isPassedTest,
+			avatar,
 			roleId,
 		}
 
@@ -83,6 +85,7 @@ class UsersService {
 			user.activationLink,
 			user.isActivated,
 			user.isPassedTest,
+			user.avatar,
 			user.roleId
 		)
 		return response
@@ -106,6 +109,7 @@ class UsersService {
 			user.activationLink,
 			user.isActivated,
 			user.isPassedTest,
+			user.avatar,
 			user.roleId
 		)
 		return response
@@ -134,6 +138,7 @@ class UsersService {
 			user.activationLink,
 			user.isActivated,
 			user.isPassedTest,
+			user.avatar,
 			user.roleId
 		)
 		return response

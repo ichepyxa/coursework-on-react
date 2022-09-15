@@ -2,9 +2,9 @@ import React, { FC } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
-import Profile from './pages/Profile/Profile'
-import Register from './pages/Register/Register'
-import Login from './pages/Login/Login'
+import Profile from './pages/Account/Profile/Profile'
+import Register from './pages/Account/Register/Register'
+import Login from './pages/Account/Login/Login'
 import About from './pages/About/About'
 import Houses from './pages/Houses/Houses'
 import Test from './pages/Test/Test'
@@ -12,11 +12,12 @@ import NotFound from './pages/NotFound/NotFound'
 import './App.css'
 import { useAppSelector } from './store/hook'
 import HouseDescription from './pages/HouseDescription/HouseDescription'
-import Favorites from './pages/Favorites/Favorites'
-import TestResult from './pages/TestResult/TestResult'
+import Favorites from './pages/Account/Favorites/Favorites'
+import TestResult from './pages/Account/TestResult/TestResult'
 import Booking from './components/Booking/Booking'
 import Sights from './pages/Sights/Sights'
 import SightDescription from './pages/SightDescription/SightDescription'
+import UploadAvatar from './pages/Account/UploadAvatar/UploadAvatar'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -46,6 +47,10 @@ const App: FC = () => {
 						<Route path="test" element={!isAuth ? <Login /> : <TestResult />} />
 						<Route path="booking" element={!isAuth ? <Login /> : <Booking />} />
 					</Route>
+					<Route
+						path="uploadAvatar"
+						element={!isAuth ? <Login /> : <UploadAvatar />}
+					/>
 					<Route
 						path="changepassword"
 						element={!isAuth ? <Login /> : <Profile />}

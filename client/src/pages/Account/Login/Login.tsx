@@ -1,15 +1,19 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import checkIsValidEmail from '../../helpers/checkIsValidEmail'
-import checkIsValidPassword from '../../helpers/checkIsValidPassword'
-import AuthService from '../../sevices/authService'
-import { useAppDispatch } from '../../store/hook'
-import { setNotification } from '../../store/slices/notificationSlice'
-import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
-import Input from '../../components/Input/Input'
+import checkIsValidEmail from '../../../helpers/checkIsValidEmail'
+import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
+import AuthService from '../../../sevices/authService'
+import { useAppDispatch } from '../../../store/hook'
+import { setNotification } from '../../../store/slices/notificationSlice'
+import {
+	setIsAuth,
+	setIsLoading,
+	setUser,
+} from '../../../store/slices/userSlice'
+import Input from '../../../components/Input/Input'
 import './style.css'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
+import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
 
 const Login: FC = () => {
 	const dispatch = useAppDispatch()

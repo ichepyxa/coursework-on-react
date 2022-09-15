@@ -1,4 +1,5 @@
 const express = require('express')
+const fileUplaod = require('express-fileupload')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const housesRouter = require('./routes/housesRoutes')
@@ -10,6 +11,11 @@ const config = require('./config/server_config')
 const app = express()
 const db = require('./models')
 
+app.use(
+	`/${config.FILES_PATH}`,
+	express.static(`${__dirname}/${config.FILES_PATH}`)
+)
+app.use(fileUplaod({}))
 app.use(express.json())
 app.use(
 	cors({

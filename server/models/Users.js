@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: false,
 		},
 		activationLink: DataTypes.STRING,
+		avatar: {
+			type: DataTypes.STRING,
+			defaultValue: '',
+		},
 	})
 
 	Users.associate = function (models) {

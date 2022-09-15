@@ -6,18 +6,20 @@ import {
 	Container,
 } from 'react-bootstrap'
 import AuthService from '../../sevices/authService'
-import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { useAppDispatch } from '../../store/hook'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 import { IUser } from '../../models'
 import { Link, useLocation } from 'react-router-dom'
 import { setNotification } from '../../store/slices/notificationSlice'
 import './style.css'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
+import { useAuth } from '../../hooks/useAuth'
+import { API_DOMAIN } from '../../constants/apiUrl'
 
 const Navbar: FC = () => {
 	const dispatch = useAppDispatch()
 	const [pageIsLoading, setPageIsLoading] = useState<boolean>(true)
-	const isAuth = useAppSelector(state => state.user.isAuth)
+	const { isAuth, avatar } = useAuth()
 	const { pathname } = useLocation()
 
 	const handleLogout = async () => {
@@ -103,7 +105,11 @@ const Navbar: FC = () => {
 										className="ms-auto"
 										title={
 											<img
-												src="/images/no-user-bg-img.png"
+												src={
+													avatar
+														? `${API_DOMAIN}${avatar}`
+														: '/images/no-user-bg-img.png'
+												}
 												alt="user"
 												width="32"
 												height="32"

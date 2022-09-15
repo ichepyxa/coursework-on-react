@@ -15,6 +15,7 @@ const initialState: UserState = {
 		activationLink: undefined,
 		isActivated: undefined,
 		isPassedTest: undefined,
+		avatar: undefined,
 		roleId: undefined,
 	},
 	isLoading: false,
@@ -34,8 +35,11 @@ const userSlice = createSlice({
 		setUser(state, action: PayloadAction<IUser>) {
 			state.user = action.payload
 		},
+		setAvatar(state, action: PayloadAction<string>) {
+			state.user.avatar = action.payload
+		},
 	},
 })
 
-export const { setUser, setIsAuth, setIsLoading } = userSlice.actions
+export const { setUser, setIsAuth, setIsLoading, setAvatar } = userSlice.actions
 export default userSlice.reducer

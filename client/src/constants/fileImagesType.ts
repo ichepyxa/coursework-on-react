@@ -1,0 +1,1 @@
+export const imagesType = ['image/jpg', 'image/png', 'image/jpeg']
