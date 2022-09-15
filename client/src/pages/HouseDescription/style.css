@@ -11,3 +11,8 @@
 		no-repeat;
 	z-index: 2;
 }
+
+.description .house-item__favorites {
+	top: 20px;
+	left: 20px;
+}

@@ -108,7 +108,7 @@ const UploadAvatar: FC = () => {
 		>
 			<h2 className="mb-4 text-center">Загрузка фото</h2>
 			<img
-				className="avatar border-primary border border-1 mb-3 rounded-circle"
+				className="avatar border-primary border border-2 mb-3 rounded-circle"
 				src={
 					userAvatar && userAvatar !== API_DOMAIN
 						? userAvatar
@@ -117,7 +117,7 @@ const UploadAvatar: FC = () => {
 				alt="userImg"
 			/>
 			<Form
-				className="d-flex flex-column justify-content-center"
+				className="d-flex flex-column mb-5 justify-content-center"
 				onSubmit={e => onUpload(e)}
 			>
 				<UploadInput

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import axios from 'axios'
 import { API_URL } from '../../constants/apiUrl'
@@ -12,11 +12,13 @@ import './style.css'
 import Loader from '../Loader/Loader'
 import Disclamer from '../Disclamer/Disclamer'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
+import NotOnline from '../../pages/NotOnline/NotOnline'
 
 const Layout: FC = () => {
 	const dispatch = useAppDispatch()
 	const { isLoading } = useAppSelector(state => state.user)
 	const notification = useAppSelector(state => state.notification)
+	const [onLine, setOnLine] = useState<boolean>(window.clientInformation.onLine)
 
 	const checkAuth = async () => {
 		dispatch(setIsLoading(true))
@@ -50,7 +52,11 @@ const Layout: FC = () => {
 		}
 	}, [])
 
-	return (
+	useEffect(() => {
+		window.addEventListener('offline', () => setOnLine(false))
+	}, [])
+
+	return onLine ? (
 		<>
 			<Navbar />
 			<main className="main" id="main">
@@ -68,6 +74,8 @@ const Layout: FC = () => {
 			)}
 			<Disclamer />
 		</>
+	) : (
+		<NotOnline />
 	)
 }
 

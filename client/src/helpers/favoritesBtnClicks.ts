@@ -6,6 +6,7 @@ export const removeFavoritesHouses = async (e: any, houseId: number) => {
 		await api
 			.delete(`${API_URL}/houses/favoritesHouses/${houseId}`)
 			.then(() => {
+				e.target.parentNode.classList.add('favorites-opacity')
 				e.target.classList.remove('active')
 			})
 	}
@@ -16,6 +17,7 @@ export const addFavoritesHouses = async (e: any, houseId: number) => {
 				houseId,
 			})
 			.then(() => {
+				e.target.parentNode.classList.remove('favorites-opacity')
 				e.target.classList.add('active')
 			})
 	}

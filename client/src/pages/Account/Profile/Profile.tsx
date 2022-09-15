@@ -16,7 +16,7 @@ const Profile: FC = () => {
 			<div className="mt-lg-4 text-center">
 				<div className="mx-auto mb-2">
 					<img
-						className="avatar border-primary border border-1 rounded-circle"
+						className="avatar border-primary border border-2 rounded-circle"
 						src={
 							avatar ? `${API_DOMAIN}${avatar}` : '/images/no-user-bg-img.png'
 						}
