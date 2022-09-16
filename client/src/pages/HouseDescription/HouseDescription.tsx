@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
+import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 import { onClickFavoritesBtn } from '../../helpers/favoritesBtnClicks'
 import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
@@ -13,6 +14,14 @@ import { useAppDispatch, useAppSelector } from '../../store/hook'
 import Images from './components/Images/Images'
 
 import './style.css'
+
+const categoriesHousesWithOtherText: { [key: string]: any } = {
+	Отель: 'номер',
+	Баня: 'баню',
+	Апартаменты: 'апартаменты',
+	Беседка: 'беседку',
+	'Открытая беседка': 'беседку',
+}
 
 const HouseDescription: FC = () => {
 	const dispatch = useAppDispatch()
@@ -58,6 +67,24 @@ const HouseDescription: FC = () => {
 		}
 	}
 
+	const favoritesBtns = () => {
+		return house.isFavorite ? (
+			<div
+				className="favorites house-item__favorites active"
+				onClick={(e: any) =>
+					onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
+				}
+			></div>
+		) : (
+			<div
+				className="favorites house-item__favorites"
+				onClick={(e: any) =>
+					onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
+				}
+			></div>
+		)
+	}
+
 	useEffect(() => {
 		getHouse()
 	}, [])
@@ -94,47 +121,31 @@ const HouseDescription: FC = () => {
 					{house.images.length > 0 ? (
 						<div>
 							<Images name={house.name} images={house.images}>
-								{house.isFavorite ? (
-									<div
-										className="favorites house-item__favorites active"
-										onClick={(e: any) =>
-											onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
-										}
-									></div>
-								) : (
-									<div
-										className="favorites house-item__favorites"
-										onClick={(e: any) =>
-											onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
-										}
-									></div>
-								)}
+								{favoritesBtns()}
 							</Images>
 						</div>
 					) : (
-						<div className="house-description__image">
-							{house.isFavorite ? (
-								<div
-									className="favorites house-item__favorites active"
-									onClick={(e: any) =>
-										onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
-									}
-								></div>
-							) : (
-								<div
-									className="favorites house-item__favorites"
-									onClick={(e: any) =>
-										onClickFavoritesBtn(e, isAuth, navigate, house.houseId)
-									}
-								></div>
-							)}
+						<div className="house-description__image not-image mb-3">
+							{favoritesBtns()}
 						</div>
 					)}
 
-					<p className="fs-5">
-						<span className="fw-bold text-uppercase">Цена:</span> от{' '}
-						{house.price} BYN за дом
-					</p>
+					{categoriesHousesWithoutPrice.includes(house.category) ? (
+						<></>
+					) : (
+						<p className="fs-5">
+							<span className="fw-bold text-uppercase">Цена:</span>
+							{house.price > 0
+								? ` от ${house.price} BYN за ${
+										Object.keys(categoriesHousesWithOtherText).includes(
+											house.category
+										)
+											? categoriesHousesWithOtherText[house.category]
+											: 'дом'
+								  }`
+								: ' нужно уточнять'}
+						</p>
+					)}
 					<p className="fs-5">
 						<span className="fw-bold text-uppercase">Местонахождение:</span>{' '}
 						{house.location}

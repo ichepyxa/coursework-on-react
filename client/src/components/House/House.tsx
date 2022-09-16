@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
 import { onClickFavoritesBtn } from '../../helpers/favoritesBtnClicks'
 import { IHouse } from '../../models'
 import { useAppSelector } from '../../store/hook'
@@ -51,21 +52,25 @@ const House: FC<IHouse> = ({
 				} justify-content-between align-items-end`}
 			>
 				<div className="house-item__content-info">
-					<h5 className="house-item__content-info__title">
+					<h5 className="house-item__content-info__title fw-semibold">
 						{name.length > 30 ? `${name.substring(0, 30)}...` : name}
 					</h5>
 					<h6 className="house-item__content-info__type fw-normal">
 						{category}
 					</h6>
-					<span className="house-item__content-price d-block">
-						{price > 0 ? (
-							<span>
-								Цена: <strong>{price}</strong> BYN
-							</span>
-						) : (
-							'Цену нужно уточнять'
-						)}
-					</span>
+					{categoriesHousesWithoutPrice.includes(category) ? (
+						<></>
+					) : (
+						<span className="house-item__content-price d-block">
+							{price > 0 ? (
+								<span>
+									Цена: <strong>{price}</strong> BYN
+								</span>
+							) : (
+								'Цену нужно уточнять'
+							)}
+						</span>
+					)}
 				</div>
 				<Link
 					to={`/houses/${houseId}`}

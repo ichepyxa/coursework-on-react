@@ -1,5 +1,6 @@
 .house-description__image {
 	display: block;
+	position: relative;
 	width: 50%;
 	max-height: 500px;
 	margin: 0 auto 50px;
@@ -10,6 +11,10 @@
 	background: url(../../../public/images/no-house-img.svg) #eeeeee 50% 50%
 		no-repeat;
 	z-index: 2;
+}
+
+.house-description__image.not-image {
+	min-height: 500px;
 }
 
 .description .house-item__favorites {

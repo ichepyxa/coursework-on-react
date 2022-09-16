@@ -45,7 +45,7 @@ const UploadAvatar: FC = () => {
 	const onUpload = async (e: any) => {
 		e.preventDefault()
 
-		if (!userAvatar) {
+		if (avatar && userAvatar?.includes(avatar)) {
 			return displayError('Выберите фото')
 		}
 
