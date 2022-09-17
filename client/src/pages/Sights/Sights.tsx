@@ -9,6 +9,8 @@ import Search from '../../components/Search/Search'
 import Pagination from '../../components/Pagination/Pagination'
 import { useSearchParams } from '../../hooks/useSearchParams'
 import SightsElement from '../../components/SightsElement/SightsElement'
+import DocumentTitle from 'react-document-title'
+import { titleName } from '../../constants/titleName'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 const Sights: FC = () => {
@@ -52,6 +54,7 @@ const Sights: FC = () => {
 		<Container className="py-3">
 			<h2 className="text-center mt-4">Достопримечательности</h2>
 			<Search pageHrefPath={pageHrefPath} />
+			<DocumentTitle title={`${titleName} достопримечательности`} />
 
 			{isLoading ? (
 				<Loader />

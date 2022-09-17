@@ -1,8 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
+import DocumentTitle from 'react-document-title'
+import { titleName } from '../../constants/titleName'
 
 const NotOnline: FC = () => {
 	return (
 		<div className="d-flex justify-content-center align-items-center w-100 vh-100 flex-column overflow-hidden">
+			<DocumentTitle title={`${titleName} нет подключения к интернету`} />
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="100"

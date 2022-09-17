@@ -11,3 +11,7 @@
 		no-repeat;
 	z-index: 2;
 }
+
+.sight-description__image.not-image {
+	min-height: 500px;
+}

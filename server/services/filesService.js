@@ -15,9 +15,9 @@ class FilesService {
 		if (!imagesType.includes(avatar.mimetype))
 			throw APIError.BadRequest('Не корректный формат фото')
 
-		const maxAvatarSize = 2 * 1000 * 1000
+		const maxAvatarSize = 5 * 1000 * 1000
 		if (avatar.size > maxAvatarSize)
-			throw APIError.BadRequest('Фото превышает максимальный вес (2 мегабайта)')
+			throw APIError.BadRequest('Фото превышает максимальный вес (5 мегабайта)')
 
 		const avatarType = avatar.name.split('.').pop()
 		const path = `${config.FILES_PATH}/avatars/${userId}`

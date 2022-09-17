@@ -1,0 +1,20 @@
+.form-changeUsername {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	max-width: 400px;
+	padding: 15px;
+	margin: auto;
+	height: calc(100vh - 15.5rem);
+}
+
+.form-changeUsername > * {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.form-changeUsername input.is-invalid {
+	border-color: var(--bs-danger);
+}

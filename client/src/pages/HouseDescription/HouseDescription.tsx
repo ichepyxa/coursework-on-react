@@ -5,6 +5,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
 import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
+import DocumentTitle from 'react-document-title'
+import { titleName } from '../../constants/titleName'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 import { onClickFavoritesBtn } from '../../helpers/favoritesBtnClicks'
 import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
@@ -21,6 +23,7 @@ const categoriesHousesWithOtherText: { [key: string]: any } = {
 	Апартаменты: 'апартаменты',
 	Беседка: 'беседку',
 	'Открытая беседка': 'беседку',
+	'Закрытая беседка': 'беседку',
 }
 
 const HouseDescription: FC = () => {
@@ -85,6 +88,16 @@ const HouseDescription: FC = () => {
 		)
 	}
 
+	const formatName = (name: string, category: string) => {
+		return `${
+			name
+				.toLowerCase()
+				.includes(category.substring(0, category.length - 1).toLowerCase())
+				? ''
+				: category
+		} ${name}`
+	}
+
 	useEffect(() => {
 		getHouse()
 	}, [])
@@ -105,17 +118,11 @@ const HouseDescription: FC = () => {
 				<Loader />
 			) : house !== null && Object.keys(house).length > 0 ? (
 				<>
+					<DocumentTitle
+						title={`${titleName} ${formatName(house.name, house.category)}`}
+					/>
 					<h2 className="text-center mt-2 mb-4">
-						{house.name
-							.toLowerCase()
-							.includes(
-								house.category
-									.substring(0, house.category.length - 1)
-									.toLowerCase()
-							)
-							? ''
-							: house.category}{' '}
-						{house.name}
+						{formatName(house.name, house.category)}
 					</h2>
 
 					{house.images.length > 0 ? (

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
@@ -18,6 +18,8 @@ import Booking from './components/Booking/Booking'
 import Sights from './pages/Sights/Sights'
 import SightDescription from './pages/SightDescription/SightDescription'
 import UploadAvatar from './pages/Account/UploadAvatar/UploadAvatar'
+import ChangeUsername from './pages/Account/ChangeUsername/ChangeUsername'
+import ChangePassword from './pages/Account/ChangePassword/ChangePassword'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -52,8 +54,12 @@ const App: FC = () => {
 						element={!isAuth ? <Login /> : <UploadAvatar />}
 					/>
 					<Route
-						path="changepassword"
-						element={!isAuth ? <Login /> : <Profile />}
+						path="changePassword"
+						element={!isAuth ? <Login /> : <ChangePassword />}
+					/>
+					<Route
+						path="changeUsername"
+						element={!isAuth ? <Login /> : <ChangeUsername />}
 					/>
 					<Route
 						path="registration"

@@ -10,6 +10,8 @@ import Pagination from '../../components/Pagination/Pagination'
 import { useSearchParams } from '../../hooks/useSearchParams'
 import HousesElement from '../../components/HousesElement/HousesElement'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
+import DocumentTitle from 'react-document-title'
+import { titleName } from '../../constants/titleName'
 
 const Houses: FC = () => {
 	const dispatch = useAppDispatch()
@@ -52,6 +54,7 @@ const Houses: FC = () => {
 		<Container className="py-3">
 			<h2 className="text-center mt-4">Места отдыха</h2>
 			<Search pageHrefPath={pageHrefPath} />
+			<DocumentTitle title={`${titleName} места отдыха`} />
 
 			{isLoading ? (
 				<Loader />

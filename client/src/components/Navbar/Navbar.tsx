@@ -23,6 +23,7 @@ const Navbar: FC = () => {
 	const { pathname } = useLocation()
 
 	const handleLogout = async () => {
+		handleCloseMenu()
 		dispatch(setIsLoading(true))
 		try {
 			await AuthService.logout().then(() => {
@@ -44,6 +45,19 @@ const Navbar: FC = () => {
 		}
 	}
 
+	const handleCloseMenu = () => {
+		const navbarToggler: HTMLElement = document.querySelector(
+			'.navbar-toggler'
+		) as HTMLElement
+		const navbarContent: HTMLElement = document.querySelector(
+			'#navbarContent'
+		) as HTMLElement
+
+		if (navbarContent?.classList.contains('show') && navbarToggler !== null) {
+			navbarToggler.click()
+		}
+	}
+
 	useEffect(() => {
 		setPageIsLoading(false)
 	}, [isAuth])
@@ -57,7 +71,7 @@ const Navbar: FC = () => {
 				className="border-bottom fixed-top"
 			>
 				<Container>
-					<Link to="/" className="navbar-brand">
+					<Link to="/" className="navbar-brand" onClick={handleCloseMenu}>
 						<img
 							src="/images/horizontal-logo.png"
 							height="40"
@@ -71,27 +85,42 @@ const Navbar: FC = () => {
 							className="me-auto w-100 align-items-lg-center"
 							style={{ margin: '5px 0' }}
 						>
-							<Nav.Item className={pathname === '/' ? 'active' : ''}>
+							<Nav.Item
+								className={pathname === '/' ? 'active' : ''}
+								onClick={handleCloseMenu}
+							>
 								<Link to="/" className="nav-link">
 									Главная
 								</Link>
 							</Nav.Item>
-							<Nav.Item className={pathname === '/houses' ? 'active' : ''}>
+							<Nav.Item
+								className={pathname === '/houses' ? 'active' : ''}
+								onClick={handleCloseMenu}
+							>
 								<Link to="/houses" className="nav-link">
 									Места отдыха
 								</Link>
 							</Nav.Item>
-							<Nav.Item className={pathname === '/sights' ? 'active' : ''}>
+							<Nav.Item
+								className={pathname === '/sights' ? 'active' : ''}
+								onClick={handleCloseMenu}
+							>
 								<Link to="/sights" className="nav-link">
 									Достопримечательности
 								</Link>
 							</Nav.Item>
-							<Nav.Item className={pathname === '/test' ? 'active' : ''}>
+							<Nav.Item
+								className={pathname === '/test' ? 'active' : ''}
+								onClick={handleCloseMenu}
+							>
 								<Link to="/test" className="nav-link">
 									Тест
 								</Link>
 							</Nav.Item>
-							<Nav.Item className={pathname === '/about' ? 'active' : ''}>
+							<Nav.Item
+								className={pathname === '/about' ? 'active' : ''}
+								onClick={handleCloseMenu}
+							>
 								<Link to="/about" className="nav-link">
 									О нас
 								</Link>
@@ -118,7 +147,11 @@ const Navbar: FC = () => {
 										}
 										id="navbarDropdown"
 									>
-										<Link className="dropdown-item" to="/account/profile">
+										<Link
+											className="dropdown-item"
+											to="/account/profile"
+											onClick={handleCloseMenu}
+										>
 											Личный кабинет
 										</Link>
 										<NavDropdown.Divider />
@@ -127,7 +160,7 @@ const Navbar: FC = () => {
 										</NavDropdown.Item>
 									</NavDropdown>
 									<Nav className="navbar-nav--mobile d-lg-flex d-lg-none">
-										<Nav.Item>
+										<Nav.Item onClick={handleCloseMenu}>
 											<Link to="/account/profile" className="nav-link">
 												Личный кабинет
 											</Link>
@@ -139,7 +172,7 @@ const Navbar: FC = () => {
 								</>
 							) : (
 								<Nav className="ms-lg-auto d-flex flex-md-column flex-lg-row gap-2">
-									<Nav.Item>
+									<Nav.Item onClick={handleCloseMenu}>
 										<Link
 											className="nav-link btn btn-outline-primary w-100"
 											to="/account/registration"
@@ -147,7 +180,7 @@ const Navbar: FC = () => {
 											Регистрация
 										</Link>
 									</Nav.Item>
-									<Nav.Item>
+									<Nav.Item onClick={handleCloseMenu}>
 										<Link
 											className="nav-link btn btn-primary ms-lg-3 w-100"
 											to="/account/login"

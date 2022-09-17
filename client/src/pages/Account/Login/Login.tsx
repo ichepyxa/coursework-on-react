@@ -14,6 +14,8 @@ import {
 import Input from '../../../components/Input/Input'
 import './style.css'
 import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
+import { titleName } from '../../../constants/titleName'
+import DocumentTitle from 'react-document-title'
 
 const Login: FC = () => {
 	const dispatch = useAppDispatch()
@@ -57,6 +59,7 @@ const Login: FC = () => {
 
 	return (
 		<Container>
+			<DocumentTitle title={`${titleName} вход`} />
 			<Form className="form-login" onSubmit={e => handleLogin(e)}>
 				<h2 className="mb-4 fw-normal text-center">Вход</h2>
 

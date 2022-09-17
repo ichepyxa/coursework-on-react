@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Input from '../../../components/Input/Input'
-import UploadAvatar from '../UploadAvatar/UploadAvatar'
+import DocumentTitle from 'react-document-title'
 import checkIsValidEmail from '../../../helpers/checkIsValidEmail'
 import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
 import checkIsValidUsername from '../../../helpers/checkIsValidUsername'
@@ -15,6 +15,7 @@ import {
 	setIsLoading,
 	setUser,
 } from '../../../store/slices/userSlice'
+import { titleName } from '../../../constants/titleName'
 
 const Register: FC = () => {
 	const dispatch = useAppDispatch()
@@ -63,6 +64,7 @@ const Register: FC = () => {
 
 	return (
 		<Container>
+			<DocumentTitle title={`${titleName} регистрация`} />
 			<Form className="form-login" onSubmit={e => handleRegistration(e)}>
 				<h2 className="mb-4 fw-normal text-center">Регистрация</h2>
 

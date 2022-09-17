@@ -64,7 +64,7 @@ const SightDescription: FC = () => {
 					{sight.images.length > 0 ? (
 						<Images name={sight.name} images={sight.images} />
 					) : (
-						<div className="sight-description__image"></div>
+						<div className="sight-description__image not-image mb-3"></div>
 					)}
 
 					<p className="fs-5">

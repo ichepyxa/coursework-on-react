@@ -75,3 +75,7 @@ export interface ISightImage {
 export interface IAvatar {
 	avatar: string
 }
+
+export interface IChangeUsernameResponse {
+	username: string
+}

@@ -99,6 +99,45 @@ class UsersController {
 			next(error)
 		}
 	}
+
+	async changeUsername(req, res, next) {
+		try {
+			const errors = validationResult(req)
+			if (!errors.isEmpty()) {
+				throw APIError.BadRequest('Ошибка при входе в аккаунт', errors.array())
+			}
+
+			const { username } = req.body
+			const { userId } = req.user
+			const newUsername = await UsersService.changeUsername(userId, username)
+
+			res.json(newUsername)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async changePassword(req, res, next) {
+		try {
+			const errors = validationResult(req)
+			if (!errors.isEmpty()) {
+				throw APIError.BadRequest('Ошибка при входе в аккаунт', errors.array())
+			}
+
+			const { oldPassword, newPassword } = req.body
+			const { userId } = req.user
+			const user = await UsersService.changePassword(
+				userId,
+				oldPassword,
+				newPassword
+			)
+
+			addRefreshTokenInCookie(res, user.refreshToken)
+			res.json(user)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new UsersController()

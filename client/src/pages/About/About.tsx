@@ -1,12 +1,15 @@
 import React, { FC } from 'react'
 import { Container } from 'react-bootstrap'
+import { titleName } from '../../constants/titleName'
 import Map from './components/Map/Map'
+import DocumentTitle from 'react-document-title'
 
 import './style.css'
 
 const About: FC = () => {
 	return (
-		<Container as="section" className="about py-5">
+		<Container as="section" className="about py-4">
+			<DocumentTitle title={`${titleName} о нас`} />
 			<h2 className="text-center mb-3">О нас</h2>
 			<p className="mb-3">
 				Белорусский туристический портал SearchHoliday.by – это место, где можно

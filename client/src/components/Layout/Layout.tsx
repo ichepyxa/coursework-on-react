@@ -54,6 +54,7 @@ const Layout: FC = () => {
 
 	useEffect(() => {
 		window.addEventListener('offline', () => setOnLine(false))
+		window.addEventListener('online', () => setOnLine(true))
 	}, [])
 
 	return onLine ? (

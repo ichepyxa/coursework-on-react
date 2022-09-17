@@ -143,6 +143,41 @@ class UsersService {
 		)
 		return response
 	}
+
+	async changeUsername(userId, username) {
+		const user = await Users.findOne({ where: { userId } })
+		if (!user) throw APIError.BadRequest('Пользователь не найден')
+
+		user.username = username
+		await user.save()
+
+		return { username: user.username }
+	}
+
+	async changePassword(userId, oldPassword, newPassword) {
+		const user = await Users.findOne({ where: { userId } })
+		if (!user) throw APIError.BadRequest('Пользователь не найден')
+
+		const isCorrectPassword = await bcypt.compare(oldPassword, user.password)
+		if (!isCorrectPassword) throw APIError.BadRequest('Неверный старый пароль')
+
+		const hashNewPassword = await bcypt.hash(newPassword, 10)
+
+		user.password = hashNewPassword
+		await user.save()
+
+		const response = await this.generateResponse(
+			user.userId,
+			user.username,
+			user.email,
+			user.activationLink,
+			user.isActivated,
+			user.isPassedTest,
+			user.avatar,
+			user.roleId
+		)
+		return response
+	}
 }
 
 module.exports = new UsersService()

@@ -28,6 +28,19 @@ router.post(
 	body('password').isLength({ min: 6, max: 20 }),
 	UsersController.loginUsers
 )
+router.put(
+	'/users/changeUsername',
+	authMiddleware,
+	body('username').isLength({ min: 3, max: 15 }),
+	UsersController.changeUsername
+)
+router.put(
+	'/users/changePassword',
+	authMiddleware,
+	body('oldPassword').isLength({ min: 6, max: 20 }),
+	body('newPassword').isLength({ min: 6, max: 20 }),
+	UsersController.changePassword
+)
 router.delete(
 	'/users/deleteAvatar',
 	authMiddleware,
