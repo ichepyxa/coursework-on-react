@@ -173,7 +173,7 @@ class HousesService {
 		return { houses: favoritesHouses }
 	}
 
-	async createFavoritesHouses(user, houseId) {
+	async addFavoritesHouses(user, houseId) {
 		if (!user) throw APIError.UnautorizedError()
 		if (!houseId) throw new Error('Не указан ID дома')
 

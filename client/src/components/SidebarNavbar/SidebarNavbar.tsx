@@ -55,7 +55,6 @@ const SidebarNav: FC = () => {
 					</Link>
 				</li>
 			</ul>
-			{/* <hr /> */}
 		</div>
 	)
 }

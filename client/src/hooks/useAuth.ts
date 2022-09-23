@@ -11,6 +11,7 @@ export const useAuth = () => {
 		isPassedTest,
 		avatar,
 		roleId,
+		isAdmin
 	}: IUser = useAppSelector(state => state.user.user)
 	const isAuth = useAppSelector(state => state.user.isAuth)
 
@@ -24,5 +25,6 @@ export const useAuth = () => {
 		avatar,
 		isAuth,
 		roleId,
+		isAdmin
 	}
 }

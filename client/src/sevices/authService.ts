@@ -28,4 +28,14 @@ export default class AuthService {
 	static async logout(): Promise<void> {
 		return api.get('/users/logout')
 	}
+
+	static async adminLogin(
+		email: string,
+		password: string
+	): Promise<AxiosResponse<IUserResponse>> {
+		return api.post<IUserResponse>('/admins/login', {
+			email,
+			password,
+		})
+	}
 }

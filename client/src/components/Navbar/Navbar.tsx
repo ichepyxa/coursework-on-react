@@ -19,7 +19,7 @@ import { API_DOMAIN } from '../../constants/apiUrl'
 const Navbar: FC = () => {
 	const dispatch = useAppDispatch()
 	const [pageIsLoading, setPageIsLoading] = useState<boolean>(true)
-	const { isAuth, avatar } = useAuth()
+	const { isAuth, avatar, isAdmin } = useAuth()
 	const { pathname } = useLocation()
 
 	const handleLogout = async () => {
@@ -73,7 +73,7 @@ const Navbar: FC = () => {
 				<Container>
 					<Link to="/" className="navbar-brand" onClick={handleCloseMenu}>
 						<img
-							src="/images/horizontal-logo.png"
+							src="/images/horizontal-logo(without-bg).png"
 							height="40"
 							className="d-inline-block align-top"
 							alt="SearchHoliday Logo"
@@ -94,19 +94,19 @@ const Navbar: FC = () => {
 								</Link>
 							</Nav.Item>
 							<Nav.Item
-								className={pathname === '/houses' ? 'active' : ''}
-								onClick={handleCloseMenu}
-							>
-								<Link to="/houses" className="nav-link">
-									Места отдыха
-								</Link>
-							</Nav.Item>
-							<Nav.Item
 								className={pathname === '/sights' ? 'active' : ''}
 								onClick={handleCloseMenu}
 							>
 								<Link to="/sights" className="nav-link">
 									Достопримечательности
+								</Link>
+							</Nav.Item>
+							<Nav.Item
+								className={pathname === '/houses' ? 'active' : ''}
+								onClick={handleCloseMenu}
+							>
+								<Link to="/houses" className="nav-link">
+									Места отдыха
 								</Link>
 							</Nav.Item>
 							<Nav.Item
@@ -154,6 +154,17 @@ const Navbar: FC = () => {
 										>
 											Личный кабинет
 										</Link>
+										{isAdmin ? (
+											<Link
+												className="dropdown-item"
+												to="/admin"
+												onClick={handleCloseMenu}
+											>
+												Админ панель
+											</Link>
+										) : (
+											<></>
+										)}
 										<NavDropdown.Divider />
 										<NavDropdown.Item onClick={handleLogout}>
 											Выйти
@@ -165,6 +176,15 @@ const Navbar: FC = () => {
 												Личный кабинет
 											</Link>
 										</Nav.Item>
+										{isAdmin ? (
+											<Nav.Item onClick={handleCloseMenu}>
+												<Link to="/admin" className="nav-link">
+													Админ панель
+												</Link>
+											</Nav.Item>
+										) : (
+											<></>
+										)}
 										<Nav.Item>
 											<Nav.Link onClick={handleLogout}>Выйти</Nav.Link>
 										</Nav.Item>

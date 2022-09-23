@@ -17,6 +17,7 @@ const initialState: UserState = {
 		isPassedTest: undefined,
 		avatar: undefined,
 		roleId: undefined,
+		isAdmin: undefined
 	},
 	isLoading: false,
 	isAuth: false,

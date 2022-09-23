@@ -101,9 +101,9 @@ class HousesController {
 		}
 	}
 
-	async createFavoritesHouses(req, res, next) {
+	async addFavoritesHouses(req, res, next) {
 		try {
-			const house = await HousesService.createFavoritesHouses(
+			const house = await HousesService.addFavoritesHouses(
 				req.user,
 				req.body.houseId
 			)

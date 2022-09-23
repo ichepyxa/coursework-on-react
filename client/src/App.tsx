@@ -20,12 +20,28 @@ import SightDescription from './pages/SightDescription/SightDescription'
 import UploadAvatar from './pages/Account/UploadAvatar/UploadAvatar'
 import ChangeUsername from './pages/Account/ChangeUsername/ChangeUsername'
 import ChangePassword from './pages/Account/ChangePassword/ChangePassword'
+import LoginAdmin from './pages/Admin/LoginAdmin/LoginAdmin'
+import { useAuth } from './hooks/useAuth'
+import LayoutAdmin from './components/LayoutAdmin/LayoutAdmin'
+import ProfileAdmin from './pages/Admin/ProfileAdmin/ProfileAdmin'
+import AdminHouses from './pages/Admin/Houses/Houses'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
+	const { isAdmin } = useAuth()
 
 	return (
 		<Routes>
+			<Route path="/admin" element={<LayoutAdmin />}>
+				<Route
+					index
+					element={!isAuth || !isAdmin ? <LoginAdmin /> : <ProfileAdmin />}
+				/>
+				<Route
+					path="houses"
+					element={!isAuth || !isAdmin ? <LoginAdmin /> : <AdminHouses />}
+				/>
+			</Route>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
 				<Route path="about" element={<About />} />

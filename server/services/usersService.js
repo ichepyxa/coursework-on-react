@@ -1,10 +1,21 @@
-const { users: Users } = require('../models')
+const { users: Users, users_roles: UsersRoles } = require('../models')
 const bcypt = require('bcrypt')
 const uuid = require('uuid')
 const mailService = require('./mailService')
 const config = require('../config/server_config.json')
 const APIError = require('../exceptions/apiExceptions')
 const TokenService = require('./tokenService')
+
+const checkIsAdmin = async user => {
+	const userRole = await UsersRoles.findOne({
+		where: { roleId: user.roleId },
+	})
+
+	if (['ADMIN'].includes(userRole.role)) {
+		return true
+	}
+	return false
+}
 
 class UsersService {
 	async generateResponse(
@@ -15,7 +26,8 @@ class UsersService {
 		isActivated,
 		isPassedTest,
 		avatar,
-		roleId
+		roleId,
+		isAdmin = false
 	) {
 		const payload = {
 			userId,
@@ -26,6 +38,7 @@ class UsersService {
 			isPassedTest,
 			avatar,
 			roleId,
+			isAdmin,
 		}
 
 		const tokens = TokenService.generateTokens(payload)
@@ -78,6 +91,7 @@ class UsersService {
 			`${config.API_URL}/api/users/activate/${activationLink}`
 		)
 
+		const isAdmin = await checkIsAdmin(user)
 		const response = await this.generateResponse(
 			user.userId,
 			user.username,
@@ -86,7 +100,8 @@ class UsersService {
 			user.isActivated,
 			user.isPassedTest,
 			user.avatar,
-			user.roleId
+			user.roleId,
+			isAdmin
 		)
 		return response
 	}
@@ -102,6 +117,7 @@ class UsersService {
 		const isCorrectPassword = await bcypt.compare(password, user.password)
 		if (!isCorrectPassword) throw APIError.BadRequest('Неверный пароль')
 
+		const isAdmin = await checkIsAdmin(user)
 		const response = await this.generateResponse(
 			user.userId,
 			user.username,
@@ -110,7 +126,8 @@ class UsersService {
 			user.isActivated,
 			user.isPassedTest,
 			user.avatar,
-			user.roleId
+			user.roleId,
+			isAdmin
 		)
 		return response
 	}
@@ -131,6 +148,7 @@ class UsersService {
 		if (!userData || !tokenFromDB) throw APIError.UnautorizedError()
 
 		const user = await Users.findOne({ where: { userId: userData.userId } })
+		const isAdmin = await checkIsAdmin(user)
 		const response = await this.generateResponse(
 			user.userId,
 			user.username,
@@ -139,7 +157,8 @@ class UsersService {
 			user.isActivated,
 			user.isPassedTest,
 			user.avatar,
-			user.roleId
+			user.roleId,
+			isAdmin
 		)
 		return response
 	}
@@ -166,15 +185,17 @@ class UsersService {
 		user.password = hashNewPassword
 		await user.save()
 
+		const isAdmin = await checkIsAdmin(user)
 		const response = await this.generateResponse(
 			user.userId,
 			user.username,
 			user.email,
-			user.activationLink,
+			user.auctivationLink,
 			user.isActivated,
 			user.isPassedTest,
 			user.avatar,
-			user.roleId
+			user.roleId,
+			isAdmin
 		)
 		return response
 	}

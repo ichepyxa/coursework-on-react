@@ -17,11 +17,10 @@ router.post(
 	roleMiddleware(['ADMIN']),
 	HousesController.createHouseImages
 )
-
 router.post(
 	'/houses/favoritesHouses',
 	authMiddleware,
-	HousesController.createFavoritesHouses
+	HousesController.addFavoritesHouses
 )
 router.put(
 	'/houses/:houseId',

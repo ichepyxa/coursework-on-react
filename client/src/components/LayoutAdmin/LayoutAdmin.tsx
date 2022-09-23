@@ -1,14 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../store/hook'
-import Footer from '../Footer/Footer'
-import Navbar from '../Navbar/Navbar'
 import Toast from '../Toast/Toast'
 import './style.css'
 import Loader from '../Loader/Loader'
-import Disclamer from '../Disclamer/Disclamer'
 import NotOnline from '../../pages/NotOnline/NotOnline'
 import { checkAuth } from '../../helpers/checkAuth'
+import NavbarAdmin from '../NavbarAdmin/NavbarAdmin'
 
 const Layout: FC = () => {
 	const dispatch = useAppDispatch()
@@ -29,11 +27,10 @@ const Layout: FC = () => {
 
 	return onLine ? (
 		<>
-			<Navbar />
+			<NavbarAdmin />
 			<main className="main" id="main">
 				{isLoading ? <Loader /> : <Outlet />}
 			</main>
-			<Footer />
 			{notification.message ? (
 				<Toast
 					message={notification.message}
@@ -43,7 +40,6 @@ const Layout: FC = () => {
 			) : (
 				<></>
 			)}
-			<Disclamer />
 		</>
 	) : (
 		<NotOnline />

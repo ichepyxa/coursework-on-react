@@ -1,0 +1,5 @@
+.main,
+#loader {
+	position: relative;
+	min-height: calc(100vh - (4.3rem + 7.1rem));
+}

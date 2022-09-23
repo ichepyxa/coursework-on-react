@@ -7,6 +7,7 @@ export interface IUser {
 	isPassedTest: boolean | undefined
 	avatar: string | undefined
 	roleId: number | undefined
+	isAdmin: boolean | undefined
 }
 
 export interface IUserResponse {
