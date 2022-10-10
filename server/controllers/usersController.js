@@ -1,4 +1,4 @@
-const config = require('../config/server_config.json')
+const config = require('../config/server_config')
 const UsersService = require('../services/usersService')
 const { validationResult } = require('express-validator')
 const APIError = require('../exceptions/apiExceptions')
@@ -7,6 +7,10 @@ function addRefreshTokenInCookie(res, refreshToken) {
 	res.cookie('refreshToken', refreshToken, {
 		maxAge: 30 * 24 * 60 * 60 * 1000,
 		httpOnly: true,
+
+		// Doesn't work on hosting without it
+		// sameSite: 'none',
+		// secure: true,
 	})
 }
 

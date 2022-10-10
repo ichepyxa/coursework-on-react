@@ -2,7 +2,7 @@ const { users: Users, users_roles: UsersRoles } = require('../models')
 const bcypt = require('bcrypt')
 const uuid = require('uuid')
 const mailService = require('./mailService')
-const config = require('../config/server_config.json')
+const config = require('../config/server_config')
 const APIError = require('../exceptions/apiExceptions')
 const TokenService = require('./tokenService')
 

@@ -7,14 +7,14 @@ const Map: FC = () => {
 	const createMap = () => {
 		let map = leaflet.map('map').setView([52.40669, 30.90868], 10)
 
-		let tiles = leaflet
+		leaflet
 			.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,
 				attribution: '&copy; OpenStreetMap',
 			})
 			.addTo(map)
 
-		let marker = leaflet
+		leaflet
 			.marker([52.40669, 30.90868])
 			.addTo(map)
 			.bindPopup(

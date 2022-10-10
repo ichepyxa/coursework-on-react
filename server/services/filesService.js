@@ -1,6 +1,6 @@
 const { users: Users } = require('../models')
 const fs = require('fs')
-const config = require('../config/server_config.json')
+const config = require('../config/server_config')
 const APIError = require('../exceptions/apiExceptions')
 
 const imagesType = ['image/jpg', 'image/png', 'image/jpeg']

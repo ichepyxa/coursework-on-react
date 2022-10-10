@@ -12,7 +12,8 @@ const Layout: FC = () => {
 	const dispatch = useAppDispatch()
 	const { isLoading } = useAppSelector(state => state.user)
 	const notification = useAppSelector(state => state.notification)
-	const [onLine, setOnLine] = useState<boolean>(window.clientInformation.onLine)
+	const [onLine, setOnLine] = useState<boolean>(true)
+	// const [onLine, setOnLine] = useState<boolean>(window.clientInformation.onLine)
 
 	useEffect(() => {
 		if (localStorage.getItem('token')) {
@@ -20,10 +21,10 @@ const Layout: FC = () => {
 		}
 	}, [])
 
-	useEffect(() => {
-		window.addEventListener('offline', () => setOnLine(false))
-		window.addEventListener('online', () => setOnLine(true))
-	}, [])
+	// useEffect(() => {
+	// 	window.addEventListener('offline', () => setOnLine(false))
+	// 	window.addEventListener('online', () => setOnLine(true))
+	// }, [])
 
 	return onLine ? (
 		<>

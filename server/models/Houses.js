@@ -1,16 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
-	const Houses = sequelize.define('houses', {
-		houseId: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true,
+	const Houses = sequelize.define(
+		'houses',
+		{
+			houseId: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			name: DataTypes.STRING,
+			category: DataTypes.STRING,
+			location: DataTypes.STRING,
+			price: DataTypes.INTEGER,
+			description: DataTypes.TEXT,
 		},
-		name: DataTypes.STRING,
-		category: DataTypes.STRING,
-		location: DataTypes.STRING,
-		price: DataTypes.INTEGER,
-		description: DataTypes.TEXT,
-	})
+		{
+			charset: 'utf8',
+			collate: 'utf8_general_ci',
+		}
+	)
 
 	Houses.associate = function (models) {
 		Houses.hasMany(models.houses_images, {

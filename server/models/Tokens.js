@@ -1,16 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-	const Tokens = sequelize.define('tokens', {
-		tokenId: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true,
+	const Tokens = sequelize.define(
+		'tokens',
+		{
+			tokenId: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			refreshToken: {
+				type: DataTypes.TEXT,
+				allowNull: false,
+			},
 		},
-		refreshToken: {
-			type: DataTypes.STRING(500),
-			allowNull: false,
-			unique: true,
-		},
-	})
+		{
+			charset: 'utf8',
+			collate: 'utf8_general_ci',
+		}
+	)
 
 	return Tokens
 }

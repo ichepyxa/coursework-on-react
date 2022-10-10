@@ -1,28 +1,31 @@
 module.exports = (sequelize, DataTypes) => {
-	const UsersRoles = sequelize.define('users_roles', {
-		roleId: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true,
+	const UsersRoles = sequelize.define(
+		'users_roles',
+		{
+			roleId: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			role: {
+				type: DataTypes.STRING,
+				defaultValue: 'USER',
+			},
 		},
-		role: {
-			type: DataTypes.STRING,
-			defaultValue: 'USER',
-		},
-	})
+		{
+			charset: 'utf8',
+			collate: 'utf8_general_ci',
+		}
+	)
 
 	UsersRoles.associate = function (models) {
-		const options = {
+		UsersRoles.hasOne(models.users, {
 			as: 'users',
 			foreignKey: {
 				name: 'roleId',
-				defaultValue: null,
+				defaultValue: 1,
 			},
-		}
-
-		UsersRoles.findOne({ where: { role: 'USER' } })
-			.then(res => (options.foreignKey.defaultValue = res.roleId))
-			.finally(() => UsersRoles.hasOne(models.users, options))
+		})
 	}
 
 	return UsersRoles

@@ -8,16 +8,26 @@ import { Link } from 'react-router-dom'
 
 const RecommendedHouses: FC = () => {
 	const [houses, setHouses] = useState<IHouse[]>([])
+	const maxRecommendedHousesCount = 6
 
 	const getRecommendedHouses = async () => {
 		try {
 			await axios
 				.get<IHouseResponse>(`${API_URL}/houses?page=1`)
 				.then(response => {
-					const houses = response.data.houses
-					const filterResponse: IHouse[] = []
+					if (
+						response.data.houses === undefined ||
+						response.data.houses === ([] as IHouse[])
+					) {
+						return setHouses([] as IHouse[])
+					}
 
-					while (filterResponse.length < 6) {
+					const houses = response.data.houses
+					if (houses.length > 0 && houses.length < maxRecommendedHousesCount)
+						return setHouses(houses)
+
+					const filterResponse: IHouse[] = []
+					while (filterResponse.length < maxRecommendedHousesCount) {
 						const item = houses[Math.floor(Math.random() * houses.length)]
 						if (filterResponse.includes(item)) continue
 
@@ -41,11 +51,15 @@ const RecommendedHouses: FC = () => {
 				<Container className="py-4" as="section">
 					<h2 className="text-center">Рекомендуемые места отдыха</h2>
 					<HousesElement houses={houses} />
-					<div className="mt-4 d-flex justify-content-center align-items-center">
-						<Link to="/houses" className="btn btn-outline-primary">
-							Смотреть больше
-						</Link>
-					</div>
+					{houses?.length < maxRecommendedHousesCount ? (
+						<></>
+					) : (
+						<div className="mt-4 d-flex justify-content-center align-items-center">
+							<Link to="/houses" className="btn btn-outline-primary">
+								Смотреть больше
+							</Link>
+						</div>
+					)}
 				</Container>
 			) : (
 				<></>

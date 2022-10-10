@@ -26,14 +26,14 @@ const Footer: FC = () => {
 								Главная
 							</Link>
 						</Nav.Item>
-						<Nav.Item className={pathname === '/houses' ? 'active' : ''}>
-							<Link to="/houses" className="nav-link">
-								Места отдыха
-							</Link>
-						</Nav.Item>
 						<Nav.Item className={pathname === '/sights' ? 'active' : ''}>
 							<Link to="/sights" className="nav-link">
 								Достопримечательности
+							</Link>
+						</Nav.Item>
+						<Nav.Item className={pathname === '/houses' ? 'active' : ''}>
+							<Link to="/houses" className="nav-link">
+								Места отдыха
 							</Link>
 						</Nav.Item>
 						<Nav.Item className={pathname === '/test' ? 'active' : ''}>
