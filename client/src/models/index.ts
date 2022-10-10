@@ -61,6 +61,7 @@ export interface ISight {
 	images: ISightImage[]
 	createdAt: string
 	updatedAt: string
+	isFavorite: boolean
 }
 
 export interface ISightsResponse {
@@ -71,6 +72,19 @@ export interface ISightsResponse {
 export interface ISightImage {
 	imageId: number,
 	image: string
+}
+
+export interface ISightFavorites {
+	favoritesId: number
+	userId: number
+	sightId: number
+	createdAt: string
+	updatedAt: string
+}
+
+export interface ISightFavoritesResponse {
+	length: any
+	sights: ISight[]
 }
 
 export interface IAvatar {

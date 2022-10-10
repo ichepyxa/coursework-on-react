@@ -1,13 +1,33 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import './style.css'
 
 const Hero: FC = () => {
+	const [currentVideoPath, setCurrentVideoPath] = useState('')
+	const videoPaths = [
+		'/video/video-bg.mp4',
+		'/video/video-bg1.mp4',
+		'/video/video-bg2.mp4',
+	]
+
+	const setRandomVideo = () => {
+		setCurrentVideoPath(
+			videoPaths[Math.floor(Math.random() * videoPaths.length)]
+		)
+	}
+
+	useEffect(() => {
+		setRandomVideo()
+		setInterval(() => {
+			setRandomVideo()
+		}, 10000)
+	}, [])
+
 	return (
 		<section className="hero">
 			<video
-				src="/video/video-bg.mp4"
+				src={currentVideoPath}
 				typeof="video/mp4"
 				muted
 				autoPlay

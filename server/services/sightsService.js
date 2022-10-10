@@ -1,6 +1,7 @@
 const {
 	sights: Sights,
 	sights_images: SightsImages,
+	users_favorites_sights: UsersFavoritesSights,
 	sequelize,
 } = require('../models')
 const { Op } = require('sequelize')
@@ -134,6 +135,68 @@ class SightsService {
 			where: { sightId },
 		})
 		return deleteSightImages
+	}
+
+	async getFavoritesSights(user) {
+		if (!user) throw APIError.UnautorizedError()
+
+		const sights = await UsersFavoritesSights.findAll({
+			where: { userId: user.userId },
+		})
+
+		const favoritesSights = []
+		let i = 0
+		while (i < sights.length) {
+			await this.getSightById(sights[i].sightId).then(data => {
+				favoritesSights.push(data)
+				i++
+			})
+		}
+
+		return { sights: favoritesSights }
+	}
+
+	async addFavoritesSights(user, sightId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!sightId) throw new Error('Не указан ID достопримечательности')
+
+		const sightFromDB = await Sights.findOne({
+			where: { sightId },
+		})
+		if (!sightFromDB) throw new Error('Не верный ID достопримечательности')
+
+		const dublicate = await UsersFavoritesSights.findOne({
+			where: {
+				userId: user.userId,
+				sightId,
+			},
+		})
+		if (dublicate)
+			throw new Error('Такая достопримечательность уже в избранном')
+
+		const favoriteSight = await UsersFavoritesSights.create({
+			userId: user.userId,
+			sightId,
+		})
+		return { sight: favoriteSight }
+	}
+
+	async deleteFavoritesSigths(user, sightId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!sightId) throw new Error('Не указан ID достопримечательности')
+
+		const sightFromDB = await Sights.findOne({
+			where: { sightId },
+		})
+		if (!sightFromDB) throw new Error('Не верный ID достопримечательности')
+
+		const favoriteSight = await UsersFavoritesSights.destroy({
+			where: {
+				userId: user.userId,
+				sightId,
+			},
+		})
+		return favoriteSight
 	}
 }
 

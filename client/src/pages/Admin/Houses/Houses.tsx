@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Container } from 'react-bootstrap'
 import DocumentTitle from 'react-document-title'
-import HousesElement from '../../../components/HousesElement/HousesElement'
+import HousesElementAdmin from '../../../components/HousesElementAdmin/HousesElementAdmin'
 import Loader from '../../../components/Loader/Loader'
 import Pagination from '../../../components/Pagination/Pagination'
 import Search from '../../../components/Search/Search'
@@ -25,7 +25,7 @@ const Houses: FC = () => {
 					<Loader />
 				) : houses.length > 0 ? (
 					<>
-						<HousesElement houses={houses} />
+						<HousesElementAdmin houses={houses} />
 						<Pagination pageHrefPath={pageHrefPath} countPage={countPage} />
 					</>
 				) : (

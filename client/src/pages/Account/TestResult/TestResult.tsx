@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Container } from 'react-bootstrap'
 import HousesElement from '../../../components/HousesElement/HousesElement'
 import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
-import { IHouse } from '../../../models'
+import { IHouse } from '../../../models/index'
 
 const TestResult: FC = () => {
 	const houses: IHouse[] = [

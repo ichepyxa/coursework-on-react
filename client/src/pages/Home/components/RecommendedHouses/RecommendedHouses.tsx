@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import { API_URL } from '../../../../constants/apiUrl'
-import { IHouse, IHouseResponse } from '../../../../models'
+import { IHouse, IHouseResponse } from '../../../../models/index'
 import HousesElement from '../../../../components/HousesElement/HousesElement'
 import { Link } from 'react-router-dom'
 

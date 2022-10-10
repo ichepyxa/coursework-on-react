@@ -9,7 +9,7 @@ import { setNotification } from '../../../store/slices/notificationSlice'
 import { setIsLoading, setUser } from '../../../store/slices/userSlice'
 
 import './style.css'
-import { IUserResponse } from '../../../models'
+import { IUserResponse } from '../../../models/index'
 import { useNavigate } from 'react-router-dom'
 import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
 

@@ -9,7 +9,8 @@ const SidebarNav: FC = () => {
 			path === '/account/profile' &&
 			(pathname === '/account/login' ||
 				pathname === '/account/registration' ||
-				pathname === '/account')
+				pathname === '/account' ||
+				pathname === '/account/profile/')
 		) {
 			return 'nav-link active'
 		}
@@ -32,10 +33,18 @@ const SidebarNav: FC = () => {
 				</li>
 				<li>
 					<Link
-						to="/account/profile/favorites"
-						className={changeActiveLink('/account/profile/favorites')}
+						to="/account/profile/favoritesHouses"
+						className={changeActiveLink('/account/profile/favoritesHouses')}
 					>
-						Избранное
+						Места отдыха
+					</Link>
+				</li>
+				<li>
+					<Link
+						to="/account/profile/favoritesSights"
+						className={changeActiveLink('/account/profile/favoritesSights')}
+					>
+						Достопримечательности
 					</Link>
 				</li>
 				<li>

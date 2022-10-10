@@ -1,5 +1,6 @@
 .sight-description__image {
 	display: block;
+	position: relative;
 	width: 50%;
 	max-height: 500px;
 	margin: 0 auto 50px;
@@ -14,4 +15,9 @@
 
 .sight-description__image.not-image {
 	min-height: 500px;
+}
+
+.description .sight-item__favorites {
+	top: 20px;
+	left: 20px;
 }

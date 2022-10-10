@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
-import { onClickFavoritesBtn } from '../../helpers/favoritesBtnClicks'
-import { IHouse } from '../../models'
+import { onClickFavoritesBtn } from '../../helpers/favoritesHousesBtnClicks'
+import { IHouse } from '../../models/index'
 import { useAppSelector } from '../../store/hook'
 
 import './style.css'

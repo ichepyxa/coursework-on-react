@@ -5,12 +5,22 @@ const authMiddleware = require('../middlewares/authMiddleware')
 const roleMiddleware = require('../middlewares/roleMiddleware')
 
 router.get('/sights', SightsController.getAllSights)
+router.get(
+	'/sights/favoritesSights',
+	authMiddleware,
+	SightsController.getFavoritesSights
+)
 router.get('/sights/:sightId', SightsController.getSightById)
 router.post('/sights', roleMiddleware(['ADMIN']), SightsController.createSight)
 router.post(
 	'/sights/images/:sightId',
 	roleMiddleware(['ADMIN']),
 	SightsController.createSightImages
+)
+router.post(
+	'/sights/favoritesSights',
+	authMiddleware,
+	SightsController.addFavoritesSights
 )
 router.put(
 	'/sights/:sightId',
@@ -31,6 +41,11 @@ router.delete(
 	'/sights/images/:imageId',
 	roleMiddleware(['ADMIN']),
 	SightsController.deleteSightImages
+)
+router.delete(
+	'/sights/favoritesSights/:sightId',
+	authMiddleware,
+	SightsController.deleteFavoritesSights
 )
 
 module.exports = router

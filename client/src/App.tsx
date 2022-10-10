@@ -12,7 +12,7 @@ import NotFound from './pages/NotFound/NotFound'
 import './App.css'
 import { useAppSelector } from './store/hook'
 import HouseDescription from './pages/HouseDescription/HouseDescription'
-import Favorites from './pages/Account/Favorites/Favorites'
+import FavoritesHouses from './pages/Account/FavoritesHouses/FavoritesHouses'
 import TestResult from './pages/Account/TestResult/TestResult'
 import Booking from './components/Booking/Booking'
 import Sights from './pages/Sights/Sights'
@@ -25,6 +25,7 @@ import { useAuth } from './hooks/useAuth'
 import LayoutAdmin from './components/LayoutAdmin/LayoutAdmin'
 import ProfileAdmin from './pages/Admin/ProfileAdmin/ProfileAdmin'
 import AdminHouses from './pages/Admin/Houses/Houses'
+import FavoritesSights from './pages/Account/FavoritesSights/FavoritesSights'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -59,8 +60,12 @@ const App: FC = () => {
 					<Route path="profile">
 						<Route index element={!isAuth ? <Login /> : <Profile />} />
 						<Route
-							path="favorites"
-							element={!isAuth ? <Login /> : <Favorites />}
+							path="favoritesHouses"
+							element={!isAuth ? <Login /> : <FavoritesHouses />}
+						/>
+						<Route
+							path="favoritesSights"
+							element={!isAuth ? <Login /> : <FavoritesSights />}
 						/>
 						<Route path="test" element={!isAuth ? <Login /> : <TestResult />} />
 						<Route path="booking" element={!isAuth ? <Login /> : <Booking />} />

@@ -91,6 +91,39 @@ class SightsController {
 			next(error)
 		}
 	}
+
+	async getFavoritesSights(req, res, next) {
+		try {
+			const sights = await SightsService.getFavoritesSights(req.user)
+			res.json(sights)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async addFavoritesSights(req, res, next) {
+		try {
+			const sight = await SightsService.addFavoritesSights(
+				req.user,
+				req.body.sightId
+			)
+			res.json(sight)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async deleteFavoritesSights(req, res, next) {
+		try {
+			const sight = await SightsService.deleteFavoritesSigths(
+				req.user,
+				req.params.sightId
+			)
+			res.json(sight)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new SightsController()

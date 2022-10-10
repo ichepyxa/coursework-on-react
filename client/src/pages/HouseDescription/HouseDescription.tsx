@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
@@ -8,14 +9,15 @@ import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWi
 import DocumentTitle from 'react-document-title'
 import { titleName } from '../../constants/titleName'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import { onClickFavoritesBtn } from '../../helpers/favoritesBtnClicks'
+import { onClickFavoritesBtn } from '../../helpers/favoritesHousesBtnClicks'
 import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
 import api from '../../http'
 import { IHouse, IHouseFavoritesResponse } from '../../models'
-import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { useAppDispatch } from '../../store/hook'
 import Images from './components/Images/Images'
 
 import './style.css'
+import { useAuth } from '../../hooks/useAuth'
 
 const categoriesHousesWithOtherText: { [key: string]: any } = {
 	Отель: 'номер',
@@ -31,7 +33,7 @@ const HouseDescription: FC = () => {
 	const params = useParams()
 
 	const navigate = useNavigate()
-	const { isAuth } = useAppSelector(state => state.user)
+	const { isAuth } = useAuth()
 	const [house, setHouse] = useState<IHouse>({} as IHouse)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
@@ -88,16 +90,6 @@ const HouseDescription: FC = () => {
 		)
 	}
 
-	const formatName = (name: string, category: string) => {
-		return `${
-			name
-				.toLowerCase()
-				.includes(category.substring(0, category.length - 1).toLowerCase())
-				? ''
-				: category
-		} ${name}`
-	}
-
 	useEffect(() => {
 		getHouse()
 	}, [])
@@ -118,12 +110,8 @@ const HouseDescription: FC = () => {
 				<Loader />
 			) : house !== null && Object.keys(house).length > 0 ? (
 				<>
-					<DocumentTitle
-						title={`${titleName} ${formatName(house.name, house.category)}`}
-					/>
-					<h2 className="text-center mt-2 mb-4">
-						{formatName(house.name, house.category)}
-					</h2>
+					<DocumentTitle title={`${titleName} ${house.name}`} />
+					<h2 className="text-center mt-2 mb-4">{house.name}</h2>
 
 					{house.images.length > 0 ? (
 						<div>

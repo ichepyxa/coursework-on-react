@@ -1,12 +1,17 @@
 import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import DocumentTitle from 'react-document-title'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
+import { titleName } from '../../constants/titleName'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import { ISight } from '../../models'
-import { useAppDispatch } from '../../store/hook'
+import { onClickFavoritesBtn } from '../../helpers/favoritesSightsBtnClicks'
+import filterFavoritesSights from '../../helpers/filterFavoritesSights'
+import api from '../../http'
+import { ISight, ISightFavoritesResponse } from '../../models/index'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
 import Images from './components/Images/Images'
 
 import './style.css'
@@ -15,8 +20,44 @@ const SightDescription: FC = () => {
 	const dispatch = useAppDispatch()
 	const params = useParams()
 
+	const navigate = useNavigate()
+	const { isAuth } = useAppSelector(state => state.user)
 	const [sight, setSight] = useState<ISight>({} as ISight)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [favoritesSights, setFavoritesSights] = useState<ISight[]>([])
+
+	const getFavoritesSights = async () => {
+		await api
+			.get<ISightFavoritesResponse>(`${API_URL}/sights/favoritesSights`)
+			.then(response => {
+				if (
+					response.data.sights === undefined ||
+					response.data.sights === ([] as ISight[])
+				) {
+					return setFavoritesSights([] as ISight[])
+				}
+
+				setFavoritesSights(response.data.sights as ISight[])
+			})
+	}
+
+	const favoritesBtns = () => {
+		return sight.isFavorite ? (
+			<div
+				className="favorites sight-item__favorites active"
+				onClick={(e: any) =>
+					onClickFavoritesBtn(e, isAuth, navigate, sight.sightId)
+				}
+			></div>
+		) : (
+			<div
+				className="favorites sight-item__favorites"
+				onClick={(e: any) =>
+					onClickFavoritesBtn(e, isAuth, navigate, sight.sightId)
+				}
+			></div>
+		)
+	}
 
 	const getSight = async () => {
 		setIsLoading(true)
@@ -41,30 +82,35 @@ const SightDescription: FC = () => {
 		getSight()
 	}, [])
 
+	useEffect(() => {
+		if (isAuth) {
+			getFavoritesSights()
+		}
+	}, [isAuth])
+
+	useEffect(() => {
+		setSight(filterFavoritesSights([sight], favoritesSights)[0])
+	}, [favoritesSights])
+
 	return (
 		<Container as="section" className="description py-4">
 			{isLoading ? (
 				<Loader />
 			) : sight !== null && Object.keys(sight).length > 0 ? (
 				<>
-					<h2 className="text-center mt-2 mb-4">
-						{sight.name.toLowerCase().includes(
-							sight.category
-								.split(',')[0]
-								.substring(0, sight.category.length - 1)
-								.toLowerCase()
-						)
-							? ''
-							: sight.category
-									.split(',')
-									.map(item => item[0].toUpperCase() + item.slice(1))[0]}{' '}
-						{sight.name}
-					</h2>
+					<DocumentTitle title={`${titleName} ${sight.name}`} />
+					<h2 className="text-center mt-2 mb-4">{sight.name}</h2>
 
 					{sight.images.length > 0 ? (
-						<Images name={sight.name} images={sight.images} />
+						<div>
+							<Images name={sight.name} images={sight.images}>
+								{favoritesBtns()}
+							</Images>
+						</div>
 					) : (
-						<div className="sight-description__image not-image mb-3"></div>
+						<div className="sight-description__image not-image mb-3">
+							{favoritesBtns()}
+						</div>
 					)}
 
 					<p className="fs-5">

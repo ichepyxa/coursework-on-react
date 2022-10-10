@@ -48,7 +48,13 @@ module.exports = (sequelize, DataTypes) => {
 		})
 
 		Users.hasOne(models.users_favorites_houses, {
-			as: 'favorites',
+			as: 'favoritesHouses',
+			foreignKey: 'userId',
+			onDelete: 'cascade',
+		})
+
+		Users.hasOne(models.users_favorites_sights, {
+			as: 'favoritesSights',
 			foreignKey: 'userId',
 			onDelete: 'cascade',
 		})

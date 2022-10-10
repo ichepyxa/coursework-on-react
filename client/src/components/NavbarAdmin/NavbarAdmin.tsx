@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
 import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
 import AuthService from '../../sevices/authService'
-import { IUser } from '../../models'
+import { IUser } from '../../models/index'
 import { setNotification } from '../../store/slices/notificationSlice'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 

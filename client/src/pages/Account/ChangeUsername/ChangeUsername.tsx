@@ -11,7 +11,7 @@ import { setNotification } from '../../../store/slices/notificationSlice'
 import { setIsLoading, setUser } from '../../../store/slices/userSlice'
 
 import './style.css'
-import { IChangeUsernameResponse } from '../../../models'
+import { IChangeUsernameResponse } from '../../../models/index'
 import { useNavigate } from 'react-router-dom'
 
 const ChangeUsername: FC = () => {

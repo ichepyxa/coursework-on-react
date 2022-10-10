@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { API_URL } from "../constants/apiUrl"
 import displayTroubleConnectionError from "../helpers/displayTroubleConnectionError"
-import { IHouse, IHouseResponse } from "../models"
+import { IHouse, IHouseResponse } from "../models/index"
 import { useSearchParams } from "./useSearchParams"
 
 export const useHouses = () => {
@@ -38,7 +39,7 @@ export const useHouses = () => {
 
   useEffect(() => {
 		getHouses()
-	}, [name, region])
+	}, [name, region, page])
 
   return {isLoading, houses, countPage}  
 }

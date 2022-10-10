@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Container } from 'react-bootstrap'
 import SidebarNavbar from '../../components/SidebarNavbar/SidebarNavbar'
-import { IHouse } from '../../models'
+import { IHouse } from '../../models/index'
 
 import './style.css'
 

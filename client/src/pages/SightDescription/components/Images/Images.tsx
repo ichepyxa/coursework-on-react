@@ -1,15 +1,17 @@
-import React, { FC } from 'react'
-import { ISightImage } from '../../../../models'
+import React, { FC, ReactNode } from 'react'
+import { ISightImage } from '../../../../models/index'
 
 import './style.css'
 
-const Images: FC<{ name: string; images: ISightImage[] }> = ({
-	name,
-	images,
-}) => {
+const Images: FC<{
+	name: string
+	images: ISightImage[]
+	children: ReactNode
+}> = ({ name, images, children }) => {
 	return (
 		<div className="sight-description__images">
 			<div className="sight-description__item">
+				{children}
 				<img
 					className="sight-description__image"
 					src={images[0].image}

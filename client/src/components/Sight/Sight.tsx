@@ -1,15 +1,41 @@
 import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { onClickFavoritesBtn } from '../../helpers/favoritesSightsBtnClicks'
 import { ISight } from '../../models'
+import { useAppSelector } from '../../store/hook'
 
 import './style.css'
 
-const Sight: FC<ISight> = ({ sightId, images, name, category }) => {
+const Sight: FC<ISight> = ({
+	sightId,
+	images,
+	name,
+	category,
+	isFavorite = false,
+}) => {
+	const navigate = useNavigate()
+	const { isAuth } = useAppSelector(state => state.user)
 	const firstCategory = category.split(',')[0]
 	const newCategory = firstCategory[0].toUpperCase() + firstCategory.slice(1)
 
 	return (
 		<div className="sight">
+			{isFavorite ? (
+				<div
+					className="favorites house-item__favorites active"
+					onClick={(e: any) =>
+						onClickFavoritesBtn(e, isAuth, navigate, sightId)
+					}
+				></div>
+			) : (
+				<div
+					className="favorites house-item__favorites"
+					onClick={(e: any) =>
+						onClickFavoritesBtn(e, isAuth, navigate, sightId)
+					}
+				></div>
+			)}
+
 			{images?.length > 0 ? (
 				<img
 					className="sight-item__image"

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { IHouse, IHouseFavoritesResponse } from '../../models'
+import { IHouse, IHouseFavoritesResponse } from '../../models/index'
 import House from '../House/House'
 import { useAppSelector } from '../../store/hook'
 import { API_URL } from '../../constants/apiUrl'

@@ -1,7 +1,7 @@
 import { setIsAuth, setIsLoading, setUser } from '../store/slices/userSlice'
 import axios from 'axios'
 import { API_URL } from '../constants/apiUrl'
-import { IUserResponse } from '../models'
+import { IUserResponse } from '../models/index'
 import displayTroubleConnectionError from './displayTroubleConnectionError'
 
 export const checkAuth = async (dispatch: CallableFunction) => {

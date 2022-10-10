@@ -17,6 +17,7 @@
 
 .sight-description__item:nth-child(1) {
 	grid-area: post-1;
+	position: relative;
 }
 
 .sight-description__item:nth-child(2) {
