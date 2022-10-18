@@ -2,6 +2,7 @@
 	background: url(../../../../public/images/no-user-bg-img.png);
 	width: 200px;
 	height: 200px;
+	max-width: unset;
 	object-fit: cover;
 }
 

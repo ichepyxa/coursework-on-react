@@ -61,7 +61,9 @@ const NavbarAdmin: FC = () => {
 							<>
 								<Nav className="navbar-nav d-flex">
 									<Nav.Item>
-										<Nav.Link onClick={handleLogout}>Выйти</Nav.Link>
+										<Nav.Link className="text-danger" onClick={handleLogout}>
+											Выйти
+										</Nav.Link>
 									</Nav.Item>
 								</Nav>
 							</>

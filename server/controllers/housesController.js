@@ -29,7 +29,8 @@ class HousesController {
 
 	async createHouse(req, res, next) {
 		try {
-			const newHouse = await HousesService.createHouse(req.body)
+			const images = req.files?.images || null
+			const newHouse = await HousesService.createHouse(req.body, images)
 			res.json(newHouse)
 		} catch (error) {
 			next(error)

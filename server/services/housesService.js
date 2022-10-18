@@ -6,6 +6,7 @@ const {
 } = require('../models')
 const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
+const FilesService = require('./filesService')
 
 class HousesService {
 	async getAllHouses() {
@@ -85,10 +86,20 @@ class HousesService {
 		return house
 	}
 
-	async createHouse(house) {
+	async createHouse(house, images) {
 		if (!house) throw new Error('Не верный формат')
 
 		const newHouse = await Houses.create(house)
+
+		if (images) {
+			!images.length
+				? await FilesService.uploadHouseImage(newHouse.houseId, images)
+				: images.map(
+						async image =>
+							await FilesService.uploadHouseImage(newHouse.houseId, image)
+				  )
+		}
+
 		return newHouse
 	}
 

@@ -26,6 +26,7 @@ import LayoutAdmin from './components/LayoutAdmin/LayoutAdmin'
 import ProfileAdmin from './pages/Admin/ProfileAdmin/ProfileAdmin'
 import AdminHouses from './pages/Admin/Houses/Houses'
 import FavoritesSights from './pages/Account/FavoritesSights/FavoritesSights'
+import CreateNewHouse from './pages/Admin/CreateNewHouse/CreateNewHouse'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -38,10 +39,16 @@ const App: FC = () => {
 					index
 					element={!isAuth || !isAdmin ? <LoginAdmin /> : <ProfileAdmin />}
 				/>
-				<Route
-					path="houses"
-					element={!isAuth || !isAdmin ? <LoginAdmin /> : <AdminHouses />}
-				/>
+				<Route path="houses">
+					<Route
+						index
+						element={!isAuth || !isAdmin ? <LoginAdmin /> : <AdminHouses />}
+					/>
+					<Route
+						path="new"
+						element={!isAuth || !isAdmin ? <LoginAdmin /> : <CreateNewHouse />}
+					/>
+				</Route>
 			</Route>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
@@ -56,37 +63,49 @@ const App: FC = () => {
 				</Route>
 				<Route path="test" element={<Test />} />
 				<Route path="account">
-					<Route index element={!isAuth ? <Login /> : <Profile />} />
+					<Route index element={!isAuth || isAdmin ? <Login /> : <Profile />} />
 					<Route path="profile">
-						<Route index element={!isAuth ? <Login /> : <Profile />} />
+						<Route
+							index
+							element={!isAuth || isAdmin ? <Login /> : <Profile />}
+						/>
 						<Route
 							path="favoritesHouses"
-							element={!isAuth ? <Login /> : <FavoritesHouses />}
+							element={!isAuth || isAdmin ? <Login /> : <FavoritesHouses />}
 						/>
 						<Route
 							path="favoritesSights"
-							element={!isAuth ? <Login /> : <FavoritesSights />}
+							element={!isAuth || isAdmin ? <Login /> : <FavoritesSights />}
 						/>
-						<Route path="test" element={!isAuth ? <Login /> : <TestResult />} />
-						<Route path="booking" element={!isAuth ? <Login /> : <Booking />} />
+						<Route
+							path="test"
+							element={!isAuth || isAdmin ? <Login /> : <TestResult />}
+						/>
+						<Route
+							path="booking"
+							element={!isAuth || isAdmin ? <Login /> : <Booking />}
+						/>
 					</Route>
 					<Route
 						path="uploadAvatar"
-						element={!isAuth ? <Login /> : <UploadAvatar />}
+						element={!isAuth || isAdmin ? <Login /> : <UploadAvatar />}
 					/>
 					<Route
 						path="changePassword"
-						element={!isAuth ? <Login /> : <ChangePassword />}
+						element={!isAuth || isAdmin ? <Login /> : <ChangePassword />}
 					/>
 					<Route
 						path="changeUsername"
-						element={!isAuth ? <Login /> : <ChangeUsername />}
+						element={!isAuth || isAdmin ? <Login /> : <ChangeUsername />}
 					/>
 					<Route
 						path="registration"
-						element={!isAuth ? <Register /> : <Profile />}
+						element={!isAuth || isAdmin ? <Register /> : <Profile />}
 					/>
-					<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
+					<Route
+						path="login"
+						element={!isAuth || isAdmin ? <Login /> : <Profile />}
+					/>
 				</Route>
 			</Route>
 

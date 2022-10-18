@@ -1,4 +1,8 @@
-const { users: Users } = require('../models')
+const {
+	users: Users,
+	houses: Houses,
+	houses_images: HousesImages,
+} = require('../models')
 const fs = require('fs')
 const config = require('../config/server_config')
 const APIError = require('../exceptions/apiExceptions')
@@ -6,6 +10,52 @@ const APIError = require('../exceptions/apiExceptions')
 const imagesType = ['image/jpg', 'image/png', 'image/jpeg']
 
 class FilesService {
+	async uploadHouseImage(houseId, image) {
+		if (!image) throw APIError.BadRequest('Вы не загрузили фото')
+
+		const house = await Houses.findOne({ where: { houseId } })
+		if (!house) throw APIError.BadRequest('Дом не найден')
+
+		if (!imagesType.includes(image.mimetype))
+			throw APIError.BadRequest('Не корректный формат фото')
+
+		const maxImageSize = 10 * 1000 * 1000
+		if (image.size > maxImageSize)
+			throw APIError.BadRequest(
+				'Фото превышает максимальный вес (10 мегабайта)'
+			)
+
+		const newImage = await HousesImages.create({ image: '', houseId })
+
+		const imageType = image.name.split('.').pop()
+		const path = `${config.FILES_PATH}/images/houses/${houseId}`
+
+		if (!fs.existsSync(path)) {
+			fs.mkdirSync(path, { recursive: true })
+		}
+
+		const fullPath = `${path}/house-img-${newImage.imageId}.${imageType}`
+		image.mv(fullPath)
+
+		newImage.image = `${config.API_URL}/${fullPath}`
+		await newImage.save()
+
+		return { image: fullPath }
+	}
+
+	async deleteHouseImage(imageId) {
+		const imageFromDB = await HousesImages.findOne({ where: { imageId } })
+		if (!imageFromDB) throw APIError.BadRequest('Картинка дома не найдена')
+
+		if (fs.existsSync(imageFromDB.image)) {
+			fs.rmSync(imageFromDB.image)
+			imageFromDB.image = ''
+			await imageFromDB.save()
+
+			return { image: imageFromDB.image }
+		}
+	}
+
 	async uploadAvatar(userId, avatar) {
 		if (!avatar) throw APIError.BadRequest('Вы не загрузили фото')
 

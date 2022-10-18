@@ -23,7 +23,7 @@ const Profile: FC = () => {
 						src={
 							avatar ? `${API_DOMAIN}${avatar}` : '/images/no-user-bg-img.png'
 						}
-						alt="userImg"
+						alt=""
 					/>
 				</div>
 				<div className="d-grid gap-3 mx-auto">

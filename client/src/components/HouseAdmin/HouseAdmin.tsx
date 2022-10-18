@@ -6,8 +6,8 @@ import './style.css'
 
 const HouseAdmin: FC<IHouse> = ({ houseId, images, name }) => {
 	return (
-		<Link
-			to={`/houses/${houseId}`}
+		<li
+			// to={`/houses/${houseId}`}
 			className="list-group-item list-group-item-action"
 		>
 			<div className="w-100 d-flex gap-3 align-items-center justify-content-center">
@@ -21,11 +21,14 @@ const HouseAdmin: FC<IHouse> = ({ houseId, images, name }) => {
 					<div className="list-group-item-image"></div>
 				)}
 				<div className="d-flex justify-content-between align-items-center w-100 flex-sm-row flex-column text-center text-sm-start gap-2">
-					<h6 className="m-0">
+					<h6 className="m-0 w-100">
 						{name.length > 30 ? `${name.substring(0, 30)}...` : name}
 					</h6>
-					<div className="d-flex justify-content-center align-items-center gap-2">
-						<Link to={`${houseId}`} className="btn btn-outline-primary w-100">
+					<div className="d-flex justify-content-center align-items-center gap-2 w-100">
+						<Link
+							to={`change/${houseId}`}
+							className="btn btn-outline-primary w-100"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className="icon icon-tabler icon-tabler-edit"
@@ -44,7 +47,10 @@ const HouseAdmin: FC<IHouse> = ({ houseId, images, name }) => {
 								<path d="M16 5l3 3"></path>
 							</svg>
 						</Link>
-						<Link to={`${houseId}`} className="btn btn-outline-danger w-100">
+						<Link
+							to={`delete/${houseId}`}
+							className="btn btn-outline-danger w-100"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className="icon icon-tabler icon-tabler-trash"
@@ -68,7 +74,7 @@ const HouseAdmin: FC<IHouse> = ({ houseId, images, name }) => {
 					</div>
 				</div>
 			</div>
-		</Link>
+		</li>
 	)
 }
 

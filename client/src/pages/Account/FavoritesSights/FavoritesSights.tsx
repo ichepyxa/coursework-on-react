@@ -50,7 +50,7 @@ const FavoritesSights: FC = () => {
 				<Loader />
 			) : sigths !== ([] as ISight[]) && sigths.length > 0 ? (
 				<div className="mt-lg-4 w-100">
-					<h2 className="text-center">Избранные достопримечательности</h2>
+					<h3 className="text-center">Избранные достопримечательности</h3>
 					<SightsElement sights={sigths} />
 				</div>
 			) : (

@@ -9,7 +9,7 @@ const UploadInput: FC<{
 }> = ({ className, label, setValue, onChange }) => {
 	return (
 		<Form.Group controlId="formFileLg" className={className}>
-			<Form.Label>{label}</Form.Label>
+			{label.length > 0 ? <Form.Label>{label}</Form.Label> : <></>}
 			<Form.Control type="file" onChange={(e: any) => onChange(e, setValue)} />
 		</Form.Group>
 	)

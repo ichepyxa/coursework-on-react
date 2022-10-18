@@ -128,7 +128,7 @@ const Navbar: FC = () => {
 							<div className="divider"></div>
 							{pageIsLoading ? (
 								<div className="dot-flashing ms-lg-auto me-lg-0 my-4 my-lg-0 mx-auto"></div>
-							) : isAuth ? (
+							) : isAuth && !isAdmin ? (
 								<>
 									<NavDropdown
 										className="ms-auto"
@@ -154,19 +154,11 @@ const Navbar: FC = () => {
 										>
 											Личный кабинет
 										</Link>
-										{isAdmin ? (
-											<Link
-												className="dropdown-item"
-												to="/admin"
-												onClick={handleCloseMenu}
-											>
-												Админ панель
-											</Link>
-										) : (
-											<></>
-										)}
 										<NavDropdown.Divider />
-										<NavDropdown.Item onClick={handleLogout}>
+										<NavDropdown.Item
+											className="text-danger"
+											onClick={handleLogout}
+										>
 											Выйти
 										</NavDropdown.Item>
 									</NavDropdown>
@@ -176,17 +168,10 @@ const Navbar: FC = () => {
 												Личный кабинет
 											</Link>
 										</Nav.Item>
-										{isAdmin ? (
-											<Nav.Item onClick={handleCloseMenu}>
-												<Link to="/admin" className="nav-link">
-													Админ панель
-												</Link>
-											</Nav.Item>
-										) : (
-											<></>
-										)}
 										<Nav.Item>
-											<Nav.Link onClick={handleLogout}>Выйти</Nav.Link>
+											<Nav.Link className="text-danger" onClick={handleLogout}>
+												Выйти
+											</Nav.Link>
 										</Nav.Item>
 									</Nav>
 								</>
