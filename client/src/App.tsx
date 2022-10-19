@@ -27,6 +27,7 @@ import ProfileAdmin from './pages/Admin/ProfileAdmin/ProfileAdmin'
 import AdminHouses from './pages/Admin/Houses/Houses'
 import FavoritesSights from './pages/Account/FavoritesSights/FavoritesSights'
 import CreateNewHouse from './pages/Admin/CreateNewHouse/CreateNewHouse'
+import EditHouse from './pages/Admin/EditHouse/EditHouse'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -48,6 +49,16 @@ const App: FC = () => {
 						path="new"
 						element={!isAuth || !isAdmin ? <LoginAdmin /> : <CreateNewHouse />}
 					/>
+					<Route path="edit">
+						<Route
+							index
+							element={!isAuth || !isAdmin ? <LoginAdmin /> : <NotFound />}
+						/>
+						<Route
+							path=":houseId"
+							element={!isAuth || !isAdmin ? <LoginAdmin /> : <EditHouse />}
+						/>
+					</Route>
 				</Route>
 			</Route>
 			<Route path="/" element={<Layout />}>

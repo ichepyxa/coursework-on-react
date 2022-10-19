@@ -14,7 +14,7 @@ class FilesService {
 		if (!image) throw APIError.BadRequest('Вы не загрузили фото')
 
 		const house = await Houses.findOne({ where: { houseId } })
-		if (!house) throw APIError.BadRequest('Дом не найден')
+		if (!house) throw APIError.BadRequest('Место отдыха не найдено')
 
 		if (!imagesType.includes(image.mimetype))
 			throw APIError.BadRequest('Не корректный формат фото')
@@ -45,10 +45,12 @@ class FilesService {
 
 	async deleteHouseImage(imageId) {
 		const imageFromDB = await HousesImages.findOne({ where: { imageId } })
-		if (!imageFromDB) throw APIError.BadRequest('Картинка дома не найдена')
+		if (!imageFromDB)
+			throw APIError.BadRequest('Картинка места отдыха не найдена')
 
-		if (fs.existsSync(imageFromDB.image)) {
-			fs.rmSync(imageFromDB.image)
+		const imagePath = imageFromDB.image.replace(`${config.API_URL}/`, '')
+		if (fs.existsSync(imagePath)) {
+			fs.rmSync(imagePath)
 			imageFromDB.image = ''
 			await imageFromDB.save()
 

@@ -142,6 +142,10 @@ const HouseDescription: FC = () => {
 						</p>
 					)}
 					<p className="fs-5">
+						<span className="fw-bold text-uppercase">Категория:</span>{' '}
+						{house.category}
+					</p>
+					<p className="fs-5">
 						<span className="fw-bold text-uppercase">Местонахождение:</span>{' '}
 						{house.location}
 					</p>

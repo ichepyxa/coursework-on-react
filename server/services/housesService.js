@@ -4,6 +4,7 @@ const {
 	houses_images: HousesImages,
 	sequelize,
 } = require('../models')
+const config = require('../config/server_config')
 const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
 const FilesService = require('./filesService')
@@ -114,12 +115,30 @@ class HousesService {
 		return newImage
 	}
 
-	async updateHouse(houseId, house) {
+	async updateHouse(houseId, house, images) {
 		if (!houseId) throw new Error('Не указан ID дома')
 		if (!house) throw new Error('Не верный формат')
 
 		const houseFromDB = await Houses.findByPk(houseId)
 		if (!houseFromDB) throw new Error('Не верный ID дома')
+
+		if (house.deletedImages) {
+			typeof house.deletedImages === 'string'
+				? // ? await FilesService.deleteHouseImage(house.deletedImages)
+				  await this.deleteHouseImages(house.deletedImages)
+				: house.deletedImages.map(
+						async imageId => await this.deleteHouseImages(imageId)
+				  )
+		}
+
+		if (images) {
+			!images.length
+				? await FilesService.uploadHouseImage(houseFromDB.houseId, images)
+				: images.map(
+						async image =>
+							await FilesService.uploadHouseImage(houseFromDB.houseId, image)
+				  )
+		}
 
 		await Houses.update({ ...house, houseId }, { where: { houseId } })
 		return await Houses.findByPk(houseId, {
@@ -158,6 +177,10 @@ class HousesService {
 
 		const imageFromDB = await HousesImages.findByPk(imageId)
 		if (!imageFromDB) throw new Error('Не верный ID картинки')
+
+		if (imageFromDB.image.includes(config.API_URL)) {
+			await FilesService.deleteHouseImage(imageId)
+		}
 
 		const deleteHouseImages = await HousesImages.destroy({
 			where: { imageId },

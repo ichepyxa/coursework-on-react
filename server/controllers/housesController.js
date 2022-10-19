@@ -1,3 +1,4 @@
+const { isStringObject } = require('util/types')
 const HousesService = require('../services/housesService')
 
 class HousesController {
@@ -51,9 +52,11 @@ class HousesController {
 
 	async updateHouse(req, res, next) {
 		try {
+			const images = req.files?.images || null
 			const updateHouse = await HousesService.updateHouse(
 				req.params.houseId,
-				req.body
+				req.body,
+				images
 			)
 			res.json(updateHouse)
 		} catch (error) {
