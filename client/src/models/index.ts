@@ -37,8 +37,8 @@ export interface IHouseFavorites {
 	updatedAt: string
 }
 
-export interface IHouseResponse {
-	count: number,
+export interface IHousesResponse {
+	count: number
 	houses: IHouse[]
 }
 
@@ -48,7 +48,7 @@ export interface IHouseFavoritesResponse {
 }
 
 export interface IHouseImage {
-	imageId: number,
+	imageId: number
 	image: string
 }
 
@@ -65,12 +65,12 @@ export interface ISight {
 }
 
 export interface ISightsResponse {
-	count: number,
+	count: number
 	sights: ISight[]
 }
 
 export interface ISightImage {
-	imageId: number,
+	imageId: number
 	image: string
 }
 

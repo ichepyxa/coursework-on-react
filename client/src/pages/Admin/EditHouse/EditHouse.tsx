@@ -117,7 +117,7 @@ const EditHouse: FC = () => {
 					.then(response => {
 						dispatch(
 							setNotification({
-								message: 'Дом успешно редактирован',
+								message: 'Место отдыха успешно отредактировано',
 								isError: false,
 								errors: [],
 							})
@@ -153,7 +153,7 @@ const EditHouse: FC = () => {
 
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
-			<DocumentTitle title={`${titleName} создание места отдыха`} />
+			<DocumentTitle title={`${titleName} редактирование места отдыха`} />
 			<SidebarNavbarAdmin />
 			<Form
 				className="mt-lg-4 w-100 position-relative"

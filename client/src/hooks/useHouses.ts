@@ -1,24 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
-import { API_URL } from "../constants/apiUrl"
-import displayTroubleConnectionError from "../helpers/displayTroubleConnectionError"
-import { IHouse, IHouseResponse } from "../models/index"
-import { useSearchParams } from "./useSearchParams"
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { API_URL } from '../constants/apiUrl'
+import displayTroubleConnectionError from '../helpers/displayTroubleConnectionError'
+import { IHouse, IHousesResponse } from '../models/index'
+import { useSearchParams } from './useSearchParams'
 
 export const useHouses = () => {
-  const dispatch = useDispatch()
+	const dispatch = useDispatch()
 	const { page, name, region } = useSearchParams()
 	const [countPage, setCountPage] = useState<number>(0)
-  const [houses, setHouses] = useState<IHouse[]>([])
+	const [houses, setHouses] = useState<IHouse[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const getHouses = async () => {
+	const getHouses = async () => {
 		setIsLoading(true)
 		try {
 			await axios
-				.get<IHouseResponse>(`${API_URL}/houses?page=${page}&name=${name}&region=${region}`)
+				.get<IHousesResponse>(
+					`${API_URL}/houses?page=${page}&name=${name}&region=${region}`
+				)
 				.then(response => {
 					if (
 						response.data.houses === undefined ||
@@ -37,9 +39,9 @@ export const useHouses = () => {
 		}
 	}
 
-  useEffect(() => {
+	useEffect(() => {
 		getHouses()
 	}, [name, region, page])
 
-  return {isLoading, houses, countPage}  
+	return { isLoading, houses, countPage }
 }

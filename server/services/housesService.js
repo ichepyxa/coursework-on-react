@@ -57,7 +57,7 @@ class HousesService {
 	}
 
 	async getHouseById(houseId) {
-		if (!houseId) throw new Error('Не указан ID дома')
+		if (!houseId) throw new Error('Не указан ID места отдыха')
 
 		const house = await Houses.findByPk(houseId, {
 			include: [
@@ -104,28 +104,16 @@ class HousesService {
 		return newHouse
 	}
 
-	async createHouseImages(houseId, houseImage) {
-		if (!houseId) throw new Error('Не указан ID дома')
-		if (!houseImage) throw new Error('Не верный формат')
-
-		const houseFromDB = await Houses.findByPk(houseId)
-		if (!houseFromDB) throw new Error('Не верный ID дома')
-
-		const newImage = await HousesImages.create({ image: houseImage, houseId })
-		return newImage
-	}
-
 	async updateHouse(houseId, house, images) {
-		if (!houseId) throw new Error('Не указан ID дома')
+		if (!houseId) throw new Error('Не указан ID места отдыха')
 		if (!house) throw new Error('Не верный формат')
 
 		const houseFromDB = await Houses.findByPk(houseId)
-		if (!houseFromDB) throw new Error('Не верный ID дома')
+		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
 
 		if (house.deletedImages) {
 			typeof house.deletedImages === 'string'
-				? // ? await FilesService.deleteHouseImage(house.deletedImages)
-				  await this.deleteHouseImages(house.deletedImages)
+				? await this.deleteHouseImages(house.deletedImages)
 				: house.deletedImages.map(
 						async imageId => await this.deleteHouseImages(imageId)
 				  )
@@ -151,22 +139,11 @@ class HousesService {
 		})
 	}
 
-	async updateHouseImages(imageId, image) {
-		if (!imageId) throw new Error('Не указан ID картинки')
-		if (!image) throw new Error('Не верный формат')
-
-		const imageFromDB = await HousesImages.findByPk(imageId)
-		if (!imageFromDB) throw new Error('Не верный ID картинки')
-
-		await HousesImages.update({ image }, { where: { imageId } })
-		return await HousesImages.findOne({ where: { imageId } })
-	}
-
 	async deleteHouse(houseId) {
-		if (!houseId) throw new Error('Не указан ID дома')
+		if (!houseId) throw new Error('Не указан ID места отдыха')
 
 		const houseFromDB = await Houses.findByPk(houseId)
-		if (!houseFromDB) throw new Error('Не верный ID дома')
+		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
 
 		const deleteHouse = await Houses.destroy({ where: { houseId } })
 		return deleteHouse
@@ -179,7 +156,10 @@ class HousesService {
 		if (!imageFromDB) throw new Error('Не верный ID картинки')
 
 		if (imageFromDB.image.includes(config.API_URL)) {
-			await FilesService.deleteHouseImage(imageId)
+			await FilesService.deleteHouseImage(imageFromDB.image).then(async () => {
+				imageFromDB.image = ''
+				await imageFromDB.save()
+			})
 		}
 
 		const deleteHouseImages = await HousesImages.destroy({
@@ -209,12 +189,12 @@ class HousesService {
 
 	async addFavoritesHouses(user, houseId) {
 		if (!user) throw APIError.UnautorizedError()
-		if (!houseId) throw new Error('Не указан ID дома')
+		if (!houseId) throw new Error('Не указан ID места отдыха')
 
 		const houseFromDB = await Houses.findOne({
 			where: { houseId },
 		})
-		if (!houseFromDB) throw new Error('Не верный ID дома')
+		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
 
 		const dublicate = await UsersFavoritesHouses.findOne({
 			where: {
@@ -233,12 +213,12 @@ class HousesService {
 
 	async deleteFavoritesHouses(user, houseId) {
 		if (!user) throw APIError.UnautorizedError()
-		if (!houseId) throw new Error('Не указан ID дома')
+		if (!houseId) throw new Error('Не указан ID места отдыха')
 
 		const houseFromDB = await Houses.findOne({
 			where: { houseId },
 		})
-		if (!houseFromDB) throw new Error('Не верный ID дома')
+		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
 
 		const favoriteHouse = await UsersFavoritesHouses.destroy({
 			where: {

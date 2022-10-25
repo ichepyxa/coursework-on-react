@@ -29,20 +29,9 @@ class SightsController {
 
 	async createSight(req, res, next) {
 		try {
-			const newSight = await SightsService.createSight(req.body)
+			const images = req.files?.images || null
+			const newSight = await SightsService.createSight(req.body, images)
 			res.json(newSight)
-		} catch (error) {
-			next(error)
-		}
-	}
-
-	async createSightImages(req, res, next) {
-		try {
-			const newImage = await SightsService.createSightImages(
-				req.params.sightId,
-				req.body.image
-			)
-			res.json(newImage)
 		} catch (error) {
 			next(error)
 		}
@@ -50,23 +39,13 @@ class SightsController {
 
 	async updateSight(req, res, next) {
 		try {
+			const images = req.files?.images || null
 			const updateSight = await SightsService.updateSight(
 				req.params.sightId,
-				req.body
+				req.body,
+				images
 			)
 			res.json(updateSight)
-		} catch (error) {
-			next(error)
-		}
-	}
-
-	async updateSightImages(req, res, next) {
-		try {
-			const updateSightImages = await SightsService.updateSightImages(
-				req.params.imageId,
-				req.body.image
-			)
-			res.json(updateSightImages)
 		} catch (error) {
 			next(error)
 		}
@@ -76,17 +55,6 @@ class SightsController {
 		try {
 			const deleteSight = await SightsService.deleteSight(req.params.sightId)
 			res.json(deleteSight)
-		} catch (error) {
-			next(error)
-		}
-	}
-
-	async deleteSightImages(req, res, next) {
-		try {
-			const deleteSightImages = await SightsService.deleteSightImages(
-				req.params.imageId
-			)
-			res.json(deleteSightImages)
 		} catch (error) {
 			next(error)
 		}

@@ -164,9 +164,9 @@ const HouseDescription: FC = () => {
 				</>
 			) : (
 				<div className="mt-5 d-flex justify-content-center align-items-center flex-column">
-					<h4 className="mb-4 text-center">Такой дом не найден.</h4>
+					<h4 className="mb-4 text-center">Такое место отдыха не найдено.</h4>
 					<Link className="btn btn-primary" to="/houses">
-						Вернуться к домам
+						Вернуться к местам отдыха
 					</Link>
 				</div>
 			)}

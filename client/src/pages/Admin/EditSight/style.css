@@ -1,0 +1,30 @@
+.not-image {
+	object-fit: cover;
+}
+
+.new-house-img {
+	overflow: hidden;
+	position: relative;
+}
+
+.new-house-img img {
+	width: 100%;
+	min-height: 200px;
+	max-height: 200px;
+	object-fit: cover;
+}
+
+.new-house-img span {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: fit-content;
+	color: var(--bs-danger);
+	font-weight: 700;
+	transform: translate(-50%, -50%);
+	background-color: rgba(0, 0, 0, 0.4);
+	border-radius: 5px;
+	user-select: none;
+	cursor: pointer;
+	padding: 5px;
+}

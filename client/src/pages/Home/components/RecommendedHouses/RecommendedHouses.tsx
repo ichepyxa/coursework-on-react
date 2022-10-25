@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import { API_URL } from '../../../../constants/apiUrl'
-import { IHouse, IHouseResponse } from '../../../../models/index'
+import { IHouse, IHousesResponse } from '../../../../models/index'
 import HousesElement from '../../../../components/HousesElement/HousesElement'
 import { Link } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ const RecommendedHouses: FC = () => {
 	const getRecommendedHouses = async () => {
 		try {
 			await axios
-				.get<IHouseResponse>(`${API_URL}/houses?page=1`)
+				.get<IHousesResponse>(`${API_URL}/houses?page=1`)
 				.then(response => {
 					if (
 						response.data.houses === undefined ||

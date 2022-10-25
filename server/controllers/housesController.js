@@ -38,18 +38,6 @@ class HousesController {
 		}
 	}
 
-	async createHouseImages(req, res, next) {
-		try {
-			const newImage = await HousesService.createHouseImages(
-				req.params.houseId,
-				req.body.image
-			)
-			res.json(newImage)
-		} catch (error) {
-			next(error)
-		}
-	}
-
 	async updateHouse(req, res, next) {
 		try {
 			const images = req.files?.images || null
@@ -64,33 +52,10 @@ class HousesController {
 		}
 	}
 
-	async updateHouseImages(req, res, next) {
-		try {
-			const updateHouseImages = await HousesService.updateHouseImages(
-				req.params.imageId,
-				req.body.image
-			)
-			res.json(updateHouseImages)
-		} catch (error) {
-			next(error)
-		}
-	}
-
 	async deleteHouse(req, res, next) {
 		try {
 			const deleteHouse = await HousesService.deleteHouse(req.params.houseId)
 			res.json(deleteHouse)
-		} catch (error) {
-			next(error)
-		}
-	}
-
-	async deleteHouseImages(req, res, next) {
-		try {
-			const deleteHouseImages = await HousesService.deleteHouseImages(
-				req.params.imageId
-			)
-			res.json(deleteHouseImages)
 		} catch (error) {
 			next(error)
 		}

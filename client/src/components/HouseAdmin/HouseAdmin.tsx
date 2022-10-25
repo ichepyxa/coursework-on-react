@@ -21,7 +21,7 @@ const HouseAdmin: FC<IHouse> = ({ houseId, images, name }) => {
 			await api.delete<void>(`/houses/${houseId}`).then(response => {
 				dispatch(
 					setNotification({
-						message: 'Дом успешно удален',
+						message: 'Место отдыха успешно удалено',
 						isError: false,
 						errors: [],
 					})

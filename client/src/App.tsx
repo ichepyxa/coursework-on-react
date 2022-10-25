@@ -24,10 +24,13 @@ import LoginAdmin from './pages/Admin/LoginAdmin/LoginAdmin'
 import { useAuth } from './hooks/useAuth'
 import LayoutAdmin from './components/LayoutAdmin/LayoutAdmin'
 import ProfileAdmin from './pages/Admin/ProfileAdmin/ProfileAdmin'
-import AdminHouses from './pages/Admin/Houses/Houses'
 import FavoritesSights from './pages/Account/FavoritesSights/FavoritesSights'
+import AdminHouses from './pages/Admin/Houses/Houses'
 import CreateNewHouse from './pages/Admin/CreateNewHouse/CreateNewHouse'
 import EditHouse from './pages/Admin/EditHouse/EditHouse'
+import AdminSights from './pages/Admin/Sights/Sights'
+import CreateNewSight from './pages/Admin/CreateNewSight/CreateNewSight'
+import EditSight from './pages/Admin/EditSight/EditSight'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -57,6 +60,26 @@ const App: FC = () => {
 						<Route
 							path=":houseId"
 							element={!isAuth || !isAdmin ? <LoginAdmin /> : <EditHouse />}
+						/>
+					</Route>
+				</Route>
+				<Route path="sights">
+					<Route
+						index
+						element={!isAuth || !isAdmin ? <LoginAdmin /> : <AdminSights />}
+					/>
+					<Route
+						path="new"
+						element={!isAuth || !isAdmin ? <LoginAdmin /> : <CreateNewSight />}
+					/>
+					<Route path="edit">
+						<Route
+							index
+							element={!isAuth || !isAdmin ? <LoginAdmin /> : <NotFound />}
+						/>
+						<Route
+							path=":sightId"
+							element={!isAuth || !isAdmin ? <LoginAdmin /> : <EditSight />}
 						/>
 					</Route>
 				</Route>

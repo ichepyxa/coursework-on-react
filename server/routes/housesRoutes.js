@@ -13,11 +13,6 @@ router.get(
 router.get('/houses/:houseId', HousesController.getHouseById)
 router.post('/houses', roleMiddleware(['ADMIN']), HousesController.createHouse)
 router.post(
-	'/houses/images/:houseId',
-	roleMiddleware(['ADMIN']),
-	HousesController.createHouseImages
-)
-router.post(
 	'/houses/favoritesHouses',
 	authMiddleware,
 	HousesController.addFavoritesHouses
@@ -27,20 +22,10 @@ router.put(
 	roleMiddleware(['ADMIN']),
 	HousesController.updateHouse
 )
-router.put(
-	'/houses/images/:imageId',
-	roleMiddleware(['ADMIN']),
-	HousesController.updateHouseImages
-)
 router.delete(
 	'/houses/:houseId',
 	roleMiddleware(['ADMIN']),
 	HousesController.deleteHouse
-)
-router.delete(
-	'/houses/images/:imageId',
-	roleMiddleware(['ADMIN']),
-	HousesController.deleteHouseImages
 )
 router.delete(
 	'/houses/favoritesHouses/:houseId',

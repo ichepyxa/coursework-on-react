@@ -117,7 +117,14 @@ const SightDescription: FC = () => {
 						<span className="fw-bold text-uppercase">Категория:</span>{' '}
 						{sight.category
 							.split(',')
-							.map(item => item[0].toUpperCase() + item.slice(1))
+							.map(item => {
+								const trimItem = item.trim()
+								if (trimItem.length < 2) {
+									return trimItem
+								}
+
+								return trimItem[0].toString().toUpperCase() + trimItem.slice(1)
+							})
 							.join(', ')}
 					</p>
 					<p className="fs-5">

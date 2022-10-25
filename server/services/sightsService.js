@@ -6,6 +6,8 @@ const {
 } = require('../models')
 const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
+const FilesService = require('./filesService')
+const config = require('../config/server_config')
 
 class SightsService {
 	async getAllSights() {
@@ -55,7 +57,7 @@ class SightsService {
 	}
 
 	async getSightById(sightId) {
-		if (!sightId) throw new Error('Не указан ID дома')
+		if (!sightId) throw new Error('Не указан ID достопримечательности')
 
 		const sight = await Sights.findByPk(sightId, {
 			include: [
@@ -68,30 +70,46 @@ class SightsService {
 		return sight
 	}
 
-	async createSight(sight) {
+	async createSight(sight, images) {
 		if (!sight) throw new Error('Не верный формат')
 
 		const newSight = await Sights.create(sight)
+
+		if (images) {
+			!images.length
+				? await FilesService.uploadSightImage(newSight.sightId, images)
+				: images.map(
+						async image =>
+							await FilesService.uploadSightImage(newSight.sightId, image)
+				  )
+		}
+
 		return newSight
 	}
 
-	async createSightImages(sightId, sightImage) {
-		if (!sightId) throw new Error('Не указан ID дома')
-		if (!sightImage) throw new Error('Не верный формат')
-
-		const sightFromDB = await Sights.findByPk(sightId)
-		if (!sightFromDB) throw new Error('Не верный ID дома')
-
-		const newSight = await SightsImages.create({ image: sightImage, sightId })
-		return newSight
-	}
-
-	async updateSight(sightId, sight) {
-		if (!sightId) throw new Error('Не указан ID дома')
+	async updateSight(sightId, sight, images) {
+		if (!sightId) throw new Error('Не указан ID достопримечательности')
 		if (!sight) throw new Error('Не верный формат')
 
 		const sightFromDB = await Sights.findByPk(sightId)
-		if (!sightFromDB) throw new Error('Не верный ID дома')
+		if (!sightFromDB) throw new Error('Не верный ID достопримечательности')
+
+		if (sight.deletedImages) {
+			typeof sight.deletedImages === 'string'
+				? await this.deleteSightImages(sight.deletedImages)
+				: sight.deletedImages.map(
+						async imageId => await this.deleteSightImages(imageId)
+				  )
+		}
+
+		if (images) {
+			!images.length
+				? await FilesService.uploadSightImage(sightFromDB.sightId, images)
+				: images.map(
+						async image =>
+							await FilesService.uploadSightImage(sightFromDB.sightId, image)
+				  )
+		}
 
 		await Sights.update({ ...sight, sightId }, { where: { sightId } })
 		return await Sights.findByPk(sightId, {
@@ -104,35 +122,31 @@ class SightsService {
 		})
 	}
 
-	async updateSightImages(sightId, image) {
-		if (!sightId) throw new Error('Не указан ID картинки')
-		if (!image) throw new Error('Не верный формат')
-
-		const imageFromDB = await SightsImages.findByPk(sightId)
-		if (!imageFromDB) throw new Error('Не верный ID картинки')
-
-		await SightsImages.update({ image }, { where: { sightId } })
-		return await SightsImages.findOne({ where: { sightId } })
-	}
-
 	async deleteSight(sightId) {
-		if (!sightId) throw new Error('Не указан ID дома')
+		if (!sightId) throw new Error('Не указан ID достопримечательности')
 
 		const sightFromDB = await Sights.findByPk(sightId)
-		if (!sightFromDB) throw new Error('Не верный ID дома')
+		if (!sightFromDB) throw new Error('Не верный ID достопримечательности')
 
 		const deleteSight = await Sights.destroy({ where: { sightId } })
 		return deleteSight
 	}
 
-	async deleteSightImages(sightId) {
-		if (!sightId) throw new Error('Не указан ID картинки')
+	async deleteSightImages(imageId) {
+		if (!imageId) throw new Error('Не указан ID картинки')
 
-		const imageFromDB = await SightsImages.findByPk(sightId)
+		const imageFromDB = await SightsImages.findByPk(imageId)
 		if (!imageFromDB) throw new Error('Не верный ID картинки')
 
+		if (imageFromDB.image.includes(config.API_URL)) {
+			await FilesService.deleteSightImage(imageFromDB.image).then(async () => {
+				imageFromDB.image = ''
+				await imageFromDB.save()
+			})
+		}
+
 		const deleteSightImages = await SightsImages.destroy({
-			where: { sightId },
+			where: { imageId },
 		})
 		return deleteSightImages
 	}

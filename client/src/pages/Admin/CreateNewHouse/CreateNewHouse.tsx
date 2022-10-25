@@ -65,7 +65,7 @@ const CreateNewHouse: FC = () => {
 				await api.post<IHouse>('/houses', formData).then(response => {
 					dispatch(
 						setNotification({
-							message: 'Дом успешно создан',
+							message: 'Место отдыха успешно создано',
 							isError: false,
 							errors: [],
 						})

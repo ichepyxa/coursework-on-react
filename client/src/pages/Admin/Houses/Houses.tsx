@@ -19,7 +19,7 @@ const Houses: FC = () => {
 			<DocumentTitle title={`${titleName} админ панель`} />
 			<SidebarNavbarAdmin />
 			<div className="mt-lg-4 w-100 position-relative">
-				<h2 className="text-center mb-4">Места отдыха</h2>
+				<h2 className="text-center mb-4 word-break">Места отдыха</h2>
 				<Link
 					to="new"
 					className="d-flex align-items-center gap-2 text-decoration-none position-absolute end-0 top-0"

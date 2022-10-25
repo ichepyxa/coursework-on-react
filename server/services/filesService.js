@@ -1,7 +1,9 @@
 const {
 	users: Users,
 	houses: Houses,
+	sights: Sights,
 	houses_images: HousesImages,
+	sights_images: SightsImages,
 } = require('../models')
 const fs = require('fs')
 const config = require('../config/server_config')
@@ -43,18 +45,52 @@ class FilesService {
 		return { image: fullPath }
 	}
 
-	async deleteHouseImage(imageId) {
-		const imageFromDB = await HousesImages.findOne({ where: { imageId } })
-		if (!imageFromDB)
-			throw APIError.BadRequest('Картинка места отдыха не найдена')
-
-		const imagePath = imageFromDB.image.replace(`${config.API_URL}/`, '')
+	async deleteHouseImage(image) {
+		const imagePath = image.replace(`${config.API_URL}/`, '')
 		if (fs.existsSync(imagePath)) {
 			fs.rmSync(imagePath)
-			imageFromDB.image = ''
-			await imageFromDB.save()
+			return { image }
+		}
+	}
 
-			return { image: imageFromDB.image }
+	async uploadSightImage(sightId, image) {
+		if (!image) throw APIError.BadRequest('Вы не загрузили фото')
+
+		const sight = await Sights.findOne({ where: { sightId } })
+		if (!sight) throw APIError.BadRequest('Достопримечательность не найдено')
+
+		if (!imagesType.includes(image.mimetype))
+			throw APIError.BadRequest('Не корректный формат фото')
+
+		const maxImageSize = 10 * 1000 * 1000
+		if (image.size > maxImageSize)
+			throw APIError.BadRequest(
+				'Фото превышает максимальный вес (10 мегабайта)'
+			)
+
+		const newImage = await SightsImages.create({ image: '', sightId })
+
+		const imageType = image.name.split('.').pop()
+		const path = `${config.FILES_PATH}/images/sights/${sightId}`
+
+		if (!fs.existsSync(path)) {
+			fs.mkdirSync(path, { recursive: true })
+		}
+
+		const fullPath = `${path}/sight-img-${newImage.imageId}.${imageType}`
+		image.mv(fullPath)
+
+		newImage.image = `${config.API_URL}/${fullPath}`
+		await newImage.save()
+
+		return { image: fullPath }
+	}
+
+	async deleteSightImage(image) {
+		const imagePath = image.replace(`${config.API_URL}/`, '')
+		if (fs.existsSync(imagePath)) {
+			fs.rmSync(imagePath)
+			return { image }
 		}
 	}
 
