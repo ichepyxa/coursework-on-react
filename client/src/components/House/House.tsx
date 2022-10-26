@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
 import { onClickFavoritesBtn } from '../../helpers/favoritesHousesBtnClicks'
+import { useAuth } from '../../hooks/useAuth'
 import { IHouse } from '../../models/index'
-import { useAppSelector } from '../../store/hook'
 
 import './style.css'
 
@@ -16,11 +16,13 @@ const House: FC<IHouse> = ({
 	isFavorite = false,
 }) => {
 	const navigate = useNavigate()
-	const { isAuth } = useAppSelector(state => state.user)
+	const { isAuth, isAdmin } = useAuth()
 
 	return (
 		<div className="house">
-			{isFavorite ? (
+			{isAdmin ? (
+				<></>
+			) : isFavorite ? (
 				<div
 					className="favorites house-item__favorites active"
 					onClick={(e: any) =>

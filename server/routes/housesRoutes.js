@@ -1,20 +1,19 @@
 const Router = require('express')
 const router = new Router()
 const HousesController = require('../controllers/housesController')
-const authMiddleware = require('../middlewares/authMiddleware')
 const roleMiddleware = require('../middlewares/roleMiddleware')
 
 router.get('/houses', HousesController.getAllHouses)
 router.get(
 	'/houses/favoritesHouses',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	HousesController.getFavoritesHouses
 )
 router.get('/houses/:houseId', HousesController.getHouseById)
 router.post('/houses', roleMiddleware(['ADMIN']), HousesController.createHouse)
 router.post(
 	'/houses/favoritesHouses',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	HousesController.addFavoritesHouses
 )
 router.put(
@@ -29,7 +28,7 @@ router.delete(
 )
 router.delete(
 	'/houses/favoritesHouses/:houseId',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	HousesController.deleteFavoritesHouses
 )
 

@@ -33,7 +33,7 @@ const HouseDescription: FC = () => {
 	const params = useParams()
 
 	const navigate = useNavigate()
-	const { isAuth } = useAuth()
+	const { isAuth, isAdmin } = useAuth()
 	const [house, setHouse] = useState<IHouse>({} as IHouse)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
@@ -73,6 +73,10 @@ const HouseDescription: FC = () => {
 	}
 
 	const favoritesBtns = () => {
+		if (isAdmin) {
+			return <></>
+		}
+
 		return house.isFavorite ? (
 			<div
 				className="favorites house-item__favorites active"
@@ -95,10 +99,10 @@ const HouseDescription: FC = () => {
 	}, [])
 
 	useEffect(() => {
-		if (isAuth) {
+		if (isAuth && !isAdmin) {
 			getFavoritesHouses()
 		}
-	}, [isAuth])
+	}, [isAuth, isAdmin])
 
 	useEffect(() => {
 		setHouse(filterFavoritesHouses([house], favoritesHouses)[0])

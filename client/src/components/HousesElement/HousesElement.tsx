@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react'
 import { IHouse, IHouseFavoritesResponse } from '../../models/index'
 import House from '../House/House'
-import { useAppSelector } from '../../store/hook'
 import { API_URL } from '../../constants/apiUrl'
 import api from '../../http'
 import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
+import { useAuth } from '../../hooks/useAuth'
 
 const HousesElement: FC<{ houses: IHouse[] }> = ({ houses }) => {
-	const { isAuth } = useAppSelector(state => state.user)
+	const { isAuth, isAdmin } = useAuth()
 	const [newHouses, setNewHouses] = useState<IHouse[]>(houses)
 	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
 
@@ -27,10 +27,10 @@ const HousesElement: FC<{ houses: IHouse[] }> = ({ houses }) => {
 	}
 
 	useEffect(() => {
-		if (isAuth) {
+		if (isAuth && !isAdmin) {
 			getFavoritesHouses()
 		}
-	}, [isAuth])
+	}, [isAuth, isAdmin])
 
 	useEffect(() => {
 		setNewHouses(filterFavoritesHouses(houses, favoritesHouses))

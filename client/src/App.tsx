@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
 import Profile from './pages/Account/Profile/Profile'
@@ -31,9 +31,11 @@ import EditHouse from './pages/Admin/EditHouse/EditHouse'
 import AdminSights from './pages/Admin/Sights/Sights'
 import CreateNewSight from './pages/Admin/CreateNewSight/CreateNewSight'
 import EditSight from './pages/Admin/EditSight/EditSight'
+import Users from './pages/Admin/Users/Users'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
+	const navigate = useNavigate()
 	const { isAdmin } = useAuth()
 
 	return (
@@ -42,6 +44,16 @@ const App: FC = () => {
 				<Route
 					index
 					element={!isAuth || !isAdmin ? <LoginAdmin /> : <ProfileAdmin />}
+				/>
+				<Route
+					path="changePassword"
+					element={
+						!isAuth || !isAdmin ? (
+							<LoginAdmin />
+						) : (
+							<ChangePassword backPath={'/admin'} />
+						)
+					}
 				/>
 				<Route path="houses">
 					<Route
@@ -83,6 +95,12 @@ const App: FC = () => {
 						/>
 					</Route>
 				</Route>
+				<Route path="users">
+					<Route
+						index
+						element={!isAuth || !isAdmin ? <LoginAdmin /> : <Users />}
+					/>
+				</Route>
 			</Route>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} />
@@ -96,51 +114,51 @@ const App: FC = () => {
 					<Route path=":sightId" element={<SightDescription />} />
 				</Route>
 				<Route path="test" element={<Test />} />
-				<Route path="account">
-					<Route index element={!isAuth || isAdmin ? <Login /> : <Profile />} />
-					<Route path="profile">
+				{isAdmin ? (
+					<></>
+				) : (
+					<Route path="account">
+						<Route index element={!isAuth ? <Login /> : <Profile />} />
+						<Route path="profile">
+							<Route index element={!isAuth ? <Login /> : <Profile />} />
+							<Route
+								path="favoritesHouses"
+								element={!isAuth ? <Login /> : <FavoritesHouses />}
+							/>
+							<Route
+								path="favoritesSights"
+								element={!isAuth ? <Login /> : <FavoritesSights />}
+							/>
+							<Route
+								path="test"
+								element={!isAuth ? <Login /> : <TestResult />}
+							/>
+							<Route
+								path="booking"
+								element={!isAuth ? <Login /> : <Booking />}
+							/>
+						</Route>
 						<Route
-							index
-							element={!isAuth || isAdmin ? <Login /> : <Profile />}
+							path="uploadAvatar"
+							element={!isAuth ? <Login /> : <UploadAvatar />}
 						/>
 						<Route
-							path="favoritesHouses"
-							element={!isAuth || isAdmin ? <Login /> : <FavoritesHouses />}
+							path="changePassword"
+							element={
+								!isAuth ? <Login /> : <ChangePassword backPath={'/profile'} />
+							}
 						/>
 						<Route
-							path="favoritesSights"
-							element={!isAuth || isAdmin ? <Login /> : <FavoritesSights />}
+							path="changeUsername"
+							element={!isAuth ? <Login /> : <ChangeUsername />}
 						/>
 						<Route
-							path="test"
-							element={!isAuth || isAdmin ? <Login /> : <TestResult />}
+							path="registration"
+							element={!isAuth ? <Register /> : <Profile />}
 						/>
-						<Route
-							path="booking"
-							element={!isAuth || isAdmin ? <Login /> : <Booking />}
-						/>
+						<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
 					</Route>
-					<Route
-						path="uploadAvatar"
-						element={!isAuth || isAdmin ? <Login /> : <UploadAvatar />}
-					/>
-					<Route
-						path="changePassword"
-						element={!isAuth || isAdmin ? <Login /> : <ChangePassword />}
-					/>
-					<Route
-						path="changeUsername"
-						element={!isAuth || isAdmin ? <Login /> : <ChangeUsername />}
-					/>
-					<Route
-						path="registration"
-						element={!isAuth || isAdmin ? <Register /> : <Profile />}
-					/>
-					<Route
-						path="login"
-						element={!isAuth || isAdmin ? <Login /> : <Profile />}
-					/>
-				</Route>
+				)}
 			</Route>
 
 			<Route path="*" element={<NotFound />} />

@@ -25,7 +25,7 @@ const ProfileAdmin: FC = () => {
 							disabled
 						/>
 						<div className="input-group-text">
-							<a href="/account/changePassword" className="btn btn-danger">
+							<a href="/admin/changePassword" className="btn btn-danger">
 								Сменить пароль
 							</a>
 						</div>

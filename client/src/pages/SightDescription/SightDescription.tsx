@@ -9,9 +9,10 @@ import { titleName } from '../../constants/titleName'
 import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 import { onClickFavoritesBtn } from '../../helpers/favoritesSightsBtnClicks'
 import filterFavoritesSights from '../../helpers/filterFavoritesSights'
+import { useAuth } from '../../hooks/useAuth'
 import api from '../../http'
 import { ISight, ISightFavoritesResponse } from '../../models/index'
-import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { useAppDispatch } from '../../store/hook'
 import Images from './components/Images/Images'
 
 import './style.css'
@@ -21,7 +22,7 @@ const SightDescription: FC = () => {
 	const params = useParams()
 
 	const navigate = useNavigate()
-	const { isAuth } = useAppSelector(state => state.user)
+	const { isAuth, isAdmin } = useAuth()
 	const [sight, setSight] = useState<ISight>({} as ISight)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [favoritesSights, setFavoritesSights] = useState<ISight[]>([])
@@ -42,6 +43,10 @@ const SightDescription: FC = () => {
 	}
 
 	const favoritesBtns = () => {
+		if (isAdmin) {
+			return <></>
+		}
+
 		return sight.isFavorite ? (
 			<div
 				className="favorites sight-item__favorites active"
@@ -83,10 +88,10 @@ const SightDescription: FC = () => {
 	}, [])
 
 	useEffect(() => {
-		if (isAuth) {
+		if (isAuth && !isAdmin) {
 			getFavoritesSights()
 		}
-	}, [isAuth])
+	}, [isAuth, isAdmin])
 
 	useEffect(() => {
 		setSight(filterFavoritesSights([sight], favoritesSights)[0])

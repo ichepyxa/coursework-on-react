@@ -1,0 +1,12 @@
+.list-group-item-image {
+	max-width: 50px;
+	max-height: 50px;
+	min-width: 50px;
+	min-height: 50px;
+	border-radius: 5px;
+	object-position: center;
+	background: url(../../../public/images/no-house-img.svg) 50% 50% no-repeat;
+	background-color: #eeeeee;
+	background-size: contain;
+	z-index: 2;
+}

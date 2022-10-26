@@ -16,6 +16,15 @@ export interface IUserResponse {
 	user: IUser
 }
 
+export interface IUserAdmin extends IUser {
+	role: string | undefined
+}
+
+export interface IUsersResponse {
+	count: number
+	users: IUser[]
+}
+
 export interface IHouse {
 	houseId: number
 	name: string

@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { onClickFavoritesBtn } from '../../helpers/favoritesSightsBtnClicks'
+import { useAuth } from '../../hooks/useAuth'
 import { ISight } from '../../models'
-import { useAppSelector } from '../../store/hook'
 
 import './style.css'
 
@@ -14,13 +14,15 @@ const Sight: FC<ISight> = ({
 	isFavorite = false,
 }) => {
 	const navigate = useNavigate()
-	const { isAuth } = useAppSelector(state => state.user)
+	const { isAuth, isAdmin } = useAuth()
 	const firstCategory = category.split(',')[0]
 	const newCategory = firstCategory[0].toUpperCase() + firstCategory.slice(1)
 
 	return (
 		<div className="sight">
-			{isFavorite ? (
+			{isAdmin ? (
+				<></>
+			) : isFavorite ? (
 				<div
 					className="favorites house-item__favorites active"
 					onClick={(e: any) =>

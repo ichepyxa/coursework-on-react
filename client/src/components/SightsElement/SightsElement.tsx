@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ISight, ISightFavoritesResponse } from '../../models'
-import { useAppSelector } from '../../store/hook'
 import { API_URL } from '../../constants/apiUrl'
 import api from '../../http'
 import Sight from '../Sight/Sight'
 import filterFavoritesSights from '../../helpers/filterFavoritesSights'
+import { useAuth } from '../../hooks/useAuth'
 
 const SightsElement: FC<{ sights: ISight[] }> = ({ sights }) => {
-	const { isAuth } = useAppSelector(state => state.user)
+	const { isAuth, isAdmin } = useAuth()
 	const [newSights, setNewSights] = useState<ISight[]>(sights)
 	const [favoritesSights, setFavoritesSights] = useState<ISight[]>([])
 
@@ -27,10 +27,10 @@ const SightsElement: FC<{ sights: ISight[] }> = ({ sights }) => {
 	}
 
 	useEffect(() => {
-		if (isAuth) {
+		if (isAuth && !isAdmin) {
 			getFavoritesHouses()
 		}
-	}, [isAuth])
+	}, [isAuth, isAdmin])
 
 	useEffect(() => {
 		setNewSights(filterFavoritesSights(sights, favoritesSights))

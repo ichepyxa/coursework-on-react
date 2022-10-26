@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import checkIsValidEmail from '../../../helpers/checkIsValidEmail'
 import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
 import AuthService from '../../../sevices/authService'
@@ -19,6 +19,7 @@ import DocumentTitle from 'react-document-title'
 
 const Login: FC = () => {
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 	const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null)
@@ -48,6 +49,10 @@ const Login: FC = () => {
 							errors: [],
 						})
 					)
+
+					if (response.data.user.isAdmin) {
+						navigate('/admin')
+					}
 				})
 			} catch (error: any) {
 				displayTroubleConnectionError(dispatch, error)

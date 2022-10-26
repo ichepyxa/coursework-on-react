@@ -21,7 +21,11 @@ router.post(
 	body('password').isLength({ min: 6, max: 20 }),
 	UsersController.registrationUsers
 )
-router.post('/users/uploadAvatar', authMiddleware, FilesController.uploadAvatar)
+router.post(
+	'/users/uploadAvatar',
+	roleMiddleware(['USER']),
+	FilesController.uploadAvatar
+)
 router.post(
 	'/users/login',
 	body('email').isEmail(),
@@ -30,7 +34,7 @@ router.post(
 )
 router.put(
 	'/users/changeUsername',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	body('username').isLength({ min: 3, max: 15 }),
 	UsersController.changeUsername
 )
@@ -43,7 +47,7 @@ router.put(
 )
 router.delete(
 	'/users/deleteAvatar',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	FilesController.deleteAvatar
 )
 

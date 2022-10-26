@@ -128,53 +128,66 @@ const Navbar: FC = () => {
 							<div className="divider"></div>
 							{pageIsLoading ? (
 								<div className="dot-flashing ms-lg-auto me-lg-0 my-4 my-lg-0 mx-auto"></div>
-							) : isAuth && !isAdmin ? (
-								<>
-									<NavDropdown
-										className="ms-auto"
-										title={
-											<img
-												src={
-													avatar
-														? `${API_DOMAIN}${avatar}`
-														: '/images/no-user-bg-img.png'
-												}
-												alt="user"
-												width="32"
-												height="32"
-												className="rounded-circle me-2 d-inline"
-											/>
-										}
-										id="navbarDropdown"
-									>
-										<Link
-											className="dropdown-item"
-											to="/account/profile"
-											onClick={handleCloseMenu}
-										>
-											Личный кабинет
-										</Link>
-										<NavDropdown.Divider />
-										<NavDropdown.Item
-											className="text-danger"
-											onClick={handleLogout}
-										>
-											Выйти
-										</NavDropdown.Item>
-									</NavDropdown>
-									<Nav className="navbar-nav--mobile d-lg-flex d-lg-none">
+							) : isAuth ? (
+								isAdmin ? (
+									<Nav className="ms-lg-auto d-flex flex-md-column flex-lg-row gap-2">
 										<Nav.Item onClick={handleCloseMenu}>
-											<Link to="/account/profile" className="nav-link">
-												Личный кабинет
+											<Link className="nav-link w-100" to="/admin">
+												Админ панель
 											</Link>
 										</Nav.Item>
-										<Nav.Item>
-											<Nav.Link className="text-danger" onClick={handleLogout}>
-												Выйти
-											</Nav.Link>
-										</Nav.Item>
 									</Nav>
-								</>
+								) : (
+									<>
+										<NavDropdown
+											className="ms-auto"
+											title={
+												<img
+													src={
+														avatar
+															? `${API_DOMAIN}${avatar}`
+															: '/images/no-user-bg-img.png'
+													}
+													alt="user"
+													width="32"
+													height="32"
+													className="rounded-circle me-2 d-inline"
+												/>
+											}
+											id="navbarDropdown"
+										>
+											<Link
+												className="dropdown-item"
+												to="/account/profile"
+												onClick={handleCloseMenu}
+											>
+												Личный кабинет
+											</Link>
+											<NavDropdown.Divider />
+											<NavDropdown.Item
+												className="text-danger"
+												onClick={handleLogout}
+											>
+												Выйти
+											</NavDropdown.Item>
+										</NavDropdown>
+										<Nav className="navbar-nav--mobile d-lg-flex d-lg-none">
+											<Nav.Item onClick={handleCloseMenu}>
+												<Link to="/account/profile" className="nav-link">
+													Личный кабинет
+												</Link>
+											</Nav.Item>
+											<Nav.Item>
+												<Nav.Link
+													className="text-danger"
+													onClick={handleLogout}
+												>
+													Выйти
+												</Nav.Link>
+											</Nav.Item>
+										</Nav>
+									</>
+								)
 							) : (
 								<Nav className="ms-lg-auto d-flex flex-md-column flex-lg-row gap-2">
 									<Nav.Item onClick={handleCloseMenu}>

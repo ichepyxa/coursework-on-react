@@ -1,20 +1,19 @@
 const Router = require('express')
 const router = new Router()
 const SightsController = require('../controllers/sightsController')
-const authMiddleware = require('../middlewares/authMiddleware')
 const roleMiddleware = require('../middlewares/roleMiddleware')
 
 router.get('/sights', SightsController.getAllSights)
 router.get(
 	'/sights/favoritesSights',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	SightsController.getFavoritesSights
 )
 router.get('/sights/:sightId', SightsController.getSightById)
 router.post('/sights', roleMiddleware(['ADMIN']), SightsController.createSight)
 router.post(
 	'/sights/favoritesSights',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	SightsController.addFavoritesSights
 )
 router.put(
@@ -29,7 +28,7 @@ router.delete(
 )
 router.delete(
 	'/sights/favoritesSights/:sightId',
-	authMiddleware,
+	roleMiddleware(['USER']),
 	SightsController.deleteFavoritesSights
 )
 

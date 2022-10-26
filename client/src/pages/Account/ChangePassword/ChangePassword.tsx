@@ -13,7 +13,11 @@ import { IUserResponse } from '../../../models/index'
 import { useNavigate } from 'react-router-dom'
 import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
 
-const ChangePassword: FC = () => {
+type ChangePasswordProps = {
+	backPath: string
+}
+
+const ChangePassword: FC<ChangePasswordProps> = ({ backPath }) => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 	const [newPassword, setNewPassword] = useState<string>('')
@@ -38,7 +42,7 @@ const ChangePassword: FC = () => {
 					})
 					.then(response => {
 						dispatch(setUser(response.data.user))
-						navigate('/account/profile')
+						navigate(backPath)
 						dispatch(
 							setNotification({
 								message: 'Успешная смена пароля',
@@ -68,9 +72,7 @@ const ChangePassword: FC = () => {
 				className="form-changeUsername"
 				onSubmit={e => handleChangePassword(e)}
 			>
-				<h2 className="mb-4 fw-normal text-center">
-					Изменение пароля пользоваля
-				</h2>
+				<h2 className="mb-4 fw-normal text-center">Изменение пароля</h2>
 
 				<Input
 					controlId="oldPassword"

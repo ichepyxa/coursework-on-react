@@ -52,7 +52,22 @@ class UsersService {
 
 	async getAllUsers() {
 		const users = await Users.findAll()
-		return users
+
+		return {
+			count: users.length,
+			users: users.map(user => {
+				return {
+					userId: user.userId,
+					username: user.username,
+					email: user.email,
+					activationLink: user.activationLink,
+					isActivated: user.isActivated,
+					isPassedTest: user.isPassedTest,
+					avatar: user.avatar,
+					roleId: user.roleId,
+				}
+			}),
+		}
 	}
 
 	async activateUser(activationLink) {
