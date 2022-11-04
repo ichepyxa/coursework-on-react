@@ -19,7 +19,6 @@ const Users: FC = () => {
 			<SidebarNavbarAdmin />
 			<div className="mt-lg-4 w-100 position-relative">
 				<h2 className="text-center mb-4 word-break">Пользователи</h2>
-				<Search pageHrefPath={pageHrefPath} />
 
 				{isLoading ? (
 					<Loader />

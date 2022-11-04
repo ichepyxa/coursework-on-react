@@ -1,0 +1,8 @@
+.form-check-input ~ label {
+	/* border-radius: 5px; */
+	/* border: 2px solid var(--bs-light); */
+}
+
+.form-check-input:checked ~ label {
+	border-color: var(--bs-primary);
+}
