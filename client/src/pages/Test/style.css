@@ -1,8 +1,28 @@
-.form-check-input ~ label {
-	/* border-radius: 5px; */
-	/* border: 2px solid var(--bs-light); */
+.main-question {
+	max-width: 600px;
+	margin: 0 auto;
+	min-height: 50vh;
+	word-break: break-all;
 }
 
-.form-check-input:checked ~ label {
-	border-color: var(--bs-primary);
+.list-group {
+	max-width: 450px;
+}
+
+.list-group-item-check:checked + .list-group-item {
+	color: #fff;
+	background-color: var(--bs-blue);
+}
+
+.list-group-checkable .list-group-item {
+	cursor: pointer;
+}
+
+.list-group-item-check {
+	position: absolute;
+	clip: rect(0, 0, 0, 0);
+}
+
+.pe-none {
+	pointer-events: none !important;
 }

@@ -4,67 +4,50 @@ import { titleName } from '../../constants/titleName'
 import './style.css'
 
 const Test: FC = () => {
+	const answers = [
+		{
+			_id: 1,
+			answer: 'gfdsgsdg',
+		},
+		{
+			_id: 2,
+			answer: 'ksamdkmgk smgoidm igmakl mgkdm kmask gmkasmk gmamgk ',
+		},
+		{
+			_id: 3,
+			answer:
+				'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam qui eveniet minima nobis ipsum ratione praesentium, quae sequi culpa placeat consectetur ipsa sapiente blanditiis deserunt illum earum odio odit dolorum!',
+		},
+	]
+
 	return (
 		<>
 			<DocumentTitle title={`${titleName} тест`} />
-			<div className="d-flex justify-content-center align-items-center min-vh-100">
-				<div className="list-group list-group-radio d-grid gap-2 border-0 w-auto">
-					<div className="position-relative">
-						<input
-							className="form-check-input position-absolute top-50 end-0 me-3 fs-5"
-							type="radio"
-							name="listGroupRadioGrid"
-							id="listGroupRadioGrid1"
-							value=""
-						/>
-						<label
-							className="list-group-item py-3 pe-5 rounded"
-							htmlFor="listGroupRadioGrid1"
-						>
-							<strong className="fw-semibold">First radio</strong>
-							<span className="d-block small opacity-75">
-								With support text underneath to add more detail
-							</span>
-						</label>
-					</div>
-
-					<div className="position-relative">
-						<input
-							className="form-check-input position-absolute top-50 end-0 me-3 fs-5"
-							type="radio"
-							name="listGroupRadioGrid"
-							id="listGroupRadioGrid2"
-							value=""
-						/>
-						<label
-							className="list-group-item py-3 pe-5"
-							htmlFor="listGroupRadioGrid2"
-						>
-							<strong className="fw-semibold">Second radio</strong>
-							<span className="d-block small opacity-75">
-								Some other text goes here
-							</span>
-						</label>
-					</div>
-
-					<div className="position-relative">
-						<input
-							className="form-check-input position-absolute top-50 end-0 me-3 fs-5"
-							type="radio"
-							name="listGroupRadioGrid"
-							id="listGroupRadioGrid3"
-							value=""
-						/>
-						<label
-							className="list-group-item py-3 pe-5"
-							htmlFor="listGroupRadioGrid3"
-						>
-							<strong className="fw-semibold">Third radio</strong>
-							<span className="d-block small opacity-75">
-								And we end with another snippet of text
-							</span>
-						</label>
-					</div>
+			<div className="d-flex justify-content-center align-items-center flex-column gap-4 main-question px-3 py-5">
+				<h2 className="text-center">
+					<strong>Вопрос:</strong> Lorem ipsum dolor sit amet consectetur
+					adipisicing elit.
+				</h2>
+				<div className="list-group list-group-checkable d-grid gap-3 border-0 w-100">
+					{answers &&
+						answers.map((answer, index) => (
+							<>
+								<input
+									className="list-group-item-check pe-none"
+									type="radio"
+									name="listGroupCheckableRadios"
+									id={`listGroupCheckableRadios${answer._id}`}
+									value=""
+								/>
+								<label
+									className="list-group-item w-100 rounded-3 py-3"
+									htmlFor={`listGroupCheckableRadios${answer._id}`}
+								>
+									<strong className="small">Ответ №{index + 1}: </strong>
+									{answer.answer}
+								</label>
+							</>
+						))}
 				</div>
 			</div>
 		</>
