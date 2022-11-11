@@ -103,3 +103,19 @@ export interface IAvatar {
 export interface IChangeUsernameResponse {
 	username: string
 }
+
+export interface IAnswer {
+	answerId: number
+	answer: string
+}
+
+export interface IQuestion {
+	questionId: number
+	title: string
+	answers: IAnswer[]
+}
+
+export interface IUserAnswer {
+	answerId: number
+	questionId: number
+}
