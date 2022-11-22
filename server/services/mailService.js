@@ -18,12 +18,26 @@ class MailService {
 		this.transporter.sendMail({
 			from: config.SMTP_USER,
 			to,
-			subject: `Активация аккаунта SearchHoliday`,
+			subject: `Активация аккаунта | SearchHoliday`,
 			text: '',
 			html: `
         <div>
           <h1>Для активации аккаунта перейдите по ссылке</h1>
           <a href="${link}">${link}</a>
+        </div>
+      `,
+		})
+	}
+
+	async sendBookingReport(to, report) {
+		this.transporter.sendMail({
+			from: config.SMTP_USER,
+			to,
+			subject: `Бронирование места отдыха | SearchHoliday`,
+			text: '',
+			html: `
+        <div>
+          <h1>Вы забронировали место отдыха ${report}</h1>
         </div>
       `,
 		})

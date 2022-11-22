@@ -16,6 +16,11 @@ router.post(
 	roleMiddleware(['USER']),
 	HousesController.addFavoritesHouses
 )
+// router.post(
+// 	'/houses/booking',
+// 	roleMiddleware(['USER']),
+// 	HousesController.addBookingHouse
+// )
 router.put(
 	'/houses/:houseId',
 	roleMiddleware(['ADMIN']),

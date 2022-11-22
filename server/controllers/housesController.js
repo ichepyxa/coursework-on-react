@@ -93,6 +93,18 @@ class HousesController {
 			next(error)
 		}
 	}
+
+	// async addBookingHouse(req, res, next) {
+	// 	try {
+	// 		const house = await HousesService.addBookingHouse(
+	// 			req.user,
+	// 			req.params.houseId
+	// 		)
+	// 		res.json(house)
+	// 	} catch (error) {
+	// 		next(error)
+	// 	}
+	// }
 }
 
 module.exports = new HousesController()

@@ -109,14 +109,14 @@ const Navbar: FC = () => {
 									Места отдыха
 								</Link>
 							</Nav.Item>
-							<Nav.Item
+							{/* <Nav.Item
 								className={pathname === '/test' ? 'active' : ''}
 								onClick={handleCloseMenu}
 							>
 								<Link to="/test" className="nav-link">
 									Тест
 								</Link>
-							</Nav.Item>
+							</Nav.Item> */}
 							<Nav.Item
 								className={pathname === '/about' ? 'active' : ''}
 								onClick={handleCloseMenu}

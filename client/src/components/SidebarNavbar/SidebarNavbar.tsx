@@ -47,7 +47,7 @@ const SidebarNav: FC = () => {
 						Достопримечательности
 					</Link>
 				</li>
-				<li>
+				{/* <li>
 					<Link
 						to="/account/profile/test"
 						className={changeActiveLink('/account/profile/test')}
@@ -62,7 +62,7 @@ const SidebarNav: FC = () => {
 					>
 						Бронирование
 					</Link>
-				</li>
+				</li> */}
 			</ul>
 		</div>
 	)

@@ -228,6 +228,8 @@ class HousesService {
 		})
 		return favoriteHouse
 	}
+
+	// async addBookingHouse(user, houseId) {}
 }
 
 module.exports = new HousesService()
