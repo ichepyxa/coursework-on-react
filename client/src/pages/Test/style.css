@@ -12,6 +12,7 @@
 .list-group-item-check:checked + .list-group-item {
 	color: #fff;
 	background-color: var(--bs-blue);
+	transition: all 0.3s ease-in-out;
 }
 
 .list-group-checkable .list-group-item {

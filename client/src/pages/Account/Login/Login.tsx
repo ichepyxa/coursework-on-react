@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import checkIsValidEmail from '../../../helpers/checkIsValidEmail'
 import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
 import AuthService from '../../../sevices/authService'

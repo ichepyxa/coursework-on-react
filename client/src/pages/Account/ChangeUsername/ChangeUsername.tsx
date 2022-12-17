@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import Input from '../../../components/Input/Input'
 import { API_URL } from '../../../constants/apiUrl'

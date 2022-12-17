@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import Advice from './components/Advice/Advice'
 import Benefits from './components/Benefits/Benefits'
 import FAQ from './components/FAQ/FAQ'
@@ -15,8 +15,8 @@ const Home: FC = () => {
 			<Hero />
 			<Benefits />
 			<RecommendedHouses />
-			<InteractiveMap />
 			<Advice />
+			<InteractiveMap />
 			<FAQ />
 		</>
 	)

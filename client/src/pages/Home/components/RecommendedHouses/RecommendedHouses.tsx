@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import { API_URL } from '../../../../constants/apiUrl'

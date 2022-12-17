@@ -1,4 +1,4 @@
-import React, { FC, SetStateAction, useEffect, useState } from 'react'
+import { FC, Fragment, useEffect, useState } from 'react'
 import DocumentTitle from 'react-document-title'
 import { titleName } from '../../constants/titleName'
 import { IQuestion, IUserAnswer } from '../../models'
@@ -66,6 +66,7 @@ const Test: FC = () => {
 					},
 				])
 		)
+
 		currentSelectRadio.checked = false
 		setCurrentSelectRadio(null)
 		setCurrentQuestionIndex(state => (state += 1))
@@ -86,7 +87,7 @@ const Test: FC = () => {
 								{questions[currentQuestionIndex].answers &&
 									questions[currentQuestionIndex].answers.map(
 										(answer, index) => (
-											<React.Fragment key={index}>
+											<Fragment key={index}>
 												<input
 													className="list-group-item-check pe-none"
 													type="radio"
@@ -104,7 +105,7 @@ const Test: FC = () => {
 													</strong>
 													{answer.answer}
 												</label>
-											</React.Fragment>
+											</Fragment>
 										)
 									)}
 							</div>

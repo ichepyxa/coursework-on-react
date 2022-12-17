@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 interface Item {
 	svg: any
@@ -8,10 +8,10 @@ interface Item {
 
 const BenefitsItem: FC<Item> = ({ svg, title, description }) => {
 	return (
-		<div className='benefits-item'>
-			<div className='benefits-item__img'>{svg}</div>
-			<h2 className='benefits-item__title mt-3 mb-2'>{title}</h2>
-			<p className='benefits-item__description m-auto'>{description}</p>
+		<div className="benefits-item">
+			<div className="benefits-item__img">{svg}</div>
+			<h2 className="benefits-item__title mt-3 mb-2">{title}</h2>
+			<p className="benefits-item__description m-auto">{description}</p>
 		</div>
 	)
 }

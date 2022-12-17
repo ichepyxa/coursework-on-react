@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Container } from 'react-bootstrap'
 import BenefitsItem from '../BenefitsItem/BenefitsItem'
 

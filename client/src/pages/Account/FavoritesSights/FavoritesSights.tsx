@@ -1,5 +1,5 @@
 import api from '../../../http'
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
 import { API_URL } from '../../../constants/apiUrl'

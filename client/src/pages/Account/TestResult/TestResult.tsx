@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Container } from 'react-bootstrap'
 import HousesElement from '../../../components/HousesElement/HousesElement'
 import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
