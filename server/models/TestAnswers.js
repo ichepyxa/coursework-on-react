@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 				autoIncrement: true,
 				primaryKey: true,
 			},
-			answer: DataTypes.STRING,
+			answer: DataTypes.TEXT,
 		},
 		{
 			charset: 'utf8',

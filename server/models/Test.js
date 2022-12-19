@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	Test.associate = function (models) {
 		Test.hasMany(models.test_questions, {
-			as: 'test',
+			as: 'questions',
 			foreignKey: 'testId',
 			onDelete: 'cascade',
 		})

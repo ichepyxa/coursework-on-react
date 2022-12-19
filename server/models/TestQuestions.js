@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 				autoIncrement: true,
 				primaryKey: true,
 			},
-			question: DataTypes.STRING,
+			question: DataTypes.TEXT,
 		},
 		{
 			charset: 'utf8',
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	TestQuestions.associate = function (models) {
 		TestQuestions.hasMany(models.test_answers, {
-			as: 'questions',
+			as: 'answers',
 			foreignKey: 'questionId',
 			onDelete: 'cascade',
 		})

@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const housesRouter = require('./routes/housesRoutes')
 const usersRouter = require('./routes/usersRoutes')
 const sightsRouter = require('./routes/sightsRoutes')
+const testRouter = require('./routes/testsRoutes')
 const errorMiddleware = require('./middlewares/errorMiddleware')
 const config = require('./config/server_config')
 
@@ -27,6 +28,7 @@ app.use(cookieParser())
 app.use(config.API_PATH, housesRouter)
 app.use(config.API_PATH, sightsRouter)
 app.use(config.API_PATH, usersRouter)
+app.use(config.API_PATH, testRouter)
 app.use(errorMiddleware)
 
 db.sequelize

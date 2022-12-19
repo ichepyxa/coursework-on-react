@@ -1,3 +1,8 @@
+export interface ITimeStamps {
+	createdAt: string
+	updatedAt: string
+}
+
 export interface IUser {
 	userId: number | undefined
 	username: string | undefined
@@ -25,7 +30,7 @@ export interface IUsersResponse {
 	users: IUser[]
 }
 
-export interface IHouse {
+export interface IHouse extends ITimeStamps {
 	houseId: number
 	name: string
 	category: string
@@ -33,17 +38,13 @@ export interface IHouse {
 	price: number
 	description: string
 	images: IHouseImage[]
-	createdAt: string
-	updatedAt: string
 	isFavorite: boolean
 }
 
-export interface IHouseFavorites {
+export interface IHouseFavorites extends ITimeStamps {
 	favoritesId: number
 	userId: number
 	houseId: number
-	createdAt: string
-	updatedAt: string
 }
 
 export interface IHousesResponse {
@@ -61,15 +62,13 @@ export interface IHouseImage {
 	image: string
 }
 
-export interface ISight {
+export interface ISight extends ITimeStamps {
 	sightId: number
 	name: string
 	category: string
 	location: string
 	description: string
 	images: ISightImage[]
-	createdAt: string
-	updatedAt: string
 	isFavorite: boolean
 }
 
@@ -83,12 +82,10 @@ export interface ISightImage {
 	image: string
 }
 
-export interface ISightFavorites {
+export interface ISightFavorites extends ITimeStamps {
 	favoritesId: number
 	userId: number
 	sightId: number
-	createdAt: string
-	updatedAt: string
 }
 
 export interface ISightFavoritesResponse {
@@ -104,15 +101,23 @@ export interface IChangeUsernameResponse {
 	username: string
 }
 
-export interface IAnswer {
-	answerId: number
-	answer: string
+export interface ITest extends ITimeStamps {
+	testId: number
+	testName: string
+	questions: IQuestion[]
 }
 
-export interface IQuestion {
+export interface IAnswer extends ITimeStamps {
+	answerId: number
+	answer: string
 	questionId: number
-	title: string
+}
+
+export interface IQuestion extends ITimeStamps {
+	questionId: number
+	question: string
 	answers: IAnswer[]
+	testId: number
 }
 
 export interface IUserAnswer {
