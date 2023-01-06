@@ -2,6 +2,8 @@ const {
 	users_favorites_houses: UsersFavoritesHouses,
 	houses: Houses,
 	houses_images: HousesImages,
+	houses_services: HousesServices,
+	services: Services,
 	sequelize,
 } = require('../models')
 const config = require('../config/server_config')
@@ -20,6 +22,52 @@ class HousesService {
 			],
 		})
 		return houses
+	}
+
+	async getHousesWithServices() {
+		const housesServices = await HousesServices.findAll({
+			include: [
+				{
+					model: Houses,
+					as: 'houses',
+				},
+				{
+					model: Services,
+					as: 'services',
+				},
+			],
+		})
+
+		const formatHousesServices = housesServices => {
+			const houses = []
+
+			for (const houseService of housesServices) {
+				const house = houses.find(
+					element => element.houseId === houseService.houses.houseId
+				)
+
+				if (house) {
+					if (
+						house.services &&
+						!house.services.includes(houseService.services.name)
+					) {
+						house.services.push(houseService.services.name)
+					} else {
+						house.services = [houseService.services.name]
+					}
+
+					continue
+				}
+
+				houses.push(houseService.houses)
+			}
+
+			return houses.map(item => {
+				return { ...item.dataValues, services: item.services }
+			})
+		}
+
+		return formatHousesServices(housesServices)
 	}
 
 	async getHousesWithParams(page = 1, name = '', region = 1) {

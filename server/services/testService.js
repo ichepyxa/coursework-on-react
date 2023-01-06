@@ -3,6 +3,7 @@ const {
 	test_answers: TestAnswers,
 	test_questions: TestQuestions,
 } = require('../models')
+const { getHousesWithServices } = require('./housesService')
 
 class TestService {
 	async getTest() {
@@ -21,6 +22,14 @@ class TestService {
 			],
 		})
 		return test
+	}
+
+	async sendAnswers(answers) {
+		const houses = await getHousesWithServices()
+
+		return houses.filter(
+			item => !item.services.includes('баня', 'мангал/барбекю', 'баня/сауна')
+		)
 	}
 }
 

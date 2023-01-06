@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 				primaryKey: true,
 			},
 			refreshToken: {
-				type: DataTypes.TEXT,
+				type: DataTypes.STRING(500),
 				allowNull: false,
 			},
 		},

@@ -9,6 +9,15 @@ class TestController {
 			next(error)
 		}
 	}
+
+	async sendAnswers(req, res, next) {
+		try {
+			const answers = await TestService.sendAnswers(req.body.answers)
+			res.json(answers)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new TestController()

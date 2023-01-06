@@ -71,13 +71,24 @@ const Navbar: FC = () => {
 				className="border-bottom fixed-top"
 			>
 				<Container>
-					<Link to="/" className="navbar-brand" onClick={handleCloseMenu}>
-						<img
+					<Link
+						to="/"
+						className="navbar-brand d-flex justify-content-center align-items-center gap-2"
+						onClick={handleCloseMenu}
+					>
+						{/* <img
 							src="/images/horizontal-logo(without-bg).png"
 							height="40"
 							className="d-inline-block align-top"
 							alt="SearchHoliday Logo"
+						/> */}
+						<img
+							src="/images/logo(without-bg).png"
+							height="40"
+							className="d-inline-block align-top"
+							alt="SearchHoliday Logo"
 						/>
+						<h6 className="m-0">SearchGomel</h6>
 					</Link>
 					<NavbarElement.Toggle aria-controls="navbarContent" />
 					<NavbarElement.Collapse id="navbarContent">

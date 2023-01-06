@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { API_URL } from '../constants/apiUrl'
 import displayTroubleConnectionError from '../helpers/displayTroubleConnectionError'
+import api from '../http'
 import { IQuestion, ITest } from '../models/index'
 
 export const useTest = () => {
@@ -15,7 +15,7 @@ export const useTest = () => {
 	const getTest = async () => {
 		setIsLoading(true)
 		try {
-			await axios.get<ITest>(`${API_URL}/test`).then(response => {
+			await api.get<ITest>(`${API_URL}/test`).then(response => {
 				if (response.data === undefined || response.data === ({} as ITest)) {
 					setQuestions([] as IQuestion[])
 					return setTest({} as ITest)

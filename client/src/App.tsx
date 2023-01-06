@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home/Home'
@@ -113,51 +113,53 @@ const App: FC = () => {
 					<Route index element={<Sights />} />
 					<Route path=":sightId" element={<SightDescription />} />
 				</Route>
-				<Route path="test" element={<Test />} />
 				{isAdmin ? (
 					<></>
 				) : (
-					<Route path="account">
-						<Route index element={!isAuth ? <Login /> : <Profile />} />
-						<Route path="profile">
+					<>
+						<Route path="test" element={!isAuth ? <Login /> : <Test />} />
+						<Route path="account">
 							<Route index element={!isAuth ? <Login /> : <Profile />} />
+							<Route path="profile">
+								<Route index element={!isAuth ? <Login /> : <Profile />} />
+								<Route
+									path="favoritesHouses"
+									element={!isAuth ? <Login /> : <FavoritesHouses />}
+								/>
+								<Route
+									path="favoritesSights"
+									element={!isAuth ? <Login /> : <FavoritesSights />}
+								/>
+								<Route
+									path="test"
+									element={!isAuth ? <Login /> : <TestResult />}
+								/>
+								<Route
+									path="booking"
+									element={!isAuth ? <Login /> : <Booking />}
+								/>
+							</Route>
 							<Route
-								path="favoritesHouses"
-								element={!isAuth ? <Login /> : <FavoritesHouses />}
+								path="uploadAvatar"
+								element={!isAuth ? <Login /> : <UploadAvatar />}
 							/>
 							<Route
-								path="favoritesSights"
-								element={!isAuth ? <Login /> : <FavoritesSights />}
+								path="changePassword"
+								element={
+									!isAuth ? <Login /> : <ChangePassword backPath={'/profile'} />
+								}
 							/>
 							<Route
-								path="test"
-								element={!isAuth ? <Login /> : <TestResult />}
+								path="changeUsername"
+								element={!isAuth ? <Login /> : <ChangeUsername />}
 							/>
 							<Route
-								path="booking"
-								element={!isAuth ? <Login /> : <Booking />}
+								path="registration"
+								element={!isAuth ? <Register /> : <Profile />}
 							/>
+							<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
 						</Route>
-						<Route
-							path="uploadAvatar"
-							element={!isAuth ? <Login /> : <UploadAvatar />}
-						/>
-						<Route
-							path="changePassword"
-							element={
-								!isAuth ? <Login /> : <ChangePassword backPath={'/profile'} />
-							}
-						/>
-						<Route
-							path="changeUsername"
-							element={!isAuth ? <Login /> : <ChangeUsername />}
-						/>
-						<Route
-							path="registration"
-							element={!isAuth ? <Register /> : <Profile />}
-						/>
-						<Route path="login" element={!isAuth ? <Login /> : <Profile />} />
-					</Route>
+					</>
 				)}
 			</Route>
 

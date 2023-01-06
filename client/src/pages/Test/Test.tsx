@@ -1,16 +1,25 @@
 import { FC, Fragment, useEffect, useState } from 'react'
 import DocumentTitle from 'react-document-title'
+import Loader from '../../components/Loader/Loader'
+import { API_URL } from '../../constants/apiUrl'
 import { titleName } from '../../constants/titleName'
+import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 import { useTest } from '../../hooks/useTest'
-import { IUserAnswer } from '../../models'
+import api from '../../http'
+import { IQuestion, IUserAnswer } from '../../models'
+import { useAppDispatch } from '../../store/hook'
+import { setNotification } from '../../store/slices/notificationSlice'
+import { setIsLoading } from '../../store/slices/userSlice'
 import './style.css'
 
 const Test: FC = () => {
+	const dispatch = useAppDispatch()
 	const [userAnswers, setUserAnswers] = useState<IUserAnswer[]>([])
 	const [currentSelectRadio, setCurrentSelectRadio] =
 		useState<HTMLInputElement | null>(null)
-	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+	const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
 	const [questionJSX, setQuestionJSX] = useState<React.ReactNode>(null)
+	const [isLastQuestionTest, setIsLastQuestionTest] = useState<boolean>(false)
 	const { questions, isLoading } = useTest()
 
 	const submitQuestion = () => {
@@ -32,6 +41,41 @@ const Test: FC = () => {
 		currentSelectRadio.checked = false
 		setCurrentSelectRadio(null)
 		setCurrentQuestionIndex(state => (state += 1))
+
+		if (currentQuestionIndex === questions.length - 1) {
+			setIsLastQuestionTest(true)
+		}
+	}
+
+	useEffect(() => {
+		if (isLastQuestionTest) {
+			sendAnswers()
+		}
+	}, [isLastQuestionTest])
+
+	const sendAnswers = async () => {
+		dispatch(setIsLoading(true))
+		try {
+			await api
+				.post<IQuestion[]>(`${API_URL}/test`, { answers: userAnswers })
+				.then(response => {
+					if (!response.data) {
+						dispatch(
+							setNotification({
+								message: 'Что-то пошло не так',
+								errors: [],
+								isError: true,
+							})
+						)
+						return
+					}
+					console.log(response.data)
+				})
+		} catch (error: any) {
+			displayTroubleConnectionError(dispatch, error)
+		} finally {
+			dispatch(setIsLoading(false))
+		}
 	}
 
 	const generateQuestionJSX = () => {
@@ -85,7 +129,9 @@ const Test: FC = () => {
 		<>
 			<DocumentTitle title={`${titleName} тест`} />
 			<div className="d-flex justify-content-center align-items-center flex-column gap-4 main-question px-3 py-5">
-				{!isLoading ? (
+				{isLoading ? (
+					<Loader />
+				) : (
 					<>
 						{questionJSX}
 						<button
@@ -98,8 +144,6 @@ const Test: FC = () => {
 								: 'Далее'}
 						</button>
 					</>
-				) : (
-					<></>
 				)}
 			</div>
 		</>

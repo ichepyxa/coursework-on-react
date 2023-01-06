@@ -17,7 +17,7 @@ const Home: FC = () => {
 			<RecommendedHouses />
 			<Advice />
 			<InteractiveMap />
-			<FAQ />
+			{/* <FAQ /> */}
 		</>
 	)
 }
