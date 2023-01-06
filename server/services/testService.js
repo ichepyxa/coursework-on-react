@@ -26,10 +26,54 @@ class TestService {
 
 	async sendAnswers(answers) {
 		const houses = await getHousesWithServices()
+		let filteredHouses = houses
+		const answersFromDB = []
 
-		return houses.filter(
-			item => !item.services.includes('баня', 'мангал/барбекю', 'баня/сауна')
-		)
+		for (const answer of answers) {
+			const answerFromDB = await TestAnswers.findOne({
+				where: {
+					answerId: answer.answerId,
+				},
+			})
+
+			if (!answerFromDB) {
+				continue
+			}
+
+			let services = answerFromDB.services
+				? answerFromDB.services.split(',')
+				: ''
+			switch (answerFromDB.type) {
+				case 'oblast':
+					const oblast = answerFromDB.answer.split(', ')[1]
+
+					filteredHouses = filteredHouses.filter(item =>
+						item.location.includes(oblast)
+					)
+					break
+				case 'add':
+					for (const service of services) {
+						filteredHouses = filteredHouses.filter(item =>
+							item.services.includes(service)
+						)
+					}
+					break
+				case 'remove':
+					console.log(services)
+					for (const service of services) {
+						filteredHouses = filteredHouses.filter(
+							item => !item.services.includes(service)
+						)
+					}
+					break
+				default:
+					break
+			}
+
+			answersFromDB.push(answerFromDB)
+		}
+
+		return filteredHouses
 	}
 }
 

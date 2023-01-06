@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
 				primaryKey: true,
 			},
 			answer: DataTypes.TEXT,
+			type: DataTypes.STRING(20),
+			services: DataTypes.TEXT,
 		},
 		{
 			charset: 'utf8',
