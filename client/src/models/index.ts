@@ -111,6 +111,8 @@ export interface IAnswer extends ITimeStamps {
 	answerId: number
 	answer: string
 	questionId: number
+	services: string
+	type: string
 }
 
 export interface IQuestion extends ITimeStamps {

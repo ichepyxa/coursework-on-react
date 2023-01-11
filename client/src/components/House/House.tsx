@@ -55,7 +55,12 @@ const House: FC<IHouse> = ({
 			>
 				<div className="house-item__content-info">
 					<h5 className="house-item__content-info__title fw-semibold">
-						{name.length > 30 ? `${name.substring(0, 30)}...` : name}
+						<Link
+							to={`/houses/${houseId}`}
+							className="house-item__content-info__link text-white"
+						>
+							{name.length > 30 ? `${name.substring(0, 30)}...` : name}
+						</Link>
 					</h5>
 					<h6 className="house-item__content-info__type fw-normal">
 						{category}

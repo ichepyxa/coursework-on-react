@@ -23,7 +23,7 @@ class TokenService {
 
 	generateTokens(payload) {
 		const accessToken = jwt.sign(payload, config.JWT_ACCESS_SECRET_KEY, {
-			expiresIn: '10m',
+			expiresIn: '15m',
 		})
 
 		const refreshToken = jwt.sign(payload, config.JWT_REFRESH_SECRET_KEY, {

@@ -10,9 +10,9 @@ class TestController {
 		}
 	}
 
-	async sendAnswers(req, res, next) {
+	async getResult(req, res, next) {
 		try {
-			const answers = await TestService.sendAnswers(req.body.answers)
+			const answers = await TestService.getResult(req.body.answers)
 			res.json(answers)
 		} catch (error) {
 			next(error)

@@ -30,6 +30,12 @@ class HousesService {
 				{
 					model: Houses,
 					as: 'houses',
+					include: [
+						{
+							model: HousesImages,
+							as: 'images',
+						},
+					],
 				},
 				{
 					model: Services,

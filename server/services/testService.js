@@ -24,10 +24,11 @@ class TestService {
 		return test
 	}
 
-	async sendAnswers(answers) {
+	async getResult(answers) {
 		const houses = await getHousesWithServices()
-		let filteredHouses = houses
 		const answersFromDB = []
+		let filteredHouses = [...houses]
+		let days = 1
 
 		for (const answer of answers) {
 			const answerFromDB = await TestAnswers.findOne({
@@ -43,26 +44,35 @@ class TestService {
 			let services = answerFromDB.services
 				? answerFromDB.services.split(',')
 				: ''
+
+			const oldFilterHouses = [...filteredHouses]
 			switch (answerFromDB.type) {
 				case 'oblast':
-					const oblast = answerFromDB.answer.split(', ')[1]
+					const oblast = services[0]
 
 					filteredHouses = filteredHouses.filter(item =>
-						item.location.includes(oblast)
+						oblast ? item.location.includes(oblast) : item
 					)
 					break
-				case 'add':
+				case 'days':
+					days = +services[0]
+					break
+				case 'price':
+					const price = +services[0] / days
+
+					filteredHouses = filteredHouses.filter(item => item.price <= price)
+					break
+				case 'inclusion':
 					for (const service of services) {
 						filteredHouses = filteredHouses.filter(item =>
-							item.services.includes(service)
+							item.services.includes(service.trim())
 						)
 					}
 					break
-				case 'remove':
-					console.log(services)
+				case 'exception':
 					for (const service of services) {
 						filteredHouses = filteredHouses.filter(
-							item => !item.services.includes(service)
+							item => !item.services.includes(service.trim())
 						)
 					}
 					break
@@ -70,10 +80,15 @@ class TestService {
 					break
 			}
 
+			if (filteredHouses.length < 6) {
+				filteredHouses = [...oldFilterHouses]
+				break
+			}
+
 			answersFromDB.push(answerFromDB)
 		}
 
-		return filteredHouses
+		return filteredHouses.slice(0, 6)
 	}
 }
 

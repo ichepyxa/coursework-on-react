@@ -86,3 +86,11 @@
 	text-align: left;
 	word-break: break-word;
 }
+
+.house-item__content-info__link {
+	text-decoration: none;
+}
+
+.house-item__content-info__link:hover {
+	text-decoration: underline;
+}
