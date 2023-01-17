@@ -10,17 +10,22 @@ router.get(
 	HousesController.getFavoritesHouses
 )
 router.get('/houses/:houseId', HousesController.getHouseById)
+router.get(
+	'/houses/isBooking/:houseId',
+	roleMiddleware(['USER']),
+	HousesController.isBookingHouse
+)
 router.post('/houses', roleMiddleware(['ADMIN']), HousesController.createHouse)
 router.post(
 	'/houses/favoritesHouses',
 	roleMiddleware(['USER']),
 	HousesController.addFavoritesHouses
 )
-// router.post(
-// 	'/houses/booking',
-// 	roleMiddleware(['USER']),
-// 	HousesController.addBookingHouse
-// )
+router.post(
+	'/houses/booking',
+	roleMiddleware(['USER']),
+	HousesController.addBookingHouse
+)
 router.put(
 	'/houses/:houseId',
 	roleMiddleware(['ADMIN']),

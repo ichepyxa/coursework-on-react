@@ -13,6 +13,12 @@
 	z-index: 2;
 }
 
+.house-description__group {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 .house-description__image.not-image {
 	min-height: 500px;
 }
@@ -22,12 +28,20 @@
 	left: 20px;
 }
 
-.house_description__booking {
+.house-description__booking {
 	width: fit-content;
 }
 
 @media (max-width: 768px) {
-	.house_description__booking {
+	.house-description__booking {
+		display: block;
 		width: 100%;
+	}
+
+	.house-description__group {
+		width: 100%;
+		justify-content: center;
+		align-items: flex-start;
+		flex-direction: column-reverse;
 	}
 }

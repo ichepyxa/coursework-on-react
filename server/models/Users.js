@@ -58,6 +58,12 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'userId',
 			onDelete: 'cascade',
 		})
+
+		Users.hasOne(models.users_booking, {
+			as: 'booking',
+			foreignKey: 'userId',
+			onDelete: 'cascade',
+		})
 	}
 
 	return Users

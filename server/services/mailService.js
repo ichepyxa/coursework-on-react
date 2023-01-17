@@ -2,16 +2,16 @@ const nodemailer = require('nodemailer')
 const config = require('../config/mail_config')
 const { CLIENT_URL } = require('../config/server_config')
 
-class MailService {
-	categoriesHousesWithOtherText = {
-		Отель: 'номер',
-		Баня: 'баню',
-		Апартаменты: 'апартаменты',
-		Беседка: 'беседку',
-		'Открытая беседка': 'беседку',
-		'Закрытая беседка': 'беседку',
-	}
+const categoriesHousesWithOtherText = {
+	Отель: 'номер',
+	Баня: 'баню',
+	Апартаменты: 'апартаменты',
+	Беседка: 'беседку',
+	'Открытая беседка': 'беседку',
+	'Закрытая беседка': 'беседку',
+}
 
+class MailService {
 	constructor() {
 		this.transporter = nodemailer.createTransport({
 			host: config.SMTP_HOST,
@@ -22,6 +22,8 @@ class MailService {
 				pass: config.SMTP_PASSWORD,
 			},
 		})
+
+		console.log(this.transporter)
 	}
 
 	email(title, url, main) {
@@ -1230,12 +1232,12 @@ class MailService {
 											</tr>
 											<tr>
 												<td
-													style="padding: 0; margin: 0"
+													style="padding: 0; margin: 0; display: flex; justify-content: center; align-items: center; width: 100%;"
 												>
 													${
 														!house.images[0].image.includes('localhost')
 															? `
-														<img src="${house.images[0].image}" >
+														<img src="${house.images[0].image}" style="width: 100%; max-height: 350px; border: 1px solid #0d6efd; border-radius: 5px;" >
 													`
 															: ''
 													}
@@ -1246,15 +1248,15 @@ class MailService {
 													style="padding: 0; margin: 0"
 												>
 													<p style="font-size: 14px;">
-														<strong style="text-transform: uppercase;">Цена:</span>
+														<strong style="text-transform: uppercase;">Цена:</strong>
 														${
 															house.price > 0
 																? ` от ${house.price} BYN за ${
 																		Object.keys(
-																			this.categoriesHousesWithOtherText
+																			categoriesHousesWithOtherText
 																		).includes(house.category)
 																			? `${
-																					this.categoriesHousesWithOtherText[
+																					categoriesHousesWithOtherText[
 																						house.category
 																					]
 																			  } на сутки`
@@ -1264,7 +1266,7 @@ class MailService {
 														}
 													</p>
 													<p style="font-size: 14px;">
-														<span style="font-size: 14px; text-transform: uppercase;">Категория:</span> ${
+														<strong style="font-size: 14px; text-transform: uppercase;">Категория:</strong> ${
 															house.category
 														}
 													</p>
@@ -1273,7 +1275,7 @@ class MailService {
 															house.location
 														}
 													</p>
-													<strong style="font-size: 14px; display: inline-block;">
+													<strong style="font-size: 14px; display: inline-block; text-transform: uppercase;">
 														Описание:
 													</strong>
 													${

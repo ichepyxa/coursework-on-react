@@ -3,6 +3,7 @@ const {
 	houses: Houses,
 	houses_images: HousesImages,
 	houses_services: HousesServices,
+	users_booking: UsersBooking,
 	services: Services,
 	sequelize,
 } = require('../models')
@@ -10,7 +11,7 @@ const config = require('../config/server_config')
 const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
 const FilesService = require('./filesService')
-const { sendBookingReport } = require('./mailService')
+const mailService = require('./mailService')
 
 class HousesService {
 	async getAllHouses() {
@@ -284,11 +285,25 @@ class HousesService {
 		return favoriteHouse
 	}
 
+	async isBookingHouse(user, houseId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!houseId) throw new Error('Не указан ID места отдыха')
+
+		const houseFromDB = await Houses.findByPk(houseId)
+		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
+
+		const usersBooking = await UsersBooking.findOne({
+			where: { houseId, userID: user.userId },
+		})
+
+		return usersBooking ? true : false
+	}
+
 	async addBookingHouse(user, houseId) {
 		if (!user) throw APIError.UnautorizedError()
 		if (!houseId) throw new Error('Не указан ID места отдыха')
 
-		const houseFromDB = await Houses.findByPk({
+		const houseFromDB = await Houses.findOne({
 			where: { houseId },
 			include: [
 				{
@@ -299,7 +314,13 @@ class HousesService {
 		})
 		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
 
-		sendBookingReport(user.email, houseFromDB, user.username)
+		await mailService.sendBookingReport(user.email, houseFromDB, user.username)
+		const bookingHouse = await UsersBooking.create({
+			userId: user.userId,
+			houseId,
+		})
+
+		return bookingHouse
 	}
 }
 

@@ -37,6 +37,38 @@ const HouseDescription: FC = () => {
 	const [house, setHouse] = useState<IHouse>({} as IHouse)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
+	const [isBooking, setIsBooking] = useState<boolean | null>(null)
+
+	const addBookingHouse = async () => {
+		setIsLoading(true)
+		try {
+			await api
+				.post(`${API_URL}/houses/booking`, { houseId: params.houseId })
+				.then(response => {
+					if (response.status < 200 || response.status > 299) {
+						return setIsBooking(null)
+					}
+
+					setIsBooking(true)
+				})
+		} catch (error: any) {
+			displayTroubleConnectionError(dispatch, error)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const getIsBooking = async () => {
+		await api
+			.get<boolean>(`${API_URL}/houses/isBooking/${params.houseId}`)
+			.then(response => {
+				if (response.data === undefined) {
+					return setIsBooking(null)
+				}
+
+				setIsBooking(response.data)
+			})
+	}
 
 	const getFavoritesHouses = async () => {
 		await api
@@ -100,6 +132,7 @@ const HouseDescription: FC = () => {
 
 	useEffect(() => {
 		if (isAuth && !isAdmin) {
+			getIsBooking()
 			getFavoritesHouses()
 		}
 	}, [isAuth, isAdmin])
@@ -132,13 +165,7 @@ const HouseDescription: FC = () => {
 					{categoriesHousesWithoutPrice.includes(house.category) ? (
 						<></>
 					) : (
-						<>
-							<Button
-								variant="primary"
-								className="house_description__booking mb-3 d-block ms-auto"
-							>
-								Забронировать
-							</Button>
+						<div className="house-description__group">
 							<p className="fs-5">
 								<span className="fw-bold text-uppercase">Цена:</span>
 								{house.price > 0
@@ -153,7 +180,15 @@ const HouseDescription: FC = () => {
 									  }`
 									: ' нужно уточнять'}
 							</p>
-						</>
+							<Button
+								variant="primary"
+								className="house-description__booking mb-3 d-inline-block"
+								disabled={isBooking ? true : undefined}
+								onClick={addBookingHouse}
+							>
+								{isBooking ? 'Уже забронированно' : 'Забронировать'}
+							</Button>
+						</div>
 					)}
 					<p className="fs-5">
 						<span className="fw-bold text-uppercase">Категория:</span>{' '}

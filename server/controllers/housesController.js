@@ -70,6 +70,18 @@ class HousesController {
 		}
 	}
 
+	async isBookingHouse(req, res, next) {
+		try {
+			const isBooking = await HousesService.isBookingHouse(
+				req.user,
+				req.params.houseId
+			)
+			res.json(isBooking)
+		} catch (error) {
+			next(error)
+		}
+	}
+
 	async addFavoritesHouses(req, res, next) {
 		try {
 			const house = await HousesService.addFavoritesHouses(
@@ -94,17 +106,17 @@ class HousesController {
 		}
 	}
 
-	// async addBookingHouse(req, res, next) {
-	// 	try {
-	// 		const house = await HousesService.addBookingHouse(
-	// 			req.user,
-	// 			req.params.houseId
-	// 		)
-	// 		res.json(house)
-	// 	} catch (error) {
-	// 		next(error)
-	// 	}
-	// }
+	async addBookingHouse(req, res, next) {
+		try {
+			const bookingHouse = await HousesService.addBookingHouse(
+				req.user,
+				req.body.houseId
+			)
+			res.json(bookingHouse)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new HousesController()
