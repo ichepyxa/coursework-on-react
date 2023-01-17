@@ -80,7 +80,7 @@ class TestService {
 					break
 			}
 
-			if (filteredHouses.length < 6) {
+			if (filteredHouses.length < 2) {
 				filteredHouses = [...oldFilterHouses]
 				break
 			}
@@ -92,6 +92,8 @@ class TestService {
 		while (randomFilterHouses.length < 6) {
 			const house =
 				filteredHouses[Math.floor(Math.random() * filteredHouses.length)]
+
+			if (randomFilterHouses.length === filteredHouses.length) break
 			if (randomFilterHouses.includes(house)) continue
 
 			randomFilterHouses.push(house)
