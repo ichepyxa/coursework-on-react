@@ -10,6 +10,7 @@ const config = require('../config/server_config')
 const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
 const FilesService = require('./filesService')
+const { sendBookingReport } = require('./mailService')
 
 class HousesService {
 	async getAllHouses() {
@@ -283,7 +284,23 @@ class HousesService {
 		return favoriteHouse
 	}
 
-	// async addBookingHouse(user, houseId) {}
+	async addBookingHouse(user, houseId) {
+		if (!user) throw APIError.UnautorizedError()
+		if (!houseId) throw new Error('Не указан ID места отдыха')
+
+		const houseFromDB = await Houses.findByPk({
+			where: { houseId },
+			include: [
+				{
+					model: HousesImages,
+					as: 'images',
+				},
+			],
+		})
+		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
+
+		sendBookingReport(user.email, houseFromDB, user.username)
+	}
 }
 
 module.exports = new HousesService()

@@ -21,3 +21,13 @@
 	top: 20px;
 	left: 20px;
 }
+
+.house_description__booking {
+	width: fit-content;
+}
+
+@media (max-width: 768px) {
+	.house_description__booking {
+		width: 100%;
+	}
+}

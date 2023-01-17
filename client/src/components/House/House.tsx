@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
 import { onClickFavoritesBtn } from '../../helpers/favoritesHousesBtnClicks'

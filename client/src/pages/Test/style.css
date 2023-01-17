@@ -1,8 +1,6 @@
 .main-question {
 	max-width: 600px;
 	margin: 0 auto;
-	min-height: 50vh;
-	word-break: break-all;
 }
 
 .list-group.list-group-checkable {

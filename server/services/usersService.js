@@ -103,7 +103,8 @@ class UsersService {
 
 		await mailService.sendActivationAccountMail(
 			email,
-			`${config.API_URL}/api/users/activate/${activationLink}`
+			`${config.API_URL}/api/users/activate/${activationLink}`,
+			username
 		)
 
 		const isAdmin = await checkIsAdmin(user)

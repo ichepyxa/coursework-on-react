@@ -88,7 +88,16 @@ class TestService {
 			answersFromDB.push(answerFromDB)
 		}
 
-		return filteredHouses.slice(0, 6)
+		const randomFilterHouses = []
+		while (randomFilterHouses.length < 6) {
+			const house =
+				filteredHouses[Math.floor(Math.random() * filteredHouses.length)]
+			if (randomFilterHouses.includes(house)) continue
+
+			randomFilterHouses.push(house)
+		}
+
+		return randomFilterHouses
 	}
 }
 

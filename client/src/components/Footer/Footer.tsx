@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Nav, Navbar as NavbarElement, Container } from 'react-bootstrap'
 import { Link, useLocation } from 'react-router-dom'
 import './style.css'

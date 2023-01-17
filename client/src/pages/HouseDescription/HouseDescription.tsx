@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios'
-import React, { FC, useEffect, useState } from 'react'
-import { Container } from 'react-bootstrap'
+import { FC, useEffect, useState } from 'react'
+import { Button, Container } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/Loader/Loader'
 import { API_URL } from '../../constants/apiUrl'
@@ -19,7 +19,7 @@ import Images from './components/Images/Images'
 import './style.css'
 import { useAuth } from '../../hooks/useAuth'
 
-const categoriesHousesWithOtherText: { [key: string]: any } = {
+const categoriesHousesWithOtherText: { [key: string]: string } = {
 	Отель: 'номер',
 	Баня: 'баню',
 	Апартаменты: 'апартаменты',
@@ -132,18 +132,28 @@ const HouseDescription: FC = () => {
 					{categoriesHousesWithoutPrice.includes(house.category) ? (
 						<></>
 					) : (
-						<p className="fs-5">
-							<span className="fw-bold text-uppercase">Цена:</span>
-							{house.price > 0
-								? ` от ${house.price} BYN за ${
-										Object.keys(categoriesHousesWithOtherText).includes(
-											house.category
-										)
-											? categoriesHousesWithOtherText[house.category]
-											: 'дом'
-								  }`
-								: ' нужно уточнять'}
-						</p>
+						<>
+							<Button
+								variant="primary"
+								className="house_description__booking mb-3 d-block ms-auto"
+							>
+								Забронировать
+							</Button>
+							<p className="fs-5">
+								<span className="fw-bold text-uppercase">Цена:</span>
+								{house.price > 0
+									? ` от ${house.price} BYN за ${
+											Object.keys(categoriesHousesWithOtherText).includes(
+												house.category
+											)
+												? `${
+														categoriesHousesWithOtherText[house.category]
+												  } на сутки`
+												: 'сутки'
+									  }`
+									: ' нужно уточнять'}
+							</p>
+						</>
 					)}
 					<p className="fs-5">
 						<span className="fw-bold text-uppercase">Категория:</span>{' '}

@@ -46,6 +46,12 @@
 	background-position: center;
 }
 
+@media (min-width: 576px) and (max-width: 768px) {
+	.favorites {
+		left: 45px;
+	}
+}
+
 .favorites.active {
 	background-image: url(../../../public/images/like-active.png);
 	background-size: cover;

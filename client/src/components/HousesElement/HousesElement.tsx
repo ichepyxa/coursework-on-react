@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { IHouse, IHouseFavoritesResponse } from '../../models/index'
 import House from '../House/House'
 import { API_URL } from '../../constants/apiUrl'
