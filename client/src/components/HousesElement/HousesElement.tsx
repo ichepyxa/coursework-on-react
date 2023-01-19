@@ -1,29 +1,27 @@
 import { FC, useEffect, useState } from 'react'
-import { IHouse, IHouseFavoritesResponse } from '../../models/index'
-import House from '../House/House'
-import { API_URL } from '../../constants/apiUrl'
-import api from '../../http'
-import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
-import { useAuth } from '../../hooks/useAuth'
+
+import { IHouse } from '@src/models/index'
+import House from '@src/components/House/House'
+import filterFavoritesHouses from '@src/helpers/filterFavoritesHouses'
+import { useAuth } from '@src/hooks/useAuth'
+import HousesService from '@src/services/housesService'
 
 const HousesElement: FC<{ houses: IHouse[] }> = ({ houses }) => {
 	const { isAuth, isAdmin } = useAuth()
 	const [newHouses, setNewHouses] = useState<IHouse[]>(houses)
 	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
 
-	const getFavoritesHouses = async () => {
-		await api
-			.get<IHouseFavoritesResponse>(`${API_URL}/houses/favoritesHouses`)
-			.then(response => {
-				if (
-					response.data.houses === undefined ||
-					response.data.houses === ([] as IHouse[])
-				) {
-					return setFavoritesHouses([] as IHouse[])
-				}
+	const getFavoritesHouses = async (): Promise<void> => {
+		await HousesService.getFavoritesHouses().then(response => {
+			if (
+				response.data.houses === undefined ||
+				response.data.houses === ([] as IHouse[])
+			) {
+				return setFavoritesHouses([] as IHouse[])
+			}
 
-				setFavoritesHouses(response.data.houses as IHouse[])
-			})
+			setFavoritesHouses(response.data.houses as IHouse[])
+		})
 	}
 
 	useEffect(() => {

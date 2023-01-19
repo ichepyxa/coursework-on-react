@@ -1,47 +1,38 @@
 import { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
-import Input from '../../../components/Input/Input'
-import { API_URL } from '../../../constants/apiUrl'
-import checkIsValidUsername from '../../../helpers/checkIsValidUsername'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import api from '../../../http'
-import { useAppDispatch } from '../../../store/hook'
-import { useAuth } from '../../../hooks/useAuth'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import { setIsLoading, setUser } from '../../../store/slices/userSlice'
+import { useNavigate } from 'react-router-dom'
+
+import Input from '@src/components/Input/Input'
+import checkIsValidUsername from '@src/helpers/checkIsValidUsername'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { useAppDispatch } from '@src/store/hook'
+import { useAuth } from '@src/hooks/useAuth'
+import { setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import UsersService from '@src/services/usersService'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
-import { IChangeUsernameResponse } from '../../../models/index'
-import { useNavigate } from 'react-router-dom'
 
 const ChangeUsername: FC = () => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+
 	const user = useAuth()
 	const [username, setUsername] = useState<string>(user.username || '')
 	const [isValidUsername, setIsValidUsername] = useState<boolean | null>(null)
 
-	const handleChangeUsername = async (e: any) => {
+	const handleChangeUsername = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (isValidUsername) {
-			dispatch(setIsLoading(true))
 			try {
-				await api
-					.put<IChangeUsernameResponse>(`${API_URL}/users/changeUsername`, {
-						username,
-					})
-					.then(response => {
-						dispatch(setUser({ ...user, username: response.data.username }))
-						navigate('/account/profile')
-						dispatch(
-							setNotification({
-								message: 'Успешная смена имени',
-								isError: false,
-								errors: [],
-							})
-						)
-					})
+				dispatch(setIsLoading(true))
+				await UsersService.changeUsername(username).then(response => {
+					dispatch(setUser({ ...user, username: response.data.username }))
+					navigate('/account/profile')
+					displaySuccess(dispatch, 'Успешная смена имени')
+				})
 			} catch (error: any) {
 				displayTroubleConnectionError(dispatch, error)
 			} finally {

@@ -1,34 +1,31 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Nav, Navbar as NavbarElement, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+
+import { useAuth } from '@src/hooks/useAuth'
+import { useAppDispatch, useAppSelector } from '@src/store/hook'
+import { setIsAuth, setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import AuthService from '@src/services/authService'
+import { IUser } from '@src/models/index'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import displaySuccess from '@src/helpers/displaySuccess'
+
 import './style.css'
-import { useAuth } from '../../hooks/useAuth'
-import { useAppDispatch, useAppSelector } from '../../store/hook'
-import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
-import AuthService from '../../sevices/authService'
-import { IUser } from '../../models/index'
-import { setNotification } from '../../store/slices/notificationSlice'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
 
 const NavbarAdmin: FC = () => {
 	const dispatch = useAppDispatch()
-	const { isLoading } = useAppSelector(state => state.user)
+	const { isLoading } = useAppSelector(state => state.page)
 	const { isAuth, isAdmin } = useAuth()
 
 	const handleLogout = async () => {
-		dispatch(setIsLoading(true))
 		try {
+			dispatch(setIsLoading(true))
 			await AuthService.logout().then(() => {
 				localStorage.removeItem('token')
 				dispatch(setUser({} as IUser))
 				dispatch(setIsAuth(false))
-				dispatch(
-					setNotification({
-						message: 'Вы вышли из аккаунта',
-						isError: false,
-						errors: [],
-					})
-				)
+				displaySuccess(dispatch, 'Вы вышли из аккаунта')
 			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)

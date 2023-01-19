@@ -1,17 +1,17 @@
 import { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
-import Input from '../../../components/Input/Input'
-import { API_URL } from '../../../constants/apiUrl'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import api from '../../../http'
-import { useAppDispatch } from '../../../store/hook'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import { setIsLoading, setUser } from '../../../store/slices/userSlice'
+import { useNavigate } from 'react-router-dom'
+
+import Input from '@src/components/Input/Input'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { useAppDispatch } from '@src/store/hook'
+import { setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import checkIsValidPassword from '@src/helpers/checkIsValidPassword'
+import displaySuccess from '@src/helpers/displaySuccess'
+import UsersService from '@src/services/usersService'
 
 import './style.css'
-import { IUserResponse } from '../../../models/index'
-import { useNavigate } from 'react-router-dom'
-import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
 
 type ChangePasswordProps = {
 	backPath: string
@@ -20,6 +20,7 @@ type ChangePasswordProps = {
 const ChangePassword: FC<ChangePasswordProps> = ({ backPath }) => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+
 	const [newPassword, setNewPassword] = useState<string>('')
 	const [oldPassword, setOldPassword] = useState<string>('')
 	const [isValidOldPassword, setIsValidOldPassword] = useState<boolean | null>(
@@ -29,28 +30,20 @@ const ChangePassword: FC<ChangePasswordProps> = ({ backPath }) => {
 		null
 	)
 
-	const handleChangePassword = async (e: any) => {
+	const handleChangePassword = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (isValidNewPassword && isValidOldPassword) {
-			dispatch(setIsLoading(true))
 			try {
-				await api
-					.put<IUserResponse>(`${API_URL}/users/changePassword`, {
-						oldPassword,
-						newPassword,
-					})
-					.then(response => {
-						dispatch(setUser(response.data.user))
-						navigate(backPath)
-						dispatch(
-							setNotification({
-								message: 'Успешная смена пароля',
-								isError: false,
-								errors: [],
-							})
-						)
-					})
+				dispatch(setIsLoading(true))
+				await UsersService.changePassword({
+					oldPassword,
+					newPassword,
+				}).then(response => {
+					dispatch(setUser(response.data.user))
+					navigate(backPath)
+					displaySuccess(dispatch, 'Успешная смена пароля')
+				})
 			} catch (error: any) {
 				displayTroubleConnectionError(dispatch, error)
 			} finally {
@@ -77,7 +70,7 @@ const ChangePassword: FC<ChangePasswordProps> = ({ backPath }) => {
 				<Input
 					controlId="oldPassword"
 					type="password"
-					placeholder="12345678"
+					placeholder="Kr3D5uJDo"
 					value={oldPassword}
 					onChange={e => setOldPassword(e.target.value)}
 					required={true}
@@ -93,7 +86,7 @@ const ChangePassword: FC<ChangePasswordProps> = ({ backPath }) => {
 				<Input
 					controlId="newPassword"
 					type="password"
-					placeholder="12345678"
+					placeholder="Kr3D5uJDo"
 					value={newPassword}
 					onChange={e => setNewPassword(e.target.value)}
 					required={true}

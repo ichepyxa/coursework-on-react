@@ -1,16 +1,27 @@
-import { setNotification } from "../store/slices/notificationSlice"
+import { AxiosError } from 'axios'
 
-export default function displayTroubleConnectionError(dispatch: CallableFunction, error: any): void {
-  if (error.response.status === 0) {
-    dispatch(
-      setNotification({
-        message: 'Проблемы с соединением',
-        errors: [],
-        isError: true,
-      })
-    )
-    return
-  }
+import { NotificationState } from '@src/models'
+import displayError from './displayError'
 
-  dispatch(setNotification({ ...error.response?.data, isError: true }))
+export default function displayTroubleConnectionError(
+	dispatch: CallableFunction,
+	error: AxiosError<NotificationState> = new AxiosError(
+		'Проблемы с соединением'
+	)
+): void {
+	if (error.response?.status === 0) {
+		displayError(dispatch, 'Проблемы с соединением')
+		return
+	}
+
+	if (error.response?.data) {
+		const message: string = !error.response?.data.message
+			? ''
+			: error.response?.data.message
+		const errors: [] = !error.response.data.errors
+			? []
+			: error.response.data.errors
+
+		displayError(dispatch, message, errors)
+	}
 }

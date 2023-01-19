@@ -1,72 +1,56 @@
-import { FC } from 'react'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import UploadInput from '../../../components/UploadInput/UploadInput'
-import { API_DOMAIN } from '../../../constants/apiUrl'
-import { imagesType } from '../../../constants/fileImagesType'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import { useAuth } from '../../../hooks/useAuth'
-import api from '../../../http'
-import { IAvatar } from '../../../models/index'
-import { useAppDispatch } from '../../../store/hook'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import { setIsLoading, setAvatar } from '../../../store/slices/userSlice'
+
+import UploadInput from '@src/components/UploadInput/UploadInput'
+import { API_DOMAIN } from '@src/constants/apiUrl'
+import { imagesType } from '@src/constants/fileImagesType'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { useAuth } from '@src/hooks/useAuth'
+import { useAppDispatch } from '@src/store/hook'
+import { setAvatar } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import displayError from '@src/helpers/displayError'
+import UsersService from '@src/services/usersService'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
 
 const UploadAvatar: FC = () => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+
 	const { avatar } = useAuth()
 	const [userAvatar, setUserAvatar] = useState<string | undefined>(
 		`${API_DOMAIN}${avatar}`
 	)
 
-	const displayError = (message: string) => {
-		dispatch(
-			setNotification({
-				message,
-				isError: true,
-				errors: [],
-			})
-		)
-	}
-
 	const onChange = (e: any, setValue: CallableFunction) => {
 		if (!imagesType.includes(e.target.files[0].type)) {
-			displayError('Вы выбрали не фото')
+			displayError(dispatch, 'Вы выбрали не фото')
 			return setValue('')
 		}
 
 		setValue(URL.createObjectURL(e.target.files[0]))
 	}
 
-	const onUpload = async (e: any) => {
+	const onUpload = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (avatar && userAvatar?.includes(avatar)) {
-			return displayError('Выберите фото')
+			return displayError(dispatch, 'Выберите фото')
 		}
 
 		const formData = new FormData()
 		formData.append('avatar', e.target.querySelector('input').files[0])
 
-		dispatch(setIsLoading(true))
 		try {
-			await api
-				.post<IAvatar>('/users/uploadAvatar', formData)
-				.then(response => {
-					dispatch(setAvatar(response.data.avatar))
-					dispatch(
-						setNotification({
-							message: 'Успешная смена фото',
-							isError: false,
-							errors: [],
-						})
-					)
-					navigate('/account/profile')
-				})
+			dispatch(setIsLoading(true))
+			await UsersService.uploadAvatar(formData).then(response => {
+				dispatch(setAvatar(response.data.avatar))
+				navigate('/account/profile')
+				displaySuccess(dispatch, 'Успешная смена фото')
+			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -74,25 +58,19 @@ const UploadAvatar: FC = () => {
 		}
 	}
 
-	const onDelete = async (e: any) => {
+	const onDelete = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (!avatar) {
-			return displayError('У вас нету фото')
+			return displayError(dispatch, 'У вас нету фото')
 		}
 
-		dispatch(setIsLoading(true))
 		try {
-			await api.delete<IAvatar>('/users/deleteAvatar').then(response => {
+			dispatch(setIsLoading(true))
+			await UsersService.deleteAvatar().then(response => {
 				dispatch(setAvatar(response.data.avatar))
-				dispatch(
-					setNotification({
-						message: 'Фото удалено',
-						isError: false,
-						errors: [],
-					})
-				)
 				navigate('/account/profile')
+				displaySuccess(dispatch, 'Фото удалено')
 			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)

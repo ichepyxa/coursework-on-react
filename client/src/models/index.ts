@@ -41,6 +41,10 @@ export interface IHouse extends ITimeStamps {
 	isFavorite: boolean
 }
 
+export interface IHouseUpdateRequest extends IHouse {
+	deletedImages: string[]
+}
+
 export interface IHouseFavorites extends ITimeStamps {
 	favoritesId: number
 	userId: number
@@ -52,7 +56,7 @@ export interface IHousesResponse {
 	houses: IHouse[]
 }
 
-export interface IHouseFavoritesResponse {
+export interface IHousesFavoritesResponse {
 	length: any
 	houses: IHouse[]
 }
@@ -72,6 +76,10 @@ export interface ISight extends ITimeStamps {
 	isFavorite: boolean
 }
 
+export interface ISightUpdateRequest extends ISight {
+	deletedImages: string[]
+}
+
 export interface ISightsResponse {
 	count: number
 	sights: ISight[]
@@ -88,7 +96,7 @@ export interface ISightFavorites extends ITimeStamps {
 	sightId: number
 }
 
-export interface ISightFavoritesResponse {
+export interface ISightsFavoritesResponse {
 	length: any
 	sights: ISight[]
 }
@@ -125,4 +133,10 @@ export interface IQuestion extends ITimeStamps {
 export interface IUserAnswer {
 	answerId: number
 	questionId: number
+}
+
+export interface NotificationState {
+	message: string | undefined
+	isError: boolean
+	errors: []
 }

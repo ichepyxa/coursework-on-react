@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
-import { titleName } from '../../constants/titleName'
+import { titleName } from '@src/constants/titleName'
 
 const NotFound: FC = () => {
 	return (

@@ -9,7 +9,6 @@ import About from './pages/About/About'
 import Houses from './pages/Houses/Houses'
 import Test from './pages/Test/Test'
 import NotFound from './pages/NotFound/NotFound'
-import './App.css'
 import { useAppSelector } from './store/hook'
 import HouseDescription from './pages/HouseDescription/HouseDescription'
 import FavoritesHouses from './pages/Account/FavoritesHouses/FavoritesHouses'
@@ -32,6 +31,8 @@ import AdminSights from './pages/Admin/Sights/Sights'
 import CreateNewSight from './pages/Admin/CreateNewSight/CreateNewSight'
 import EditSight from './pages/Admin/EditSight/EditSight'
 import Users from './pages/Admin/Users/Users'
+
+import './App.css'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
@@ -146,7 +147,11 @@ const App: FC = () => {
 							<Route
 								path="changePassword"
 								element={
-									!isAuth ? <Login /> : <ChangePassword backPath={'/profile'} />
+									!isAuth ? (
+										<Login />
+									) : (
+										<ChangePassword backPath={'/account/profile'} />
+									)
 								}
 							/>
 							<Route

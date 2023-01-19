@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Toast as ToastElement } from 'react-bootstrap'
-import { useAppDispatch } from '../../store/hook'
-import {
-	NotificationState,
-	setNotification,
-} from '../../store/slices/notificationSlice'
+
+import { useAppDispatch } from '@src/store/hook'
+import { setNotification } from '@src/store/slices/notificationSlice'
+import { NotificationState } from '@src/models'
+
 import './style.css'
 
 const Toast = ({
@@ -19,7 +19,7 @@ const Toast = ({
 	const dispatch = useAppDispatch()
 	const [isShow, setIsShow] = useState<boolean>(isVisible)
 
-	const onClose = () => {
+	const onClose = (): void => {
 		setIsShow(false)
 		dispatch(setNotification({} as NotificationState))
 	}

@@ -3,21 +3,23 @@ import { Container, Form } from 'react-bootstrap'
 import DocumentTitle from 'react-document-title'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import SidebarNavbarAdmin from '../../../components/SidebarNavbarAdmin/SidebarNavbarAdmin'
-import UploadInput from '../../../components/UploadInput/UploadInput'
-import { imagesType } from '../../../constants/fileImagesType'
-import { titleName } from '../../../constants/titleName'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import api from '../../../http'
-import { IHouse } from '../../../models'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import { setIsLoading } from '../../../store/slices/userSlice'
+
+import displayError from '@src/helpers/displayError'
+import displaySuccess from '@src/helpers/displaySuccess'
+import HousesService from '@src/services/housesService'
+import SidebarNavbarAdmin from '@src/components/SidebarNavbarAdmin/SidebarNavbarAdmin'
+import UploadInput from '@src/components/UploadInput/UploadInput'
+import { imagesType } from '@src/constants/fileImagesType'
+import { titleName } from '@src/constants/titleName'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { setIsLoading } from '@src/store/slices/pageSlice'
 
 import './style.css'
 
 const CreateNewHouse: FC = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
 	const [images, setImages] = useState<string[]>([])
 	const [imagesFiles, setImagesFiles] = useState<[]>([])
 	const [name, setName] = useState<string>('')
@@ -30,7 +32,7 @@ const CreateNewHouse: FC = () => {
 	const [isValidCategory, setIsValidCategory] = useState<boolean | null>(null)
 	const [isValidLocation, setIsValidLocation] = useState<boolean | null>(null)
 
-	useEffect(() => {
+	useEffect((): void => {
 		if (name.length > 0 || category.length > 0 || location.length > 0) {
 			setIsValidName(name.length > 2 ? true : false)
 			setIsValidCategory(category.length > 3 ? true : false)
@@ -38,21 +40,12 @@ const CreateNewHouse: FC = () => {
 		}
 	}, [name, category, location])
 
-	const displayError = (message: string) => {
-		dispatch(
-			setNotification({
-				message,
-				isError: true,
-				errors: [],
-			})
-		)
-	}
-
-	const onUpload = async (e: any) => {
+	const onUpload = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (isValidName && isValidLocation && isValidCategory) {
 			const formData = new FormData()
+
 			imagesFiles.forEach(image => formData.append('images', image))
 			formData.append('name', name)
 			formData.append('category', category)
@@ -60,16 +53,10 @@ const CreateNewHouse: FC = () => {
 			formData.append('price', price.toString())
 			formData.append('description', description)
 
-			dispatch(setIsLoading(true))
 			try {
-				await api.post<IHouse>('/houses', formData).then(response => {
-					dispatch(
-						setNotification({
-							message: 'Место отдыха успешно создано',
-							isError: false,
-							errors: [],
-						})
-					)
+				dispatch(setIsLoading(true))
+				await HousesService.createHouse(formData).then(response => {
+					displaySuccess(dispatch, 'Место отдыха успешно создано')
 					navigate(`/houses/${response.data.houseId}`)
 				})
 			} catch (error: any) {
@@ -80,7 +67,7 @@ const CreateNewHouse: FC = () => {
 		}
 	}
 
-	const onDelete = (index: number) => {
+	const onDelete = (index: number): void => {
 		setImages((state: any) =>
 			state.filter((value: any, currentIndex: number) => currentIndex !== index)
 		)
@@ -89,9 +76,9 @@ const CreateNewHouse: FC = () => {
 		)
 	}
 
-	const onChange = (e: any, setValue: CallableFunction) => {
+	const onChange = (e: any, setValue: CallableFunction): void => {
 		if (!imagesType.includes(e.target.files[0].type)) {
-			displayError('Вы выбрали не фото')
+			displayError(dispatch, 'Вы выбрали не фото')
 			return
 		}
 

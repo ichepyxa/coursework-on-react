@@ -1,21 +1,21 @@
-import { AxiosResponse } from 'axios'
 import { FC, useEffect, useState } from 'react'
 import DocumentTitle from 'react-document-title'
-import HousesElement from '../../components/HousesElement/HousesElement'
-import Loader from '../../components/Loader/Loader'
-import { API_URL } from '../../constants/apiUrl'
-import { titleName } from '../../constants/titleName'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import api from '../../http'
-import { IHouse, IQuestion, ITest, IUserAnswer } from '../../models'
-import { useAppDispatch } from '../../store/hook'
-import { setNotification } from '../../store/slices/notificationSlice'
+
+import displayError from '@src/helpers/displayError'
+import TestService from '@src/services/testService'
+import HousesElement from '@src/components/HousesElement/HousesElement'
+import Loader from '@src/components/Loader/Loader'
 import Questions from './components/Questions'
+import { titleName } from '@src/constants/titleName'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { IHouse, IQuestion, ITest, IUserAnswer } from '@src/models'
+import { useAppDispatch } from '@src/store/hook'
+
 import './style.css'
 
 const Test: FC = () => {
 	const dispatch = useAppDispatch()
-	const [isLoading, setIsLoading] = useState<boolean>(false)
+
 	const [isTestResult, setIsTestResult] = useState<boolean>(false)
 	const [testResult, setTestResult] = useState<IHouse[]>([] as IHouse[])
 	const [userAnswers, setUserAnswers] = useState<IUserAnswer[]>([])
@@ -23,32 +23,24 @@ const Test: FC = () => {
 		useState<HTMLInputElement | null>(null)
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
 	const [isLastQuestionTest, setIsLastQuestionTest] = useState<boolean>(false)
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [test, setTest] = useState<ITest>({} as ITest)
 	const [questions, setQuestions] = useState<IQuestion[]>([] as IQuestion[])
 
-	const sendAnswers = async () => {
-		setIsLoading(true)
+	const sendAnswers = async (): Promise<void> => {
 		try {
-			await api
-				.post<IQuestion[], AxiosResponse<IHouse[]>>(`${API_URL}/test`, {
-					answers: userAnswers,
-				})
-				.then(response => {
-					if (!response.data || response.data === ([] as IHouse[])) {
-						dispatch(
-							setNotification({
-								message: 'Что-то пошло не так',
-								errors: [],
-								isError: true,
-							})
-						)
+			setIsLoading(true)
+			await TestService.sendAnswers({
+				answers: userAnswers,
+			}).then(response => {
+				if (!response.data || response.data === ([] as IHouse[])) {
+					displayError(dispatch, 'Не удалось загрузить тест')
+					return
+				}
 
-						return
-					}
-
-					setIsTestResult(true)
-					setTestResult(response.data)
-				})
+				setIsTestResult(true)
+				setTestResult(response.data)
+			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -56,10 +48,10 @@ const Test: FC = () => {
 		}
 	}
 
-	const getTest = async () => {
-		setIsLoading(true)
+	const getTest = async (): Promise<void> => {
 		try {
-			await api.get<ITest>(`${API_URL}/test`).then(response => {
+			setIsLoading(true)
+			await TestService.getTest().then(response => {
 				if (response.data === undefined || response.data === ({} as ITest)) {
 					setQuestions([] as IQuestion[])
 					return setTest({} as ITest)
@@ -75,7 +67,7 @@ const Test: FC = () => {
 		}
 	}
 
-	const submitQuestion = () => {
+	const submitQuestion = (): void => {
 		if (!currentSelectRadio) {
 			return
 		}

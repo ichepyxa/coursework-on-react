@@ -1,41 +1,40 @@
 import { FC, useEffect, useState } from 'react'
-import axios from 'axios'
 import { Container } from 'react-bootstrap'
-import { API_URL } from '../../../../constants/apiUrl'
-import { IHouse, IHousesResponse } from '../../../../models/index'
-import HousesElement from '../../../../components/HousesElement/HousesElement'
 import { Link } from 'react-router-dom'
+
+import HousesElement from '@src/components/HousesElement/HousesElement'
+// import HousesElement from '@src/components/HousesElement/HousesElement'
+import { IHouse } from '@src/models/index'
+import HousesService from '@src/services/housesService'
 
 const RecommendedHouses: FC = () => {
 	const [houses, setHouses] = useState<IHouse[]>([])
-	const maxRecommendedHousesCount = 6
+	const maxRecommendedHousesCount: number = 6
 
-	const getRecommendedHouses = async () => {
+	const getRecommendedHouses = async (): Promise<void> => {
 		try {
-			await axios
-				.get<IHousesResponse>(`${API_URL}/houses?page=1`)
-				.then(response => {
-					if (
-						response.data.houses === undefined ||
-						response.data.houses === ([] as IHouse[])
-					) {
-						return setHouses([] as IHouse[])
-					}
+			await HousesService.getHouses(1).then(response => {
+				if (
+					response.data.houses === undefined ||
+					response.data.houses === ([] as IHouse[])
+				) {
+					return setHouses([] as IHouse[])
+				}
 
-					const houses = response.data.houses
-					if (houses.length > 0 && houses.length < maxRecommendedHousesCount)
-						return setHouses(houses)
+				const houses = response.data.houses
+				if (houses.length > 0 && houses.length < maxRecommendedHousesCount)
+					return setHouses(houses)
 
-					const filterResponse: IHouse[] = []
-					while (filterResponse.length < maxRecommendedHousesCount) {
-						const item = houses[Math.floor(Math.random() * houses.length)]
-						if (filterResponse.includes(item)) continue
+				const filterResponse: IHouse[] = []
+				while (filterResponse.length < maxRecommendedHousesCount) {
+					const item = houses[Math.floor(Math.random() * houses.length)]
+					if (filterResponse.includes(item)) continue
 
-						filterResponse.push(item)
-					}
+					filterResponse.push(item)
+				}
 
-					setHouses(filterResponse)
-				})
+				setHouses(filterResponse)
+			})
 		} catch (error: any) {
 			setHouses([] as IHouse[])
 		}

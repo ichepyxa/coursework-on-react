@@ -1,37 +1,35 @@
-import api from '../../../http'
 import { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
-import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
-import { API_URL } from '../../../constants/apiUrl'
-import { ISightFavoritesResponse, ISight } from '../../../models'
-import { useAppDispatch } from '../../../store/hook'
-import Loader from '../../../components/Loader/Loader'
 import { Link } from 'react-router-dom'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
+
+import SidebarNavbar from '@src/components/SidebarNavbar/SidebarNavbar'
+import SightsElement from '@src/components/SightsElement/SightsElement'
+import Loader from '@src/components/Loader/Loader'
+import { ISight } from '@src/models'
+import { useAppDispatch } from '@src/store/hook'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import SightsService from '@src/services/sightsService'
 
 import './style.css'
-import SightsElement from '../../../components/SightsElement/SightsElement'
 
 const FavoritesSights: FC = () => {
 	const dispatch = useAppDispatch()
-	const [sigths, setSights] = useState<ISight[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [sigths, setSights] = useState<ISight[]>([])
 
-	const getSigths = async () => {
-		setIsLoading(true)
+	const getSigths = async (): Promise<void> => {
 		try {
-			await api
-				.get<ISightFavoritesResponse>(`${API_URL}/sights/favoritesSights`)
-				.then(response => {
-					if (
-						response.data.sights === undefined ||
-						response.data.sights === ([] as ISight[])
-					) {
-						return setSights([] as ISight[])
-					}
+			setIsLoading(true)
+			await SightsService.getFavoritesSights().then(response => {
+				if (
+					response.data.sights === undefined ||
+					response.data.sights === ([] as ISight[])
+				) {
+					return setSights([] as ISight[])
+				}
 
-					setSights(response.data.sights)
-				})
+				setSights(response.data.sights)
+			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -39,7 +37,7 @@ const FavoritesSights: FC = () => {
 		}
 	}
 
-	useEffect(() => {
+	useEffect((): void => {
 		getSigths()
 	}, [])
 

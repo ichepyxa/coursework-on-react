@@ -1,31 +1,27 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import api from '../../http'
-import { IHouse } from '../../models/index'
-import { setNotification } from '../../store/slices/notificationSlice'
-import { setIsLoading } from '../../store/slices/userSlice'
+
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { IHouse } from '@src/models/'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import HousesService from '@src/services/housesService'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
 
 const HouseAdmin: FC<IHouse> = ({ houseId, images, name }) => {
 	const dispatch = useDispatch()
+
 	const [isShowModal, setIsShowModal] = useState(false)
 	const [isPermission, setIsPermission] = useState(false)
 
-	const deleteHouse = async () => {
-		dispatch(setIsLoading(true))
+	const deleteHouse = async (): Promise<void> => {
 		try {
-			await api.delete<void>(`/houses/${houseId}`).then(response => {
-				dispatch(
-					setNotification({
-						message: 'Место отдыха успешно удалено',
-						isError: false,
-						errors: [],
-					})
-				)
+			dispatch(setIsLoading(true))
+			await HousesService.deleteHouse(houseId).then(response => {
+				displaySuccess(dispatch, 'Место отдыха успешно удалено')
 			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)

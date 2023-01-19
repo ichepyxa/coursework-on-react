@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { API_URL } from '../constants/apiUrl'
-import displayTroubleConnectionError from '../helpers/displayTroubleConnectionError'
-import { ISight, ISightsResponse } from '../models/index'
+
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { ISight } from '@src/models/index'
 import { useSearchParams } from './useSearchParams'
+import SightsService from '@src/services/sightsService'
 
 export const useSights = () => {
 	const dispatch = useDispatch()
@@ -14,14 +14,11 @@ export const useSights = () => {
 	const [sights, setSights] = useState<ISight[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
-	const getSights = async () => {
-		setIsLoading(true)
+	const getSights = async (): Promise<void> => {
 		try {
-			await axios
-				.get<ISightsResponse>(
-					`${API_URL}/sights?page=${page}&name=${name}&region=${region}`
-				)
-				.then(response => {
+			setIsLoading(true)
+			await SightsService.getSightsByFilters(page, name, region).then(
+				response => {
 					if (
 						response.data.sights === undefined ||
 						response.data.sights === ([] as ISight[])
@@ -31,7 +28,8 @@ export const useSights = () => {
 
 					setCountPage(response.data.count)
 					setSights(response.data.sights as ISight[])
-				})
+				}
+			)
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {

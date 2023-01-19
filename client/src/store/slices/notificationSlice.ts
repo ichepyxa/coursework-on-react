@@ -1,15 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export interface NotificationState {
-	message: string | undefined,
-	isError: boolean,
-	errors: []
-}
+import { NotificationState } from '@src/models/index'
 
 const initialState: NotificationState = {
 	message: undefined,
 	isError: false,
-	errors: [] 
+	errors: [],
 }
 
 const notificationSlice = createSlice({

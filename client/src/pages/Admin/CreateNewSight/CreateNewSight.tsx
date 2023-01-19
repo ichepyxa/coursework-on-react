@@ -3,21 +3,23 @@ import { Container, Form } from 'react-bootstrap'
 import DocumentTitle from 'react-document-title'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import SidebarNavbarAdmin from '../../../components/SidebarNavbarAdmin/SidebarNavbarAdmin'
-import UploadInput from '../../../components/UploadInput/UploadInput'
-import { imagesType } from '../../../constants/fileImagesType'
-import { titleName } from '../../../constants/titleName'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import api from '../../../http'
-import { ISight } from '../../../models'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import { setIsLoading } from '../../../store/slices/userSlice'
+
+import SidebarNavbarAdmin from '@src/components/SidebarNavbarAdmin/SidebarNavbarAdmin'
+import UploadInput from '@src/components/UploadInput/UploadInput'
+import { imagesType } from '@src/constants/fileImagesType'
+import { titleName } from '@src/constants/titleName'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import displayError from '@src/helpers/displayError'
+import displaySuccess from '@src/helpers/displaySuccess'
+import SightsService from '@src/services/sightsService'
 
 import './style.css'
 
 const CreateNewSight: FC = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
 	const [images, setImages] = useState<string[]>([])
 	const [imagesFiles, setImagesFiles] = useState<[]>([])
 	const [name, setName] = useState<string>('')
@@ -29,45 +31,22 @@ const CreateNewSight: FC = () => {
 	const [isValidCategory, setIsValidCategory] = useState<boolean | null>(null)
 	const [isValidLocation, setIsValidLocation] = useState<boolean | null>(null)
 
-	useEffect(() => {
-		if (name.length > 0 || category.length > 0 || location.length > 0) {
-			setIsValidName(name.length > 2 ? true : false)
-			setIsValidCategory(category.length > 3 ? true : false)
-			setIsValidLocation(location.length > 10 ? true : false)
-		}
-	}, [name, category, location])
-
-	const displayError = (message: string) => {
-		dispatch(
-			setNotification({
-				message,
-				isError: true,
-				errors: [],
-			})
-		)
-	}
-
-	const onUpload = async (e: any) => {
+	const onUpload = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (isValidName && isValidLocation && isValidCategory) {
 			const formData = new FormData()
+
 			imagesFiles.forEach(image => formData.append('images', image))
 			formData.append('name', name)
 			formData.append('category', category)
 			formData.append('location', location)
 			formData.append('description', description)
 
-			dispatch(setIsLoading(true))
 			try {
-				await api.post<ISight>('/sights', formData).then(response => {
-					dispatch(
-						setNotification({
-							message: 'Достопримечательность успешно создана',
-							isError: false,
-							errors: [],
-						})
-					)
+				dispatch(setIsLoading(true))
+				await SightsService.createSight(formData).then(response => {
+					displaySuccess(dispatch, 'Достопримечательность успешно создана')
 					navigate(`/sights/${response.data.sightId}`)
 				})
 			} catch (error: any) {
@@ -78,7 +57,7 @@ const CreateNewSight: FC = () => {
 		}
 	}
 
-	const onDelete = (index: number) => {
+	const onDelete = (index: number): void => {
 		setImages((state: any) =>
 			state.filter((value: any, currentIndex: number) => currentIndex !== index)
 		)
@@ -87,15 +66,23 @@ const CreateNewSight: FC = () => {
 		)
 	}
 
-	const onChange = (e: any, setValue: CallableFunction) => {
+	const onChange = (e: any, setValue: CallableFunction): void => {
 		if (!imagesType.includes(e.target.files[0].type)) {
-			displayError('Вы выбрали не фото')
+			displayError(dispatch, 'Вы выбрали не фото')
 			return
 		}
 
 		setValue((state: any) => [...state, URL.createObjectURL(e.target.files[0])])
 		setImagesFiles((state: any) => [...state, e.target.files[0]] as any)
 	}
+
+	useEffect(() => {
+		if (name.length > 0 || category.length > 0 || location.length > 0) {
+			setIsValidName(name.length > 2 ? true : false)
+			setIsValidCategory(category.length > 3 ? true : false)
+			setIsValidLocation(location.length > 10 ? true : false)
+		}
+	}, [name, category, location])
 
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">

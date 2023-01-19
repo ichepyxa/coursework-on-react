@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { API_URL } from '../constants/apiUrl'
 import displayTroubleConnectionError from '../helpers/displayTroubleConnectionError'
-import api from '../http'
+import api from '../lib/axios'
 import { IUserAdmin, IUsersResponse } from '../models/index'
 import { useSearchParams } from './useSearchParams'
 

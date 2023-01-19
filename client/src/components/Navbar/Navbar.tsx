@@ -1,20 +1,23 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import {
 	Nav,
 	NavDropdown,
 	Navbar as NavbarElement,
 	Container,
 } from 'react-bootstrap'
-import AuthService from '../../sevices/authService'
-import { useAppDispatch } from '../../store/hook'
-import { setIsAuth, setIsLoading, setUser } from '../../store/slices/userSlice'
-import { IUser } from '../../models/index'
 import { Link, useLocation } from 'react-router-dom'
-import { setNotification } from '../../store/slices/notificationSlice'
+
+import AuthService from '@src/services/authService'
+import { useAppDispatch } from '@src/store/hook'
+import { setIsAuth, setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import { IUser } from '@src/models/index'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { useAuth } from '@src/hooks/useAuth'
+import { API_DOMAIN } from '@src/constants/apiUrl'
+import displaySuccess from '@src/helpers/displaySuccess'
+
 import './style.css'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import { useAuth } from '../../hooks/useAuth'
-import { API_DOMAIN } from '../../constants/apiUrl'
 
 const Navbar: FC = () => {
 	const dispatch = useAppDispatch()
@@ -22,21 +25,15 @@ const Navbar: FC = () => {
 	const { isAuth, avatar, isAdmin } = useAuth()
 	const { pathname } = useLocation()
 
-	const handleLogout = async () => {
+	const handleLogout = async (): Promise<void> => {
 		handleCloseMenu()
-		dispatch(setIsLoading(true))
 		try {
+			dispatch(setIsLoading(true))
 			await AuthService.logout().then(() => {
 				localStorage.removeItem('token')
 				dispatch(setUser({} as IUser))
 				dispatch(setIsAuth(false))
-				dispatch(
-					setNotification({
-						message: 'Вы вышли из аккаунта',
-						isError: false,
-						errors: [],
-					})
-				)
+				displaySuccess(dispatch, 'Вы вышли из аккаунта')
 			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
@@ -45,7 +42,7 @@ const Navbar: FC = () => {
 		}
 	}
 
-	const handleCloseMenu = () => {
+	const handleCloseMenu = (): void => {
 		const navbarToggler: HTMLElement = document.querySelector(
 			'.navbar-toggler'
 		) as HTMLElement

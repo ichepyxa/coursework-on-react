@@ -1,21 +1,16 @@
-import { setIsAuth, setIsLoading, setUser } from '../store/slices/userSlice'
-import axios from 'axios'
-import { API_URL } from '../constants/apiUrl'
-import { IUserResponse } from '../models/index'
+import { setIsAuth, setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
 import displayTroubleConnectionError from './displayTroubleConnectionError'
+import UsersService from '@src/services/usersService'
 
 export const checkAuth = async (dispatch: CallableFunction) => {
-	dispatch(setIsLoading(true))
 	try {
-		await axios
-			.get<IUserResponse>(`${API_URL}/users/refresh`, {
-				withCredentials: true,
-			})
-			.then(response => {
-				localStorage.setItem('token', response.data.accessToken)
-				dispatch(setUser(response.data.user))
-				dispatch(setIsAuth(true))
-			})
+		dispatch(setIsLoading(true))
+		await UsersService.refresh().then(response => {
+			localStorage.setItem('token', response.data.accessToken)
+			dispatch(setUser(response.data.user))
+			dispatch(setIsAuth(true))
+		})
 		// dispatch(
 		// 	setNotification({
 		// 		message: 'С возвращением',

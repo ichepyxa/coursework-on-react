@@ -1,32 +1,28 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import api from '../../http'
-import { ISight } from '../../models/index'
-import { setNotification } from '../../store/slices/notificationSlice'
-import { setIsLoading } from '../../store/slices/userSlice'
+
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { ISight } from '@src/models/index'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import SightsService from '@src/services/sightsService'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
 
 const SightAdmin: FC<ISight> = ({ sightId, images, name }) => {
 	const dispatch = useDispatch()
-	const [isShowModal, setIsShowModal] = useState(false)
-	const [isPermission, setIsPermission] = useState(false)
 
-	const deleteSight = async () => {
+	const [isShowModal, setIsShowModal] = useState<boolean>(false)
+	const [isPermission, setIsPermission] = useState<boolean>(false)
+
+	const deleteSight = async (): Promise<void> => {
 		dispatch(setIsLoading(true))
 		try {
-			await api.delete<void>(`/sights/${sightId}`).then(response => {
-				dispatch(
-					setNotification({
-						message: 'Достопримечательность успешно удалена',
-						isError: false,
-						errors: [],
-					})
-				)
-			})
+			await SightsService.deleteSight(sightId).then(response =>
+				displaySuccess(dispatch, 'Достопримечательность успешно удалена')
+			)
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -34,7 +30,7 @@ const SightAdmin: FC<ISight> = ({ sightId, images, name }) => {
 		}
 	}
 
-	useEffect(() => {
+	useEffect((): void => {
 		if (isPermission) {
 			deleteSight()
 			setIsShowModal(false)

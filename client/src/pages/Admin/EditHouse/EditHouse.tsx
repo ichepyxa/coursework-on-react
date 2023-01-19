@@ -1,31 +1,28 @@
-import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
 import { Container, Form } from 'react-bootstrap'
 import DocumentTitle from 'react-document-title'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import SidebarNavbarAdmin from '../../../components/SidebarNavbarAdmin/SidebarNavbarAdmin'
-import UploadInput from '../../../components/UploadInput/UploadInput'
-import { API_URL } from '../../../constants/apiUrl'
-import { imagesType } from '../../../constants/fileImagesType'
-import { titleName } from '../../../constants/titleName'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import api from '../../../http'
-import { IHouse } from '../../../models'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import { setIsLoading } from '../../../store/slices/userSlice'
+
+import SidebarNavbarAdmin from '@src/components/SidebarNavbarAdmin/SidebarNavbarAdmin'
+import UploadInput from '@src/components/UploadInput/UploadInput'
+import { imagesType } from '@src/constants/fileImagesType'
+import { titleName } from '@src/constants/titleName'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { IHouse } from '@src/models'
+import Loader from '@src/components/Loader/Loader'
+import HousesService from '@src/services/housesService'
+import displayError from '@src/helpers/displayError'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
 
-interface IHouseUpdateRequest extends IHouse {
-	deletedImages: string[]
-}
-
 const EditHouse: FC = () => {
 	const dispatch = useDispatch()
-	const params = useParams()
 	const navigate = useNavigate()
+	const params = useParams()
 
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [house, setHouse] = useState<IHouse>({} as IHouse)
 	const [images, setImages] = useState<string[]>([])
 	const [imagesFiles, setImagesFiles] = useState<[]>([])
@@ -41,25 +38,25 @@ const EditHouse: FC = () => {
 	)
 	const [isValidLocation, setIsValidLocation] = useState<boolean | null>(null)
 
-	const getHouse = async () => {
-		setIsLoading(true)
+	const getHouse = async (): Promise<void> => {
 		try {
-			await axios
-				.get<IHouse>(`${API_URL}/houses/${params.houseId}`)
-				.then(response => {
-					if (response.data === undefined || response.data === ({} as IHouse)) {
-						return setHouse({} as IHouse)
-					}
+			setIsLoading(true)
 
-					setName(response.data.name)
-					setCategory(response.data.category)
-					setLocation(response.data.location)
-					setPrice(response.data.price)
-					setImages(response.data.images.map(image => image.image))
-					setImagesFiles(response.data.images as any)
-					setDescription(response.data.description)
-					setHouse(response.data)
-				})
+			const houseId = !params.houseId ? '' : params.houseId
+			await HousesService.getHouse(houseId).then(response => {
+				if (response.data === undefined || response.data === ({} as IHouse)) {
+					return setHouse({} as IHouse)
+				}
+
+				setName(response.data.name)
+				setCategory(response.data.category)
+				setLocation(response.data.location)
+				setPrice(response.data.price)
+				setImages(response.data.images.map(image => image.image))
+				setImagesFiles(response.data.images as any)
+				setDescription(response.data.description)
+				setHouse(response.data)
+			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -67,29 +64,7 @@ const EditHouse: FC = () => {
 		}
 	}
 
-	useEffect(() => {
-		getHouse()
-	}, [])
-
-	useEffect(() => {
-		if (name.length > 0 || category.length > 0 || location.length > 0) {
-			setIsValidName(name.length > 2 ? true : false)
-			setIsValidnewCategory(category.length > 3 ? true : false)
-			setIsValidLocation(location.length > 10 ? true : false)
-		}
-	}, [name, category, location])
-
-	const displayError = (message: string) => {
-		dispatch(
-			setNotification({
-				message,
-				isError: true,
-				errors: [],
-			})
-		)
-	}
-
-	const onUpload = async (e: any) => {
+	const onUpload = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		const deletedImages = house.images
@@ -98,6 +73,7 @@ const EditHouse: FC = () => {
 
 		if (isValidName && isValidLocation && isValidnewCategory) {
 			const formData = new FormData()
+
 			imagesFiles.forEach((image: any) =>
 				image instanceof File ? formData.append('images', image) : null
 			)
@@ -110,29 +86,23 @@ const EditHouse: FC = () => {
 			formData.append('price', price.toString())
 			formData.append('description', description)
 
-			dispatch(setIsLoading(true))
 			try {
-				await api
-					.put<IHouseUpdateRequest>(`/houses/${house.houseId}`, formData)
-					.then(response => {
-						dispatch(
-							setNotification({
-								message: 'Место отдыха успешно отредактировано',
-								isError: false,
-								errors: [],
-							})
-						)
+				setIsLoading(true)
+				await HousesService.updateHouse(house.houseId, formData).then(
+					response => {
+						displaySuccess(dispatch, 'Место отдыха успешно отредактировано')
 						navigate(`/houses/${response.data.houseId}`)
-					})
+					}
+				)
 			} catch (error: any) {
 				displayTroubleConnectionError(dispatch, error)
 			} finally {
-				dispatch(setIsLoading(false))
+				setIsLoading(false)
 			}
 		}
 	}
 
-	const onDelete = (index: number) => {
+	const onDelete = (index: number): void => {
 		setImages((state: any) =>
 			state.filter((value: any, currentIndex: number) => currentIndex !== index)
 		)
@@ -141,9 +111,9 @@ const EditHouse: FC = () => {
 		)
 	}
 
-	const onChange = (e: any, setValue: CallableFunction) => {
+	const onChange = (e: any, setValue: CallableFunction): void => {
 		if (!imagesType.includes(e.target.files[0].type)) {
-			displayError('Вы выбрали не фото')
+			displayError(dispatch, 'Вы выбрали не фото')
 			return
 		}
 
@@ -151,139 +121,155 @@ const EditHouse: FC = () => {
 		setImagesFiles((state: any) => [...state, e.target.files[0]] as any)
 	}
 
+	useEffect((): void => {
+		getHouse()
+	}, [])
+
+	useEffect((): void => {
+		if (name.length > 0 || category.length > 0 || location.length > 0) {
+			setIsValidName(name.length > 2 ? true : false)
+			setIsValidnewCategory(category.length > 3 ? true : false)
+			setIsValidLocation(location.length > 10 ? true : false)
+		}
+	}, [name, category, location])
+
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
 			<DocumentTitle title={`${titleName} редактирование места отдыха`} />
 			<SidebarNavbarAdmin />
-			<Form
-				className="mt-lg-4 w-100 position-relative"
-				onSubmit={e => onUpload(e)}
-			>
-				<h2 className="text-center mb-5">Редактирование места отдыха</h2>
-				<div className="mb-5">
-					<h4 className="text-center">Изображения</h4>
-					<div className="row g-3 m-0 justify-content-center align-items-center text-center w-100">
-						{images.length > 0 ? (
-							images.map((item, index) => (
-								<div
-									key={index}
-									className="new-house-img cursor-pointer col-12 col-sm-6 col-lg-4 rounded"
+			{isLoading ? (
+				<Loader />
+			) : (
+				<Form
+					className="mt-lg-4 w-100 position-relative"
+					onSubmit={e => onUpload(e)}
+				>
+					<h2 className="text-center mb-5">Редактирование места отдыха</h2>
+					<div className="mb-5">
+						<h4 className="text-center">Изображения</h4>
+						<div className="row g-3 m-0 justify-content-center align-items-center text-center w-100">
+							{images.length > 0 ? (
+								images.map((item, index) => (
+									<div
+										key={index}
+										className="new-house-img cursor-pointer col-12 col-sm-6 col-lg-4 rounded"
+									>
+										<img src={item} alt="" className="rounded" />
+										<span onClick={() => onDelete(index)}>
+											Нажмите чтобы удалить
+										</span>
+									</div>
+								))
+							) : (
+								<div className="col-12 fw-light">Нет изображений</div>
+							)}
+						</div>
+						<div className="w-100 d-flex justify-content-center">
+							<UploadInput
+								className="mt-3 mx-auto"
+								label=""
+								setValue={setImages}
+								onChange={onChange}
+							/>
+						</div>
+					</div>
+					<div className="mb-5">
+						<h4 className="text-center mb-4">Подробности</h4>
+						<div className="d-flex flex-md-row flex-column mb-4 gap-4">
+							<div className="w-100 mx-auto">
+								<label htmlFor="nameFormControlInput" className="form-label">
+									Название
+								</label>
+								<input
+									type="text"
+									required
+									className={`form-control ${
+										isValidName === null
+											? ''
+											: isValidName
+											? 'is-valid'
+											: 'is-invalid'
+									}`}
+									placeholder=""
+									value={name}
+									onChange={e => setName(e.target.value)}
+								/>
+							</div>
+							<div className="w-100 mx-auto">
+								<label
+									htmlFor="newCategoryFormControlInput"
+									className="form-label"
 								>
-									<img src={item} alt="" className="rounded" />
-									<span onClick={() => onDelete(index)}>
-										Нажмите чтобы удалить
-									</span>
-								</div>
-							))
-						) : (
-							<div className="col-12 fw-light">Нет изображений</div>
-						)}
-					</div>
-					<div className="w-100 d-flex justify-content-center">
-						<UploadInput
-							className="mt-3 mx-auto"
-							label=""
-							setValue={setImages}
-							onChange={onChange}
-						/>
-					</div>
-				</div>
-				<div className="mb-5">
-					<h4 className="text-center mb-4">Подробности</h4>
-					<div className="d-flex flex-md-row flex-column mb-4 gap-4">
-						<div className="w-100 mx-auto">
-							<label htmlFor="nameFormControlInput" className="form-label">
-								Название
+									Категория
+								</label>
+								<input
+									type="text"
+									className={`form-control ${
+										isValidnewCategory === null
+											? ''
+											: isValidnewCategory
+											? 'is-valid'
+											: 'is-invalid'
+									}`}
+									required
+									placeholder=""
+									value={category}
+									onChange={e => setCategory(e.target.value)}
+								/>
+							</div>
+							<div className="w-100 mx-auto">
+								<label htmlFor="priceFormControlInput" className="form-label">
+									Цена (если есть)
+								</label>
+								<input
+									type="number"
+									className="form-control"
+									placeholder=""
+									value={price}
+									onChange={e => setPrice(+e.target.value)}
+								/>
+							</div>
+						</div>
+						<div className="mb-4 w-100 mx-auto">
+							<label htmlFor="locationFormControlInput" className="form-label">
+								Местонахождение
 							</label>
 							<input
 								type="text"
-								required
 								className={`form-control ${
-									isValidName === null
+									isValidLocation === null
 										? ''
-										: isValidName
+										: isValidLocation
 										? 'is-valid'
 										: 'is-invalid'
 								}`}
+								required
 								placeholder=""
-								value={name}
-								onChange={e => setName(e.target.value)}
+								value={location}
+								onChange={e => setLocation(e.target.value)}
 							/>
 						</div>
-						<div className="w-100 mx-auto">
+						<div className="mb-3">
 							<label
-								htmlFor="newCategoryFormControlInput"
+								htmlFor="descriptionFormControlTextarea"
 								className="form-label"
 							>
-								Категория
+								Описание
 							</label>
-							<input
-								type="text"
-								className={`form-control ${
-									isValidnewCategory === null
-										? ''
-										: isValidnewCategory
-										? 'is-valid'
-										: 'is-invalid'
-								}`}
-								required
-								placeholder=""
-								value={category}
-								onChange={e => setCategory(e.target.value)}
-							/>
-						</div>
-						<div className="w-100 mx-auto">
-							<label htmlFor="priceFormControlInput" className="form-label">
-								Цена (если есть)
-							</label>
-							<input
-								type="number"
+							<textarea
 								className="form-control"
-								placeholder=""
-								value={price}
-								onChange={e => setPrice(+e.target.value)}
-							/>
+								style={{ resize: 'vertical' }}
+								rows={7}
+								value={description}
+								onChange={e => setDescription(e.target.value)}
+							></textarea>
 						</div>
 					</div>
-					<div className="mb-4 w-100 mx-auto">
-						<label htmlFor="locationFormControlInput" className="form-label">
-							Местонахождение
-						</label>
-						<input
-							type="text"
-							className={`form-control ${
-								isValidLocation === null
-									? ''
-									: isValidLocation
-									? 'is-valid'
-									: 'is-invalid'
-							}`}
-							required
-							placeholder=""
-							value={location}
-							onChange={e => setLocation(e.target.value)}
-						/>
+					<div className="d-flex justify-content-center align-items-center w-100 mb-5">
+						<button className="btn btn-primary">Сохранить</button>
 					</div>
-					<div className="mb-3">
-						<label
-							htmlFor="descriptionFormControlTextarea"
-							className="form-label"
-						>
-							Описание
-						</label>
-						<textarea
-							className="form-control"
-							style={{ resize: 'vertical' }}
-							rows={7}
-							value={description}
-							onChange={e => setDescription(e.target.value)}
-						></textarea>
-					</div>
-				</div>
-				<div className="d-flex justify-content-center align-items-center w-100 mb-5">
-					<button className="btn btn-primary">Сохранить</button>
-				</div>
-			</Form>
+				</Form>
+			)}
 		</Container>
 	)
 }

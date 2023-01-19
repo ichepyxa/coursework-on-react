@@ -1,19 +1,14 @@
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
-// import { Link } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import api from '../../http'
-import { IUserAdmin } from '../../models/index'
-import { setNotification } from '../../store/slices/notificationSlice'
-import { setIsLoading } from '../../store/slices/userSlice'
+
+import { IUserAdmin } from '@src/models/index'
+import { API_DOMAIN } from '@src/constants/apiUrl'
 
 import './style.css'
-import { API_DOMAIN } from '../../constants/apiUrl'
 
 const UserAdmin: FC<IUserAdmin> = ({
 	username,
-	userId,
 	avatar,
 	email,
 	isPassedTest,

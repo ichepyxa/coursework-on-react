@@ -1,23 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import Loader from '../../components/Loader/Loader'
-import { API_URL } from '../../constants/apiUrl'
-import { categoriesHousesWithoutPrice } from '../../constants/categoriesHousesWithoutPrice'
 import DocumentTitle from 'react-document-title'
-import { titleName } from '../../constants/titleName'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import { onClickFavoritesBtn } from '../../helpers/favoritesHousesBtnClicks'
-import filterFavoritesHouses from '../../helpers/filterFavoritesHouses'
-import api from '../../http'
-import { IHouse, IHouseFavoritesResponse } from '../../models'
-import { useAppDispatch } from '../../store/hook'
+
+import Loader from '@src/components/Loader/Loader'
 import Images from './components/Images/Images'
+import { categoriesHousesWithoutPrice } from '@src/constants/categoriesHousesWithoutPrice'
+import { titleName } from '@src/constants/titleName'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { onClickFavoritesBtn } from '@src/helpers/favoritesHousesBtnClicks'
+import filterFavoritesHouses from '@src/helpers/filterFavoritesHouses'
+import { IHouse } from '@src/models'
+import { useAppDispatch, useAppSelector } from '@src/store/hook'
+import { useAuth } from '@src/hooks/useAuth'
+import HousesService from '@src/services/housesService'
 
 import './style.css'
-import { useAuth } from '../../hooks/useAuth'
 
 const categoriesHousesWithOtherText: { [key: string]: string } = {
 	Отель: 'номер',
@@ -30,27 +29,27 @@ const categoriesHousesWithOtherText: { [key: string]: string } = {
 
 const HouseDescription: FC = () => {
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	const params = useParams()
 
-	const navigate = useNavigate()
 	const { isAuth, isAdmin } = useAuth()
 	const [house, setHouse] = useState<IHouse>({} as IHouse)
-	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [favoritesHouses, setFavoritesHouses] = useState<IHouse[]>([])
 	const [isBooking, setIsBooking] = useState<boolean | null>(null)
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
-	const addBookingHouse = async () => {
-		setIsLoading(true)
+	const addBookingHouse = async (): Promise<void> => {
 		try {
-			await api
-				.post(`${API_URL}/houses/booking`, { houseId: params.houseId })
-				.then(response => {
-					if (response.status < 200 || response.status > 299) {
+			setIsLoading(true)
+			await HousesService.addBookingHouse({ houseId: params.houseId }).then(
+				response => {
+					if (response.status !== 200) {
 						return setIsBooking(null)
 					}
 
 					setIsBooking(true)
-				})
+				}
+			)
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -58,45 +57,42 @@ const HouseDescription: FC = () => {
 		}
 	}
 
-	const getIsBooking = async () => {
-		await api
-			.get<boolean>(`${API_URL}/houses/isBooking/${params.houseId}`)
-			.then(response => {
-				if (response.data === undefined) {
-					return setIsBooking(null)
-				}
+	const getIsBooking = async (): Promise<void> => {
+		const houseId = !params.houseId ? '' : params.houseId
+		await HousesService.getIsBooking(houseId).then(response => {
+			if (response.data === undefined) {
+				return setIsBooking(null)
+			}
 
-				setIsBooking(response.data)
-			})
+			setIsBooking(response.data)
+		})
 	}
 
-	const getFavoritesHouses = async () => {
-		await api
-			.get<IHouseFavoritesResponse>(`${API_URL}/houses/favoritesHouses`)
-			.then(response => {
-				if (
-					response.data.houses === undefined ||
-					response.data.houses === ([] as IHouse[])
-				) {
-					return setFavoritesHouses([] as IHouse[])
-				}
+	const getFavoritesHouses = async (): Promise<void> => {
+		await HousesService.getFavoritesHouses().then(response => {
+			if (
+				response.data.houses === undefined ||
+				response.data.houses === ([] as IHouse[])
+			) {
+				return setFavoritesHouses([] as IHouse[])
+			}
 
-				setFavoritesHouses(response.data.houses as IHouse[])
-			})
+			setFavoritesHouses(response.data.houses as IHouse[])
+		})
 	}
 
-	const getHouse = async () => {
-		setIsLoading(true)
+	const getHouse = async (): Promise<void> => {
 		try {
-			await axios
-				.get<IHouse>(`${API_URL}/houses/${params.houseId}`)
-				.then(response => {
-					if (response.data === undefined || response.data === ({} as IHouse)) {
-						return setHouse({} as IHouse)
-					}
+			setIsLoading(true)
 
-					setHouse(response.data as IHouse)
-				})
+			const houseId = !params.houseId ? '' : params.houseId
+			await HousesService.getHouse(houseId).then(response => {
+				if (response.data === undefined || response.data === ({} as IHouse)) {
+					return setHouse({} as IHouse)
+				}
+
+				setHouse(response.data as IHouse)
+			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {
@@ -104,7 +100,7 @@ const HouseDescription: FC = () => {
 		}
 	}
 
-	const favoritesBtns = () => {
+	const favoritesBtns = (): React.ReactNode => {
 		if (isAdmin) {
 			return <></>
 		}

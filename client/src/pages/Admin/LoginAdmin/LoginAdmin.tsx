@@ -1,20 +1,19 @@
 import { FC, useState, useEffect } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
-import Input from '../../../components/Input/Input'
-import { titleName } from '../../../constants/titleName'
 import DocumentTitle from 'react-document-title'
 import { Link } from 'react-router-dom'
-import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
-import checkIsValidEmail from '../../../helpers/checkIsValidEmail'
-import { useAppDispatch } from '../../../store/hook'
-import {
-	setIsAuth,
-	setIsLoading,
-	setUser,
-} from '../../../store/slices/userSlice'
-import AuthService from '../../../sevices/authService'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
+
+import Input from '@src/components/Input/Input'
+import { titleName } from '@src/constants/titleName'
+import checkIsValidPassword from '@src/helpers/checkIsValidPassword'
+import checkIsValidEmail from '@src/helpers/checkIsValidEmail'
+import { useAppDispatch } from '@src/store/hook'
+import { setIsAuth, setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import AuthService from '@src/services/authService'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import displayError from '@src/helpers/displayError'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
 
@@ -25,34 +24,22 @@ const LoginAdmin: FC = () => {
 	const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null)
 	const [isValidPassword, setIsValidPassword] = useState<boolean | null>(null)
 
-	const handleLogin = async (e: any) => {
+	const handleLogin = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (isValidEmail && isValidPassword) {
-			dispatch(setIsLoading(true))
 			try {
+				dispatch(setIsLoading(true))
 				await AuthService.login(email, password).then(response => {
 					if (!response.data.user.isAdmin) {
-						dispatch(
-							setNotification({
-								message: 'Неверный логин или пароль',
-								errors: [],
-								isError: true,
-							})
-						)
+						displayError(dispatch, 'Неверный логин или пароль')
 						return
 					}
 
 					localStorage.setItem('token', response.data.accessToken)
 					dispatch(setUser(response.data.user))
 					dispatch(setIsAuth(true))
-					dispatch(
-						setNotification({
-							message: 'Успешный вход',
-							isError: false,
-							errors: [],
-						})
-					)
+					displaySuccess(dispatch, 'Успешный вход')
 				})
 			} catch (error: any) {
 				displayTroubleConnectionError(dispatch, error)

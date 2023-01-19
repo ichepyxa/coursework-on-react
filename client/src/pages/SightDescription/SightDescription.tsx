@@ -1,48 +1,45 @@
-import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import DocumentTitle from 'react-document-title'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import Loader from '../../components/Loader/Loader'
-import { API_URL } from '../../constants/apiUrl'
-import { titleName } from '../../constants/titleName'
-import displayTroubleConnectionError from '../../helpers/displayTroubleConnectionError'
-import { onClickFavoritesBtn } from '../../helpers/favoritesSightsBtnClicks'
-import filterFavoritesSights from '../../helpers/filterFavoritesSights'
-import { useAuth } from '../../hooks/useAuth'
-import api from '../../http'
-import { ISight, ISightFavoritesResponse } from '../../models/index'
-import { useAppDispatch } from '../../store/hook'
+
+import SightsService from '@src/services/sightsService'
+import Loader from '@src/components/Loader/Loader'
+import { titleName } from '@src/constants/titleName'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { onClickFavoritesBtn } from '@src/helpers/favoritesSightsBtnClicks'
+import filterFavoritesSights from '@src/helpers/filterFavoritesSights'
+import { useAuth } from '@src/hooks/useAuth'
+import { ISight } from '@src/models/index'
+import { useAppDispatch } from '@src/store/hook'
 import Images from './components/Images/Images'
 
 import './style.css'
 
 const SightDescription: FC = () => {
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	const params = useParams()
 
-	const navigate = useNavigate()
 	const { isAuth, isAdmin } = useAuth()
 	const [sight, setSight] = useState<ISight>({} as ISight)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [favoritesSights, setFavoritesSights] = useState<ISight[]>([])
 
-	const getFavoritesSights = async () => {
-		await api
-			.get<ISightFavoritesResponse>(`${API_URL}/sights/favoritesSights`)
-			.then(response => {
-				if (
-					response.data.sights === undefined ||
-					response.data.sights === ([] as ISight[])
-				) {
-					return setFavoritesSights([] as ISight[])
-				}
+	const getFavoritesSights = async (): Promise<void> => {
+		await SightsService.getFavoritesSights().then(response => {
+			if (
+				response.data.sights === undefined ||
+				response.data.sights === ([] as ISight[])
+			) {
+				return setFavoritesSights([] as ISight[])
+			}
 
-				setFavoritesSights(response.data.sights as ISight[])
-			})
+			setFavoritesSights(response.data.sights as ISight[])
+		})
 	}
 
-	const favoritesBtns = () => {
+	const favoritesBtns = (): React.ReactNode => {
 		if (isAdmin) {
 			return <></>
 		}
@@ -64,18 +61,18 @@ const SightDescription: FC = () => {
 		)
 	}
 
-	const getSight = async () => {
-		setIsLoading(true)
+	const getSight = async (): Promise<void> => {
 		try {
-			await axios
-				.get<ISight>(`${API_URL}/sights/${params.sightId}`)
-				.then(response => {
-					if (response.data === undefined || response.data === ({} as ISight)) {
-						return setSight({} as ISight)
-					}
+			setIsLoading(true)
 
-					setSight(response.data as ISight)
-				})
+			const sightId = !params.sightId ? '' : params.sightId
+			await SightsService.getSight(sightId).then(response => {
+				if (response.data === undefined || response.data === ({} as ISight)) {
+					return setSight({} as ISight)
+				}
+
+				setSight(response.data as ISight)
+			})
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {

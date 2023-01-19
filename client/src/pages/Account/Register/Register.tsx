@@ -1,21 +1,19 @@
 import { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import Input from '../../../components/Input/Input'
 import DocumentTitle from 'react-document-title'
-import checkIsValidEmail from '../../../helpers/checkIsValidEmail'
-import checkIsValidPassword from '../../../helpers/checkIsValidPassword'
-import checkIsValidUsername from '../../../helpers/checkIsValidUsername'
-import displayTroubleConnectionError from '../../../helpers/displayTroubleConnectionError'
-import AuthService from '../../../sevices/authService'
-import { useAppDispatch } from '../../../store/hook'
-import { setNotification } from '../../../store/slices/notificationSlice'
-import {
-	setIsAuth,
-	setIsLoading,
-	setUser,
-} from '../../../store/slices/userSlice'
-import { titleName } from '../../../constants/titleName'
+
+import Input from '@src/components/Input/Input'
+import checkIsValidEmail from '@src/helpers/checkIsValidEmail'
+import checkIsValidPassword from '@src/helpers/checkIsValidPassword'
+import checkIsValidUsername from '@src/helpers/checkIsValidUsername'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import AuthService from '@src/services/authService'
+import { useAppDispatch } from '@src/store/hook'
+import { setIsAuth, setUser } from '@src/store/slices/userSlice'
+import { setIsLoading } from '@src/store/slices/pageSlice'
+import { titleName } from '@src/constants/titleName'
+import displaySuccess from '@src/helpers/displaySuccess'
 
 const Register: FC = () => {
 	const dispatch = useAppDispatch()
@@ -26,32 +24,18 @@ const Register: FC = () => {
 	const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null)
 	const [isValidPassword, setIsValidPassword] = useState<boolean | null>(null)
 
-	useEffect(() => {
-		if (username.length > 0 || email.length > 0 || password.length > 0) {
-			setIsValidUsername(checkIsValidUsername(username))
-			setIsValidEmail(checkIsValidEmail(email))
-			setIsValidPassword(checkIsValidPassword(password))
-		}
-	}, [email, password, username])
-
-	const handleRegistration = async (e: any) => {
+	const handleRegistration = async (e: any): Promise<void> => {
 		e.preventDefault()
 
 		if (isValidUsername && isValidEmail && isValidPassword) {
-			dispatch(setIsLoading(true))
 			try {
+				dispatch(setIsLoading(true))
 				await AuthService.registration(username, email, password).then(
 					response => {
 						localStorage.setItem('token', response.data.accessToken)
 						dispatch(setUser(response.data.user))
 						dispatch(setIsAuth(true))
-						dispatch(
-							setNotification({
-								message: 'Успешная регистрация',
-								isError: false,
-								errors: [],
-							})
-						)
+						displaySuccess(dispatch, 'Успешная регистрация')
 					}
 				)
 			} catch (error: any) {
@@ -61,6 +45,14 @@ const Register: FC = () => {
 			}
 		}
 	}
+
+	useEffect(() => {
+		if (username.length > 0 || email.length > 0 || password.length > 0) {
+			setIsValidUsername(checkIsValidUsername(username))
+			setIsValidEmail(checkIsValidEmail(email))
+			setIsValidPassword(checkIsValidPassword(password))
+		}
+	}, [email, password, username])
 
 	return (
 		<Container>

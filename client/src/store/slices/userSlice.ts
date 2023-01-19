@@ -3,7 +3,6 @@ import { IUser } from '../../models/index'
 
 type UserState = {
 	user: IUser
-	isLoading: boolean
 	isAuth: boolean
 }
 
@@ -17,9 +16,8 @@ const initialState: UserState = {
 		isPassedTest: undefined,
 		avatar: undefined,
 		roleId: undefined,
-		isAdmin: undefined
+		isAdmin: undefined,
 	},
-	isLoading: false,
 	isAuth: false,
 }
 
@@ -27,9 +25,6 @@ const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setIsLoading(state, action: PayloadAction<boolean>) {
-			state.isLoading = action.payload
-		},
 		setIsAuth(state, action: PayloadAction<boolean>) {
 			state.isAuth = action.payload
 		},
@@ -42,5 +37,5 @@ const userSlice = createSlice({
 	},
 })
 
-export const { setUser, setIsAuth, setIsLoading, setAvatar } = userSlice.actions
+export const { setUser, setIsAuth, setAvatar } = userSlice.actions
 export default userSlice.reducer

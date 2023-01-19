@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { API_URL } from '../constants/apiUrl'
-import displayTroubleConnectionError from '../helpers/displayTroubleConnectionError'
-import { IHouse, IHousesResponse } from '../models/index'
+
+import HousesService from '@src/services/housesService'
+import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
+import { IHouse } from '@src/models'
 import { useSearchParams } from './useSearchParams'
 
 export const useHouses = () => {
@@ -15,13 +15,10 @@ export const useHouses = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const getHouses = async () => {
-		setIsLoading(true)
 		try {
-			await axios
-				.get<IHousesResponse>(
-					`${API_URL}/houses?page=${page}&name=${name}&region=${region}`
-				)
-				.then(response => {
+			setIsLoading(true)
+			await HousesService.getHousesByFilters(page, name, region).then(
+				response => {
 					if (
 						response.data.houses === undefined ||
 						response.data.houses === ([] as IHouse[])
@@ -31,7 +28,8 @@ export const useHouses = () => {
 
 					setCountPage(response.data.count)
 					setHouses(response.data.houses as IHouse[])
-				})
+				}
+			)
 		} catch (error: any) {
 			displayTroubleConnectionError(dispatch, error)
 		} finally {

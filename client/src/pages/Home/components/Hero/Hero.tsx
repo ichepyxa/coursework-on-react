@@ -4,20 +4,20 @@ import { Link } from 'react-router-dom'
 import './style.css'
 
 const Hero: FC = () => {
-	const [currentVideoPath, setCurrentVideoPath] = useState('')
-	const videoPaths = [
+	const [currentVideoPath, setCurrentVideoPath] = useState<string>('')
+	const videoPaths: string[] = [
 		'/video/video-bg.mp4',
 		'/video/video-bg1.mp4',
 		'/video/video-bg2.mp4',
 	]
 
-	const setRandomVideo = () => {
+	const setRandomVideo = (): void => {
 		setCurrentVideoPath(
 			videoPaths[Math.floor(Math.random() * videoPaths.length)]
 		)
 	}
 
-	useEffect(() => {
+	useEffect((): void => {
 		setRandomVideo()
 		setInterval(() => {
 			setRandomVideo()
