@@ -1,31 +1,17 @@
-import Houses from './src/components/houses/Houses'
-import Login from './src/components/login/Login'
-
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-
-const Stack = createNativeStackNavigator()
+import { useEffect, useState } from 'react'
+import { isUserAuth } from './src/helpers/checkAuth'
+import GuestRoutes from './src/routes/GuestRoutes'
+import AuthRoutes from './src/routes/AuthRoutes'
+import { storeData } from './src/helpers/storage'
 
 export default function Navigate() {
-	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen
-					name="Home"
-					component={Houses}
-					options={{ title: 'gfdjgkdg' }}
-				/>
-				<Stack.Screen
-					name="Houses"
-					component={Houses}
-					options={{ title: 'Места отдыха' }}
-				/>
-				<Stack.Screen
-					name="Login"
-					component={Login}
-					options={{ title: 'Авторизация' }}
-				/>
-			</Stack.Navigator>
-		</NavigationContainer>
-	)
+	const [isAuth, setIsAuth] = useState(false)
+
+	useEffect(() => {
+		isUserAuth().then(res => setIsAuth(res))
+	}, [])
+
+	console.log(isAuth)
+
+	return isAuth ? <AuthRoutes /> : <GuestRoutes />
 }

@@ -13,5 +13,7 @@ const styles = StyleSheet.create({
 	container: {
 		paddingTop: 35,
 		paddingBottom: 35,
+		fontSize: 20,
+		fontFamily: 'mt-regular',
 	},
 })

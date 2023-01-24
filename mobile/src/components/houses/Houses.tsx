@@ -33,7 +33,7 @@ export default function Houses() {
 	return (
 		<ScrollView>
 			{isLoading ? (
-				<Loader isLoading={isLoading} styles={styles.lottie} />
+				<Loader isLoading={isLoading} />
 			) : houses && houses.length > 0 ? (
 				<View style={styles.houses}>
 					{/* <Text style={styles.title}>Места отдыха</Text> */}
@@ -58,9 +58,5 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		fontWeight: '500',
 		marginVertical: 10,
-	},
-	lottie: {
-		width: 250,
-		height: 250,
 	},
 })
