@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Container } from 'react-bootstrap'
 import Loader from '../../components/Loader/Loader'
 import Search from '../../components/Search/Search'
