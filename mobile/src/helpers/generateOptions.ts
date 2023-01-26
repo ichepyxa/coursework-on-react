@@ -2,7 +2,7 @@ export const generateOptions = title => {
 	return {
 		title,
 		headerStyle: {
-			backgroundColor: '#3EB5E6',
+			backgroundColor: '#1D90ED',
 		},
 		headerTintColor: '#fff',
 		headerTitleStyle: {

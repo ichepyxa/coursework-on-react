@@ -4,64 +4,64 @@ import {
 	StyleSheet,
 	Text,
 	TouchableNativeFeedback,
-	TouchableOpacity,
 	View,
 } from 'react-native'
+import FastImage from 'react-native-fast-image'
 
 import IHouse from '../../models/IHouse'
 
+interface IHouseProps extends IHouse {
+	navigation: any
+}
+
 export const categoriesHousesWithoutPrice = ['Кафе', 'Ресторан']
 
-export default function House({
-	houseId,
-	images,
-	name,
-	category,
-	price,
-}: // isFavorite = false,
-IHouse) {
-	const handleClick = () => {}
+const House = React.memo(
+	({ houseId, images, name, category, price, navigation }: IHouseProps) => {
+		const handleClick = () => {
+			navigation.navigate('House', {
+				houseId,
+			})
+		}
 
-	return (
-		<TouchableNativeFeedback onPress={handleClick}>
-			<View style={styles.house}>
-				{images?.length > 0 ? (
-					<Image
-						style={styles.image}
-						source={{ uri: images[0].image }} //Math.floor(Math.random() * images.length)
-					/>
-				) : (
-					<View></View>
-				)}
-
-				<View style={styles.info}>
-					<Text style={styles.strong}>
-						Название:{' '}
-						<Text style={styles.standart}>
-							{name.length > 30 ? `${name.substring(0, 30)}...` : name}
-						</Text>
-					</Text>
-					<Text style={styles.strong}>
-						Категория: <Text style={styles.standart}>{category}</Text>
-					</Text>
-					{categoriesHousesWithoutPrice.includes(category) ? (
-						<View></View>
+		return (
+			<TouchableNativeFeedback onPress={handleClick}>
+				<View style={styles.house}>
+					{images && images?.length > 0 ? (
+						<Image style={styles.image} source={{ uri: images[0].image }} />
 					) : (
-						<View>
-							{price > 0 ? (
-								<Text style={styles.strong}>
-									Цена: <Text style={styles.standart}>{price} BYN</Text>
-								</Text>
-							) : (
-								<Text>Цену нужно уточнять</Text>
-							)}
-						</View>
+						<View style={styles.image}></View>
 					)}
+
+					<View style={styles.info}>
+						<Text style={styles.strong}>
+							Название:{' '}
+							<Text style={styles.standart}>
+								{name.length > 30 ? `${name.substring(0, 30)}...` : name}
+							</Text>
+						</Text>
+						<Text style={styles.strong}>
+							Категория: <Text style={styles.standart}>{category}</Text>
+						</Text>
+						{categoriesHousesWithoutPrice.includes(category) ? (
+							<View></View>
+						) : (
+							<View>
+								{price > 0 ? (
+									<Text style={styles.strong}>
+										Цена: <Text style={styles.standart}>{price} BYN</Text>
+									</Text>
+								) : (
+									<Text>Цену нужно уточнять</Text>
+								)}
+							</View>
+						)}
+					</View>
 				</View>
-			</View>
-		</TouchableNativeFeedback>
-	)
-}
+			</TouchableNativeFeedback>
+		)
+	}
+)
 
 const styles = StyleSheet.create({
 	house: {
@@ -88,3 +88,5 @@ const styles = StyleSheet.create({
 		fontWeight: '600',
 	},
 })
+
+export default House

@@ -22,8 +22,6 @@ class MailService {
 				pass: config.SMTP_PASSWORD,
 			},
 		})
-
-		console.log(this.transporter)
 	}
 
 	email(title, url, main) {

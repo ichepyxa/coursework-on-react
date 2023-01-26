@@ -6,11 +6,13 @@ import {
 	TouchableNativeFeedback,
 	View,
 } from 'react-native'
+
+import { checkIsAuth } from '../../helpers/checkIsAuth'
 import { getStringData, storeData } from '../../helpers/storage'
 import AuthService from '../../services/authService'
 import Loader from '../loader/Loader'
 
-export default function Login({ navigation }) {
+export default function Login({ navigation, route }) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
@@ -19,9 +21,8 @@ export default function Login({ navigation }) {
 		try {
 			setIsLoading(true)
 			await AuthService.login(email, password).then(async response => {
-				storeData('token', response.data.accessToken)
+				await storeData('token', response.data.accessToken)
 				setIsLoading(false)
-				navigation.navigate('Home')
 			})
 		} catch (error) {
 			console.log(error)
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
 	btn: {
 		textAlign: 'center',
 		fontFamily: 'mt-medium',
-		backgroundColor: '#3EB5E6',
+		backgroundColor: '#1D90ED',
 		color: '#fff',
 		width: '100%',
 		fontSize: 20,

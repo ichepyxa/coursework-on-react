@@ -1,6 +1,7 @@
 import IHouseImage from './IHouseImage'
+import ITimeStamps from './ITimeStamps'
 
-export default interface IHouse {
+export default interface IHouse extends ITimeStamps {
 	houseId: number
 	name: string
 	category: string

@@ -38,7 +38,10 @@ api.interceptors.response.use(
 					.get<IUserResponse>(`${API_URL}/refresh`, {
 						withCredentials: true,
 					})
-					.then(response => storeData('token', response.data.accessToken))
+					.then(
+						async response =>
+							await storeData('token', response.data.accessToken)
+					)
 				return api.request(originalRequest)
 			} catch (error) {
 				console.log(error)
