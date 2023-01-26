@@ -11,10 +11,8 @@ import {
 export default class SightsService {
 	static async getSights(
 		page: number = 0
-	): Promise<AxiosResponse<ISightsFavoritesResponse>> {
-		return api.get<ISightsFavoritesResponse>(
-			`/sights${page ? `?page=${page}` : ''}`
-		)
+	): Promise<AxiosResponse<ISightsResponse>> {
+		return api.get<ISightsResponse>(`/sights${page ? `?page=${page}` : ''}`)
 	}
 
 	static async getSightsByFilters(

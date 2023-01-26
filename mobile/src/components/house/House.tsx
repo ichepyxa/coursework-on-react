@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import {
 	Image,
@@ -6,20 +7,16 @@ import {
 	TouchableNativeFeedback,
 	View,
 } from 'react-native'
-import FastImage from 'react-native-fast-image'
 
 import IHouse from '../../models/IHouse'
-
-interface IHouseProps extends IHouse {
-	navigation: any
-}
 
 export const categoriesHousesWithoutPrice = ['Кафе', 'Ресторан']
 
 const House = React.memo(
-	({ houseId, images, name, category, price, navigation }: IHouseProps) => {
+	({ houseId, images, name, category, price }: IHouse) => {
+		const navigation = useNavigation()
 		const handleClick = () => {
-			navigation.navigate('House', {
+			navigation.navigate<string>('House', {
 				houseId,
 			})
 		}

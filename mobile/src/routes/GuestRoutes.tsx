@@ -7,14 +7,12 @@ const Stack = createNativeStackNavigator()
 
 export default function GuestRoutes() {
 	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen
-					name="Home"
-					component={Login}
-					options={() => generateOptions('Вход')}
-				/>
-			</Stack.Navigator>
-		</NavigationContainer>
+		<Stack.Navigator>
+			<Stack.Screen
+				name="Home"
+				component={Login}
+				options={() => generateOptions('Вход')}
+			/>
+		</Stack.Navigator>
 	)
 }
