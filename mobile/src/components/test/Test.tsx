@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
+import IHouse from '../../models/IHouse'
+import IQuestion from '../../models/IQuestion'
+import ITest from '../../models/ITest'
+import { IUserAnswer } from '../../models/IUserAnswer'
+import TestService from '../../services/testService'
 import Loader from '../loader/Loader'
+import Questions from '../questions/Questions'
+import TestResult from '../test-result/TestResult'
 
 export default function Test() {
 	const [isTestResult, setIsTestResult] = useState(false)
 	const [testResult, setTestResult] = useState<IHouse[]>([] as IHouse[])
 	const [userAnswers, setUserAnswers] = useState<IUserAnswer[]>([])
-	const [currentSelectRadio, setCurrentSelectRadio] =
-		useState<HTMLInputElement | null>(null)
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
 	const [isLastQuestionTest, setIsLastQuestionTest] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -33,13 +39,9 @@ export default function Test() {
 		try {
 			setIsLoading(true)
 			await TestService.getTest().then(response => {
-				if (response.data === undefined || response.data === ({} as ITest)) {
-					setQuestions([] as IQuestion[])
-					return setTest({} as ITest)
-				}
-
 				setQuestions(response.data.questions)
 				setTest(response.data as ITest)
+				setIsLoading(false)
 			})
 		} catch (error) {
 			console.log(error)
@@ -47,8 +49,8 @@ export default function Test() {
 		}
 	}
 
-	const submitQuestion = (): void => {
-		if (!currentSelectRadio) {
+	const submitQuestion = (answerId): void => {
+		if (!answerId) {
 			return
 		}
 
@@ -58,13 +60,11 @@ export default function Test() {
 					...state,
 					{
 						questionId: questions[currentQuestionIndex].questionId,
-						answerId: +currentSelectRadio.id,
+						answerId,
 					},
 				])
 		)
 
-		currentSelectRadio.checked = false
-		setCurrentSelectRadio(null)
 		setCurrentQuestionIndex(state => (state += 1))
 
 		if (currentQuestionIndex === questions.length - 1) {
@@ -82,33 +82,42 @@ export default function Test() {
 		}
 	}, [isLastQuestionTest])
 
-	return isTestResult ? (
-		<div className="py-5 overflow-hidden">
-			<h2 className="text-center">Результаты</h2>
-			<HousesElement houses={testResult} />
-		</div>
-	) : (
-		<div className="d-flex justify-content-center align-items-center flex-column gap-4 main-question px-3 py-5">
-			{isLoading ? (
-				<Loader isLoading={isLoading} />
+	return (
+		<View style={styles.test}>
+			{isTestResult ? (
+				<View>
+					<Text style={styles.title}>Результаты</Text>
+					<TestResult houses={testResult} />
+				</View>
 			) : (
-				<>
-					<Questions
-						questions={questions}
-						currentQuestionIndex={currentQuestionIndex}
-						setCurrentSelectRadio={setCurrentSelectRadio}
-					/>
-					<button
-						className="mt-2 btn btn-outline-primary d-block px-5 py-2"
-						onClick={submitQuestion}
-						disabled={currentSelectRadio ? undefined : true}
-					>
-						{currentQuestionIndex === questions.length - 1
-							? 'Завершить'
-							: 'Далее'}
-					</button>
-				</>
+				<View>
+					{isLoading ? (
+						<Loader isLoading={isLoading} />
+					) : (
+						<>
+							<Questions
+								questions={questions}
+								currentQuestionIndex={currentQuestionIndex}
+								submitQuestion={submitQuestion}
+							/>
+						</>
+					)}
+				</View>
 			)}
-		</div>
+		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	title: {
+		textAlign: 'center',
+		fontSize: 20,
+		marginVertical: 10,
+		fontFamily: 'mt-semibold',
+	},
+	test: {
+		paddingHorizontal: 30,
+		paddingTop: 60,
+		marginBottom: 100,
+	},
+})

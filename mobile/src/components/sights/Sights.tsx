@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 import ISight from '../../models/ISight'
 import Sight from '../sight/Sight'
@@ -48,16 +48,19 @@ export default function Sights() {
 	return isLoading ? (
 		<Loader isLoading={isLoading} />
 	) : (
-		<FlatList
-			style={styles.sights}
-			data={sights}
-			keyExtractor={keyExtractor}
-			renderItem={renderItem}
-			onEndReachedThreshold={0.25}
-			onEndReached={getSights}
-			refreshing={isRefreshing}
-			onRefresh={onRefresh}
-		/>
+		<View>
+			<Text style={styles.title}>Достопримечательности</Text>
+			<FlatList
+				style={styles.sights}
+				data={sights}
+				keyExtractor={keyExtractor}
+				renderItem={renderItem}
+				onEndReachedThreshold={0.25}
+				onEndReached={getSights}
+				refreshing={isRefreshing}
+				onRefresh={onRefresh}
+			/>
+		</View>
 	)
 }
 
@@ -74,8 +77,9 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontSize: 20,
+		fontSize: 22,
 		fontWeight: '500',
-		marginVertical: 10,
+		marginBottom: 10,
+		marginTop: 20,
 	},
 })

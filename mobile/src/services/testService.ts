@@ -1,7 +1,9 @@
 import { AxiosResponse } from 'axios'
 
-import api from '@src/lib/axios/index'
-import { IHouse, IQuestion, ITest } from '@src/models/index'
+import api from '../helpers/axios'
+import ITest from '../models/ITest'
+import IQuestion from '../models/IQuestion'
+import IHouse from '../models/IHouse'
 
 export default class TestService {
 	static async getTest(): Promise<AxiosResponse<ITest>> {

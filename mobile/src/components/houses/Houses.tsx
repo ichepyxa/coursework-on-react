@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 import IHouse from '../../models/IHouse'
 import HousesService from '../../services/housesService'
@@ -9,14 +9,14 @@ import Loader from '../loader/Loader'
 const keyExtractor = house =>
 	`house_${house.houseId.toString() * (Math.random() * 1500)}`
 
+const renderItem = ({ item }: { item: IHouse }) => <House {...item} />
+
 export default function Houses() {
 	const [isInitLoading, setIsInitLoading] = useState(true)
 	const [isRefreshing, setIsRefreshing] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [houses, setHouses] = useState<IHouse[]>([])
 	const [page, setPage] = useState<number>(1)
-
-	const renderItem = ({ item }) => <House {...item} />
 
 	const onRefresh = async () => {
 		setPage(1)
@@ -48,16 +48,19 @@ export default function Houses() {
 	return isLoading ? (
 		<Loader isLoading={isLoading} />
 	) : (
-		<FlatList
-			style={styles.houses}
-			data={houses}
-			keyExtractor={keyExtractor}
-			renderItem={renderItem}
-			onEndReachedThreshold={0.25}
-			onEndReached={getHouses}
-			refreshing={isRefreshing}
-			onRefresh={onRefresh}
-		/>
+		<View>
+			<Text style={styles.title}>Места отдыха</Text>
+			<FlatList
+				style={styles.houses}
+				data={houses}
+				keyExtractor={keyExtractor}
+				renderItem={renderItem}
+				onEndReachedThreshold={0.25}
+				onEndReached={getHouses}
+				refreshing={isRefreshing}
+				onRefresh={onRefresh}
+			/>
+		</View>
 	)
 }
 
@@ -74,8 +77,9 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontSize: 20,
+		fontSize: 22,
 		fontWeight: '500',
-		marginVertical: 10,
+		marginBottom: 10,
+		marginTop: 20,
 	},
 })

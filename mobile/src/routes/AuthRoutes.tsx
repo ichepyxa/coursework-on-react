@@ -9,6 +9,7 @@ import HouseDescription from '../components/house-description/HouseDescription'
 import Houses from '../components/houses/Houses'
 import SightDescription from '../components/sight-description/SightDescription'
 import Sights from '../components/sights/Sights'
+import Test from '../components/test/Test'
 import { generateOptions } from '../helpers/generateOptions'
 
 const Stack = createNativeStackNavigator()
@@ -49,7 +50,7 @@ export default function AuthRoutes() {
 				/>
 				<Tab.Screen
 					name="Тест"
-					component={Houses}
+					component={Test}
 					options={{
 						tabBarIcon: ({ color }) => (
 							<Foundation name="clipboard-notes" size={24} color={color} />
