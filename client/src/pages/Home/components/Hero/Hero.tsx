@@ -35,12 +35,10 @@ const Hero: FC = () => {
 				playsInline
 			></video>
 			<div className="hero-content">
-				<h1 className="text-center my-3">SearchGomel</h1>
-				{/* SearchHoliday */}
+				<h1 className="text-center my-3">SearchHoliday</h1>
 				<h5 className="text-center">
-					{/* SearchHoliday - это сервис, где можно подобрать места отдыха в
-					Беларуси */}
-					SearchGomel - это сервис, где можно подобрать места отдыха в Беларуси
+					SearchHoliday - это сервис, где можно подобрать места отдыха в
+					Беларуси
 				</h5>
 				<Link
 					to="/houses"

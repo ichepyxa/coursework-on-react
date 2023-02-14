@@ -73,19 +73,12 @@ const Navbar: FC = () => {
 						className="navbar-brand d-flex justify-content-center align-items-center gap-2"
 						onClick={handleCloseMenu}
 					>
-						{/* <img
+						<img
 							src="/images/horizontal-logo(without-bg).png"
 							height="40"
 							className="d-inline-block align-top"
 							alt="SearchHoliday Logo"
-						/> */}
-						<img
-							src="/images/logo(without-bg).png"
-							height="40"
-							className="d-inline-block align-top"
-							alt="SearchHoliday Logo"
 						/>
-						<h6 className="m-0">SearchGomel</h6>
 					</Link>
 					<NavbarElement.Toggle aria-controls="navbarContent" />
 					<NavbarElement.Collapse id="navbarContent">

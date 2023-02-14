@@ -85,7 +85,7 @@ export default function Test() {
 	return (
 		<View style={styles.test}>
 			{isTestResult ? (
-				<View>
+				<View style={styles.result}>
 					<Text style={styles.title}>Результаты</Text>
 					<TestResult houses={testResult} />
 				</View>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 	},
 	test: {
 		paddingHorizontal: 30,
-		paddingTop: 60,
+		paddingTop: 10,
 		marginBottom: 100,
 	},
 })
