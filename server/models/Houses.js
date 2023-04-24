@@ -43,6 +43,12 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'houseId',
 			onDelete: 'cascade',
 		})
+
+		Houses.hasMany(models.test_results, {
+			as: 'testResults',
+			foreignKey: 'houseId',
+			onDelete: 'cascade',
+		})
 	}
 
 	return Houses
