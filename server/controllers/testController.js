@@ -12,7 +12,16 @@ class TestController {
 
 	async getResult(req, res, next) {
 		try {
-			const answers = await TestService.getResult(req.body.answers)
+			const answers = await TestService.getResult(req.user, req.body.answers)
+			res.json(answers)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async getSaveResult(req, res, next) {
+		try {
+			const answers = await TestService.getSaveResult(req.user)
 			res.json(answers)
 		} catch (error) {
 			next(error)

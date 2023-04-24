@@ -47,6 +47,14 @@ const SidebarNav: FC = () => {
 						Достопримечательности
 					</Link>
 				</li>
+				<li>
+					<Link
+						to="/account/profile/testResults"
+						className={changeActiveLink('/account/profile/testResults')}
+					>
+						Результаты теста
+					</Link>
+				</li>
 				{/* <li>
 					<Link
 						to="/account/profile/test"

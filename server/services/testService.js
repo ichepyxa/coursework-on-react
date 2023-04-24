@@ -2,8 +2,9 @@ const {
 	test: Test,
 	test_answers: TestAnswers,
 	test_questions: TestQuestions,
+	test_results: TestResults,
 } = require('../models')
-const { getHousesWithServices } = require('./housesService')
+const { getHouseById, getHousesWithServices } = require('./housesService')
 
 class TestService {
 	async getTest() {
@@ -24,7 +25,9 @@ class TestService {
 		return test
 	}
 
-	async getResult(answers) {
+	async getResult(user, answers) {
+		if (!user) throw APIError.UnautorizedError()
+
 		const houses = await getHousesWithServices()
 		const answersFromDB = []
 		let filteredHouses = [...houses]
@@ -88,6 +91,13 @@ class TestService {
 			answersFromDB.push(answerFromDB)
 		}
 
+		const userTestResults = await TestResults.findAll({
+			where: {
+				userId: user.userId,
+			},
+		})
+
+		let resultIndex = 0
 		const randomFilterHouses = []
 		while (randomFilterHouses.length < 6) {
 			const house =
@@ -96,10 +106,72 @@ class TestService {
 			if (randomFilterHouses.length === filteredHouses.length) break
 			if (randomFilterHouses.includes(house)) continue
 
+			if (
+				!userTestResults ||
+				userTestResults.length <= 0 ||
+				(resultIndex != 0 && resultIndex == userTestResults.length)
+			) {
+				const testResult = await TestResults.create({
+					houseId: house.houseId,
+					userId: user.userId,
+				})
+			} else {
+				await TestResults.update(
+					{
+						houseId: house.houseId,
+						userId: user.userId,
+					},
+					{
+						where: {
+							testResultId: userTestResults[resultIndex].testResultId,
+						},
+					}
+				)
+
+				resultIndex++
+			}
+
 			randomFilterHouses.push(house)
 		}
 
+		if (userTestResults.length > randomFilterHouses.length) {
+			for (let i = resultIndex; i < userTestResults.length; i++) {
+				if (i < resultIndex) {
+					return
+				}
+
+				await TestResults.destroy({
+					where: {
+						testResultId: userTestResults[i].testResultId,
+					},
+				})
+			}
+		}
+
 		return randomFilterHouses
+	}
+
+	async getSaveResult(user) {
+		if (!user) throw APIError.UnautorizedError()
+
+		const userTestResults = await TestResults.findAll({
+			where: {
+				userId: user.userId,
+			},
+		})
+
+		let houses = []
+		if (userTestResults && userTestResults.length > 0) {
+			for (let i = 0; i < userTestResults.length; i++) {
+				const house = await getHouseById(userTestResults[i].houseId)
+
+				if (house) {
+					houses.push(house)
+				}
+			}
+		}
+
+		return houses
 	}
 }
 

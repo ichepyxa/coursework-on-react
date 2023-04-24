@@ -8,6 +8,10 @@ export default class TestService {
 		return api.get<ITest>('/test')
 	}
 
+	static async getSaveResults(): Promise<AxiosResponse<IHouse[]>> {
+		return api.get<IHouse[]>('/test/results')
+	}
+
 	static async sendAnswers(data: {}): Promise<AxiosResponse<IHouse[]>> {
 		return api.post<IQuestion[], AxiosResponse<IHouse[]>>(`/test`, data)
 	}

@@ -132,7 +132,7 @@ const App: FC = () => {
 									element={!isAuth ? <Login /> : <FavoritesSights />}
 								/>
 								<Route
-									path="test"
+									path="testResults"
 									element={!isAuth ? <Login /> : <TestResult />}
 								/>
 								<Route
