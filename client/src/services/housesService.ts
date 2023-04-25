@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios'
 import api from '@src/lib/axios/index'
 import {
 	IBookingHouse,
+	IBookingHouses,
 	IHouse,
 	IHousesFavoritesResponse,
 	IHousesResponse,
@@ -36,6 +37,10 @@ export default class HousesService {
 		return api.get<IBookingHouse[]>('/houses/booking')
 	}
 
+	static async getAllBookingHouses(): Promise<AxiosResponse<IBookingHouses[]>> {
+		return api.get<IBookingHouses[]>('/houses/allBooking')
+	}
+
 	static async getHouse(id: string): Promise<AxiosResponse<IHouse>> {
 		return api.get<IHouse>(`/houses/${id}`)
 	}
@@ -65,6 +70,13 @@ export default class HousesService {
 		data: FormData
 	): Promise<AxiosResponse<IHouseUpdateRequest>> {
 		return api.put<IHouseUpdateRequest>(`/houses/${id}`, data)
+	}
+
+	static async updateBookingStatus(
+		id: number,
+		data: FormData
+	): Promise<AxiosResponse<string>> {
+		return api.put<string>(`/houses/booking/${id}`, data)
 	}
 
 	static async deleteHouse(id: number): Promise<AxiosResponse<void>> {

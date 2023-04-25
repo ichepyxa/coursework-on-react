@@ -4,7 +4,6 @@ import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
 import { IBookingHouse } from '../../../models/index'
 import BookingElement from '../../../components/BookingElement/BookingElement'
 import { useAppDispatch } from '@src/store/hook'
-import TestService from '@src/services/testService'
 import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
 import Loader from '@src/components/Loader/Loader'
 
@@ -41,81 +40,33 @@ const Booking: FC = () => {
 		getResults()
 	}, [])
 
-	// const houses: IBookingHouse[] = [
-	// 	{
-	// 		houseId: 1,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [
-	// 			{
-	// 				imageId: 1,
-	// 				image:
-	// 					'https://www.holiday.by/files/houses/thumbnails/houses_gallery_preview/b0e6762b4c53b77487b1bd65c3cf8ca2.jpeg',
-	// 			},
-	// 		],
-	// 		createdAt: '2022-10-26 21:38:15',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 		status: 'Забронированно',
-	// 	},
-	// 	{
-	// 		houseId: 2,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [],
-	// 		createdAt: '2022-10-26 21:38:15',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 		status: 'Отклонено',
-	// 	},
-	// 	{
-	// 		houseId: 3,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [],
-	// 		createdAt: '2022-10-26 21:38:15',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 		status: 'На рассмотрении',
-	// 	},
-	// 	{
-	// 		houseId: 4,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [],
-	// 		createdAt: '2022-10-26 21:38:15',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 		status: 'пквапа',
-	// 	},
-	// ]
-
-	const [isShowDetails, setIsShowDetails] = useState(false)
-	const toggleShowDetails = () => setIsShowDetails(!isShowDetails)
-
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
 			<SidebarNavbar />
-			<div className="mt-lg-4 w-100">
-				<h2 className="text-center">Забронированные места отдыха</h2>
-				<div className="list-group mt-3">
-					{houses.map(house => (
-						<BookingElement {...house} />
-					))}
+			{isLoading ? (
+				<Loader />
+			) : houses !== ([] as IBookingHouse[]) && houses.length > 0 ? (
+				<div className="mt-lg-4 w-100">
+					<h2 className="text-center">Забронированные места отдыха</h2>
+					<div className="list-group mt-3">
+						{houses.map(house => (
+							<BookingElement {...house} />
+						))}
+					</div>
 				</div>
-			</div>
+			) : (
+				<div className="w-100 d-flex justify-content-center align-items-center flex-column">
+					<h2 className="mb-4 mt-lg-4 text-center mw-50 fs-4">
+						Вы не бронировали места отдаха
+					</h2>
+					<Link
+						to="/houses"
+						className="houses__btn btn btn-outline-primary px-4"
+					>
+						Перейти к местам
+					</Link>
+				</div>
+			)}
 		</Container>
 	)
 }

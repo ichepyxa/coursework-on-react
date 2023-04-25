@@ -12,6 +12,7 @@ const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
 const FilesService = require('./filesService')
 const mailService = require('./mailService')
+const { getUser } = require('./usersService')
 
 class HousesService {
 	async getAllHouses() {
@@ -313,6 +314,40 @@ class HousesService {
 			if (house) {
 				const newHouse = JSON.parse(JSON.stringify(house))
 				newHouse.status = usersBooking[i].status
+
+				houses.push(newHouse)
+			}
+		}
+
+		return houses
+	}
+
+	async updateBookingStatus(bookingId, status) {
+		if (!bookingId) throw new Error('Не указан ID бронирования')
+
+		await UsersBooking.update(
+			{
+				status,
+			},
+			{
+				where: { bookingId },
+			}
+		)
+	}
+
+	async getAllBookingHouses() {
+		const usersBooking = await UsersBooking.findAll()
+
+		let houses = []
+		for (let i = 0; i < usersBooking.length; i++) {
+			const house = await this.getHouseById(usersBooking[i].houseId)
+			const user = await getUser(usersBooking[i].userId)
+
+			if (house) {
+				const newHouse = JSON.parse(JSON.stringify(house))
+				newHouse.status = usersBooking[i].status
+				newHouse.user = user
+				newHouse.bookingId = usersBooking[i].bookingId
 
 				houses.push(newHouse)
 			}

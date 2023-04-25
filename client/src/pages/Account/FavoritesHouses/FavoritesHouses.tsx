@@ -53,7 +53,7 @@ const FavoritesHouses: FC = () => {
 				</div>
 			) : (
 				<div className="w-100 d-flex justify-content-center align-items-center flex-column">
-					<h2 className="mb-4 mt-lg-4 text-center mw-50">
+					<h2 className="mb-4 mt-lg-4 text-center mw-50 fs-4">
 						У вас нет избранных мест отдыха
 					</h2>
 					<Link

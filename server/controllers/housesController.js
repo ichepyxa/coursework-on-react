@@ -91,6 +91,27 @@ class HousesController {
 		}
 	}
 
+	async updateBookingStatus(req, res, next) {
+		try {
+			const updateStatus = await HousesService.updateBookingStatus(
+				req.params.bookingId,
+				req.body.status
+			)
+			res.json(updateStatus)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	async getAllBookingHouses(req, res, next) {
+		try {
+			const houses = await HousesService.getAllBookingHouses()
+			res.json(houses)
+		} catch (error) {
+			next(error)
+		}
+	}
+
 	async addFavoritesHouses(req, res, next) {
 		try {
 			const house = await HousesService.addFavoritesHouses(

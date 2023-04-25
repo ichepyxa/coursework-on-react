@@ -70,6 +70,25 @@ class UsersService {
 		}
 	}
 
+	async getUser(id) {
+		const user = await Users.findOne({
+			where: {
+				userId: id,
+			},
+		})
+
+		return {
+			userId: user.userId,
+			username: user.username,
+			email: user.email,
+			activationLink: user.activationLink,
+			isActivated: user.isActivated,
+			isPassedTest: user.isPassedTest,
+			avatar: user.avatar,
+			roleId: user.roleId,
+		}
+	}
+
 	async activateUser(activationLink) {
 		const user = await Users.findOne({ where: { activationLink } })
 		if (!activationLink && !user) {

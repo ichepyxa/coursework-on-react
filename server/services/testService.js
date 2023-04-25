@@ -1,5 +1,6 @@
 const {
 	test: Test,
+	users: Users,
 	test_answers: TestAnswers,
 	test_questions: TestQuestions,
 	test_results: TestResults,
@@ -27,6 +28,17 @@ class TestService {
 
 	async getResult(user, answers) {
 		if (!user) throw APIError.UnautorizedError()
+
+		await Users.update(
+			{
+				isPassedTest: true,
+			},
+			{
+				where: {
+					userId: user.userId,
+				},
+			}
+		)
 
 		const houses = await getHousesWithServices()
 		const answersFromDB = []

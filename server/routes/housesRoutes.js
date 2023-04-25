@@ -14,6 +14,11 @@ router.get(
 	roleMiddleware(['USER']),
 	HousesController.getBookingHouses
 )
+router.get(
+	'/houses/allBooking',
+	roleMiddleware(['ADMIN']),
+	HousesController.getAllBookingHouses
+)
 router.get('/houses/:houseId', HousesController.getHouseById)
 router.get(
 	'/houses/isBooking/:houseId',
@@ -35,6 +40,11 @@ router.put(
 	'/houses/:houseId',
 	roleMiddleware(['ADMIN']),
 	HousesController.updateHouse
+)
+router.put(
+	'/houses/booking/:bookingId',
+	roleMiddleware(['ADMIN']),
+	HousesController.updateBookingStatus
 )
 router.delete(
 	'/houses/:houseId',

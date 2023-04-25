@@ -92,12 +92,12 @@ const BookingElement: FC<IBookingHouse> = ({
 						)}
 					</h6>
 					<div className="d-flex align-items-center gap-2">
-						<button
+						{/* <button
 							onClick={() => null}
 							className="btn btn-outline-danger d-flex justify-content-center align-items-center gap-2"
 						>
 							<span>Отменить</span>
-						</button>
+						</button> */}
 						<Link
 							to={`/houses/${houseId}`}
 							className="btn btn-outline-primary d-flex justify-content-center align-items-center gap-2"

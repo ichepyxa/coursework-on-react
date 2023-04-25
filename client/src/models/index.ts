@@ -45,6 +45,11 @@ export interface IBookingHouse extends IHouse {
 	status: string | 'На рассмотрении' | 'Отклонено' | 'Забронированно'
 }
 
+export interface IBookingHouses extends IBookingHouse {
+	user: IUser
+	bookingId: number
+}
+
 export interface IHouseUpdateRequest extends IHouse {
 	deletedImages: string[]
 }
