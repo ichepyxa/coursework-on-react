@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import DocumentTitle from 'react-document-title'
+import { useNavigate } from 'react-router-dom'
 
 import displayError from '@src/helpers/displayError'
 import TestService from '@src/services/testService'
@@ -15,6 +16,7 @@ import './style.css'
 
 const Test: FC = () => {
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 
 	const [isTestResult, setIsTestResult] = useState<boolean>(false)
 	const [testResult, setTestResult] = useState<IHouse[]>([] as IHouse[])
@@ -104,35 +106,46 @@ const Test: FC = () => {
 
 	return (
 		<>
-			<DocumentTitle title={`${titleName} тест`} />
 			{isTestResult ? (
-				<div className="py-5 overflow-hidden">
-					<h2 className="text-center">Результаты</h2>
-					<HousesElement houses={testResult} />
-				</div>
+				<>
+					<DocumentTitle title={`${titleName} результаты теста`} />
+					<div className="py-5 overflow-hidden">
+						<h2 className="text-center">Результаты</h2>
+						<HousesElement houses={testResult} />
+						<button
+							onClick={() => navigate(0)}
+							className="mt-4 mx-auto btn btn-outline-primary d-block px-5 py-2"
+						>
+							Перепройти тест
+						</button>
+					</div>
+				</>
 			) : (
-				<div className="d-flex justify-content-center align-items-center flex-column gap-4 main-question px-3 py-5">
-					{isLoading ? (
-						<Loader />
-					) : (
-						<>
-							<Questions
-								questions={questions}
-								currentQuestionIndex={currentQuestionIndex}
-								setCurrentSelectRadio={setCurrentSelectRadio}
-							/>
-							<button
-								className="mt-2 btn btn-outline-primary d-block px-5 py-2"
-								onClick={submitQuestion}
-								disabled={currentSelectRadio ? undefined : true}
-							>
-								{currentQuestionIndex === questions.length - 1
-									? 'Завершить'
-									: 'Далее'}
-							</button>
-						</>
-					)}
-				</div>
+				<>
+					<DocumentTitle title={`${titleName} тест`} />
+					<div className="d-flex justify-content-center align-items-center flex-column gap-4 main-question px-3 py-5">
+						{isLoading ? (
+							<Loader />
+						) : (
+							<>
+								<Questions
+									questions={questions}
+									currentQuestionIndex={currentQuestionIndex}
+									setCurrentSelectRadio={setCurrentSelectRadio}
+								/>
+								<button
+									className="mt-2 btn btn-outline-primary d-block px-5 py-2"
+									onClick={submitQuestion}
+									disabled={currentSelectRadio ? undefined : true}
+								>
+									{currentQuestionIndex === questions.length - 1
+										? 'Завершить'
+										: 'Далее'}
+								</button>
+							</>
+						)}
+					</div>
+				</>
 			)}
 		</>
 	)

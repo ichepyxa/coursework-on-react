@@ -10,45 +10,6 @@ import Loader from '@src/components/Loader/Loader'
 import { Link } from 'react-router-dom'
 
 const TestResult: FC = () => {
-	// const houses: IHouse[] = [
-	// 	{
-	// 		houseId: 1,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [],
-	// 		createdAt: '23fsa f',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 	},
-	// 	{
-	// 		houseId: 2,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [],
-	// 		createdAt: '23fsa f',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 	},
-	// 	{
-	// 		houseId: 3,
-	// 		name: 'fsag',
-	// 		category: 'fdisaknjриалтвыфь штоЛьлладвыф',
-	// 		location: 'gds',
-	// 		price: 3244,
-	// 		description: 'gsgfs',
-	// 		images: [],
-	// 		createdAt: '23fsa f',
-	// 		updatedAt: 'sagasggs',
-	// 		isFavorite: false,
-	// 	},
-	// ]
-
 	const dispatch = useAppDispatch()
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [houses, setHouses] = useState<IHouse[]>([])

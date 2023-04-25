@@ -293,10 +293,32 @@ class HousesService {
 		if (!houseFromDB) throw new Error('Не верный ID места отдыха')
 
 		const usersBooking = await UsersBooking.findOne({
-			where: { houseId, userID: user.userId },
+			where: { houseId, userId: user.userId },
 		})
 
 		return usersBooking ? true : false
+	}
+
+	async getBookingHouses(user) {
+		if (!user) throw APIError.UnautorizedError()
+
+		const usersBooking = await UsersBooking.findAll({
+			where: { userId: user.userId },
+		})
+
+		let houses = []
+		for (let i = 0; i < usersBooking.length; i++) {
+			const house = await this.getHouseById(usersBooking[i].houseId)
+
+			if (house) {
+				const newHouse = JSON.parse(JSON.stringify(house))
+				newHouse.status = usersBooking[i].status
+
+				houses.push(newHouse)
+			}
+		}
+
+		return houses
 	}
 
 	async addBookingHouse(user, houseId) {

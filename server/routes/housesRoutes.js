@@ -9,6 +9,11 @@ router.get(
 	roleMiddleware(['USER']),
 	HousesController.getFavoritesHouses
 )
+router.get(
+	'/houses/booking',
+	roleMiddleware(['USER']),
+	HousesController.getBookingHouses
+)
 router.get('/houses/:houseId', HousesController.getHouseById)
 router.get(
 	'/houses/isBooking/:houseId',

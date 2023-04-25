@@ -41,6 +41,10 @@ export interface IHouse extends ITimeStamps {
 	isFavorite: boolean
 }
 
+export interface IBookingHouse extends IHouse {
+	status: string | 'На рассмотрении' | 'Отклонено' | 'Забронированно'
+}
+
 export interface IHouseUpdateRequest extends IHouse {
 	deletedImages: string[]
 }

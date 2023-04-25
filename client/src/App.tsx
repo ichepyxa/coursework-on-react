@@ -13,7 +13,7 @@ import { useAppSelector } from './store/hook'
 import HouseDescription from './pages/HouseDescription/HouseDescription'
 import FavoritesHouses from './pages/Account/FavoritesHouses/FavoritesHouses'
 import TestResult from './pages/Account/TestResult/TestResult'
-import Booking from './components/Booking/Booking'
+import Booking from './pages/Account/Booking/Booking'
 import Sights from './pages/Sights/Sights'
 import SightDescription from './pages/SightDescription/SightDescription'
 import UploadAvatar from './pages/Account/UploadAvatar/UploadAvatar'
@@ -101,6 +101,7 @@ const App: FC = () => {
 						index
 						element={!isAuth || !isAdmin ? <LoginAdmin /> : <Users />}
 					/>
+					<Route path="booking" element={!isAuth ? <Login /> : <Booking />} />
 				</Route>
 			</Route>
 			<Route path="/" element={<Layout />}>

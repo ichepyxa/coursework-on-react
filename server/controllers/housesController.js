@@ -82,6 +82,15 @@ class HousesController {
 		}
 	}
 
+	async getBookingHouses(req, res, next) {
+		try {
+			const houses = await HousesService.getBookingHouses(req.user)
+			res.json(houses)
+		} catch (error) {
+			next(error)
+		}
+	}
+
 	async addFavoritesHouses(req, res, next) {
 		try {
 			const house = await HousesService.addFavoritesHouses(

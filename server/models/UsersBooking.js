@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
 				autoIncrement: true,
 				primaryKey: true,
 			},
+			status: {
+				type: DataTypes.ENUM('На рассмотрении', 'Отклонено', 'Забронированно'),
+				defaultValue: 'На рассмотрении',
+			},
 		},
 		{
 			charset: 'utf8',

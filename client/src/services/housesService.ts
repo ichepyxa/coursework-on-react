@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import api from '@src/lib/axios/index'
 import {
+	IBookingHouse,
 	IHouse,
 	IHousesFavoritesResponse,
 	IHousesResponse,
@@ -29,6 +30,10 @@ export default class HousesService {
 		AxiosResponse<IHousesFavoritesResponse>
 	> {
 		return api.get<IHousesFavoritesResponse>('/houses/favoritesHouses')
+	}
+
+	static async getBookingHouses(): Promise<AxiosResponse<IBookingHouse[]>> {
+		return api.get<IBookingHouse[]>('/houses/booking')
 	}
 
 	static async getHouse(id: string): Promise<AxiosResponse<IHouse>> {

@@ -3,7 +3,7 @@
 	height: 50px;
 	border-radius: 5px;
 	object-position: center;
-	background: url(../../../public/images/no-house-img.svg) 50% 50% no-repeat;
+	background: url(../../../../public/images/no-house-img.svg) 50% 50% no-repeat;
 	background-color: #eeeeee;
 	background-size: contain;
 	z-index: 2;

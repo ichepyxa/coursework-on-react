@@ -55,14 +55,6 @@ const SidebarNav: FC = () => {
 						Результаты теста
 					</Link>
 				</li>
-				{/* <li>
-					<Link
-						to="/account/profile/test"
-						className={changeActiveLink('/account/profile/test')}
-					>
-						Тест
-					</Link>
-				</li>
 				<li>
 					<Link
 						to="/account/profile/booking"
@@ -70,7 +62,7 @@ const SidebarNav: FC = () => {
 					>
 						Бронирование
 					</Link>
-				</li> */}
+				</li>
 			</ul>
 		</div>
 	)
