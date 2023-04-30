@@ -6,6 +6,7 @@ const {
 	test_results: TestResults,
 } = require('../models')
 const { getHouseById, getHousesWithServices } = require('./housesService')
+const APIError = require("../exceptions/apiExceptions");
 
 class TestService {
 	async getTest() {
@@ -40,8 +41,8 @@ class TestService {
 			}
 		)
 
+		// const answersFromDB = []
 		const houses = await getHousesWithServices()
-		const answersFromDB = []
 		let filteredHouses = [...houses]
 		let days = 1
 
@@ -100,7 +101,7 @@ class TestService {
 				break
 			}
 
-			answersFromDB.push(answerFromDB)
+			// answersFromDB.push(answerFromDB)
 		}
 
 		const userTestResults = await TestResults.findAll({
@@ -110,13 +111,19 @@ class TestService {
 		})
 
 		let resultIndex = 0
+		let repeatCount = 0
 		const randomFilterHouses = []
 		while (randomFilterHouses.length < 6) {
 			const house =
 				filteredHouses[Math.floor(Math.random() * filteredHouses.length)]
 
+			if (repeatCount > 20) break
 			if (randomFilterHouses.length === filteredHouses.length) break
+
+			repeatCount++
+
 			if (randomFilterHouses.includes(house)) continue
+			if (['Кафе', 'Ресторан', 'Открытая беседка', 'Закрытая беседка'].includes(house.category)) continue
 
 			if (
 				!userTestResults ||

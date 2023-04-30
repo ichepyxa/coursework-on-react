@@ -1,6 +1,7 @@
 */.git
 */node_modules
 start-command.txt
-*/.DS_Store
+.DS_Store
 */files
+.idea
 /documentation

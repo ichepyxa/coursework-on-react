@@ -119,7 +119,7 @@ const BookingElementAdmin: FC<IBookingHouses> = ({
 								</span>
 							) : currentStatus === 'Забронированно' ? (
 								<span className="p-1 px-2 border border-2 border-success text-success rounded">
-									Забронированно
+									Забронировано
 								</span>
 							) : (
 								<span className="p-1 px-2 border border-2 border-dark text-dark rounded">
