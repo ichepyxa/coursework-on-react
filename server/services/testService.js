@@ -122,7 +122,14 @@ class TestService {
 
 			repeatCount++
 
-			if (randomFilterHouses.includes(house)) continue
+			let isExists = false
+			for (let i = 0; i < randomFilterHouses.length; i++) {
+				if (JSON.stringify(randomFilterHouses[i]) === JSON.stringify(house)) {
+					isExists = true
+				}
+			}
+
+			if (isExists) continue
 			if (['Кафе', 'Ресторан', 'Открытая беседка', 'Закрытая беседка'].includes(house.category)) continue
 
 			if (
