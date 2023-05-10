@@ -78,9 +78,9 @@ const CreateNewSight: FC = () => {
 
 	useEffect(() => {
 		if (name.length > 0 || category.length > 0 || location.length > 0) {
-			setIsValidName(name.length > 2 ? true : false)
-			setIsValidCategory(category.length > 3 ? true : false)
-			setIsValidLocation(location.length > 10 ? true : false)
+			setIsValidName(name.length > 2)
+			setIsValidCategory(category.length > 3)
+			setIsValidLocation(location.length > 10)
 		}
 	}, [name, category, location])
 

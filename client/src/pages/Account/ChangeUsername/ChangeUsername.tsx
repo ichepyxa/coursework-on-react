@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,6 +13,8 @@ import UsersService from '@src/services/usersService'
 import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
+import {titleName} from "@src/constants/titleName";
+import DocumentTitle from "react-document-title";
 
 const ChangeUsername: FC = () => {
 	const dispatch = useAppDispatch()
@@ -49,6 +51,8 @@ const ChangeUsername: FC = () => {
 
 	return (
 		<Container>
+			<DocumentTitle title={`${titleName} изменение имени пользователя`} />
+
 			<Form
 				className="form-changeUsername"
 				onSubmit={e => handleChangeUsername(e)}

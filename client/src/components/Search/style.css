@@ -1,8 +1,5 @@
 @media (max-width: 768px) {
-	.search-area {
-		margin-bottom: 1rem;
-	}
-
+	.search-area,
 	.search-title {
 		margin-bottom: 1rem;
 	}

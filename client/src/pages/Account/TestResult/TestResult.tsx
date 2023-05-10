@@ -1,13 +1,15 @@
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import HousesElement from '../../../components/HousesElement/HousesElement'
 import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
-import { IHouse } from '../../../models/index'
+import { IHouse } from '@src/models'
 import { useAppDispatch } from '@src/store/hook'
 import TestService from '@src/services/testService'
 import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
 import Loader from '@src/components/Loader/Loader'
 import { Link } from 'react-router-dom'
+import {titleName} from "@src/constants/titleName";
+import DocumentTitle from "react-document-title";
 
 const TestResult: FC = () => {
 	const dispatch = useAppDispatch()
@@ -38,6 +40,8 @@ const TestResult: FC = () => {
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
 			<SidebarNavbar />
+			<DocumentTitle title={`${titleName} результаты теста`} />
+
 			{isLoading ? (
 				<Loader />
 			) : houses !== ([] as IHouse[]) && houses.length > 0 ? (

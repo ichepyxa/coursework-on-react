@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
@@ -11,6 +11,8 @@ import displayTroubleConnectionError from '@src/helpers/displayTroubleConnection
 import HousesService from '@src/services/housesService'
 
 import './style.css'
+import {titleName} from "@src/constants/titleName";
+import DocumentTitle from "react-document-title";
 
 const FavoritesHouses: FC = () => {
 	const dispatch = useAppDispatch()
@@ -44,6 +46,8 @@ const FavoritesHouses: FC = () => {
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
 			<SidebarNavbar />
+			<DocumentTitle title={`${titleName} избранные места отдыха`} />
+
 			{isLoading ? (
 				<Loader />
 			) : houses !== ([] as IHouse[]) && houses.length > 0 ? (

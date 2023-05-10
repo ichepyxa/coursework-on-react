@@ -42,7 +42,8 @@ const Booking: FC = () => {
 
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
-			<DocumentTitle title={`${titleName} админ панель | Бронирование`} />
+			<DocumentTitle title={`${titleName} бронирование`} />
+
 			<SidebarNavbarAdmin />
 			<div className="mt-lg-4 w-100 position-relative">
 				<h2 className="text-center mb-4 word-break">Бронирование</h2>

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,6 +12,8 @@ import displaySuccess from '@src/helpers/displaySuccess'
 import UsersService from '@src/services/usersService'
 
 import './style.css'
+import {titleName} from "@src/constants/titleName";
+import DocumentTitle from "react-document-title";
 
 type ChangePasswordProps = {
 	backPath: string
@@ -61,6 +63,8 @@ const ChangePassword: FC<ChangePasswordProps> = ({ backPath }) => {
 
 	return (
 		<Container>
+			<DocumentTitle title={`${titleName} изменение пароля`} />
+
 			<Form
 				className="form-changeUsername"
 				onSubmit={e => handleChangePassword(e)}

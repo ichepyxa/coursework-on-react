@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,6 +15,8 @@ import UsersService from '@src/services/usersService'
 import displaySuccess from '@src/helpers/displaySuccess'
 
 import './style.css'
+import {titleName} from "@src/constants/titleName";
+import DocumentTitle from "react-document-title";
 
 const UploadAvatar: FC = () => {
 	const dispatch = useAppDispatch()
@@ -84,6 +86,7 @@ const UploadAvatar: FC = () => {
 			as="section"
 			className="upload-avatar d-flex flex-column justify-content-center align-items-center"
 		>
+			<DocumentTitle title={`${titleName} загрузка фото`} />
 			<h2 className="mb-4 text-center">Загрузка фото</h2>
 			<img
 				className="avatar border-primary border border-2 mb-3 rounded-circle"

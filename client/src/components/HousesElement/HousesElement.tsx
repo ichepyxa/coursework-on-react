@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 
-import { IHouse } from '@src/models/index'
+import { IHouse } from '@src/models'
 import House from '@src/components/House/House'
 import filterFavoritesHouses from '@src/helpers/filterFavoritesHouses'
 import { useAuth } from '@src/hooks/useAuth'

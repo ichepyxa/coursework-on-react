@@ -149,3 +149,8 @@ export interface NotificationState {
 	isError: boolean
 	errors: []
 }
+
+export interface BookingHouse {
+	isBooking: boolean
+	status: string
+}

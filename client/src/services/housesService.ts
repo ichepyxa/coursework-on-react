@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import api from '@src/lib/axios/index'
 import {
+	BookingHouse,
 	IBookingHouse,
 	IBookingHouses,
 	IHouse,
@@ -45,8 +46,8 @@ export default class HousesService {
 		return api.get<IHouse>(`/houses/${id}`)
 	}
 
-	static async getIsBooking(id: string): Promise<AxiosResponse<boolean>> {
-		return api.get<boolean>(`/houses/isBooking/${id}`)
+	static async getIsBooking(id: string): Promise<AxiosResponse<BookingHouse>> {
+		return api.get<BookingHouse>(`/houses/isBooking/${id}`)
 	}
 
 	static async createHouse(data: FormData): Promise<AxiosResponse<IHouse>> {

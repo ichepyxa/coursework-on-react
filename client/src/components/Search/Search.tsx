@@ -12,6 +12,7 @@ const Search: FC<{ pageHrefPath: string }> = ({ pageHrefPath }) => {
 
 	const [inputName, setInputName] = useState<string>(name)
 	const [selectRegion, setSelectRegion] = useState<string | number>(region)
+	const [selectType, setSelectType] = useState<string | number>(1)
 
 	const filterBtnClick = (name: string, region: string | number) =>
 		navigate(createHref(pageHrefPath, 1, name, region))

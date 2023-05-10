@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import SidebarNavbar from '../../../components/SidebarNavbar/SidebarNavbar'
-import { IBookingHouse } from '../../../models/index'
+import { IBookingHouse } from '@src/models'
 import BookingElement from '../../../components/BookingElement/BookingElement'
 import { useAppDispatch } from '@src/store/hook'
 import displayTroubleConnectionError from '@src/helpers/displayTroubleConnectionError'
@@ -10,6 +10,8 @@ import Loader from '@src/components/Loader/Loader'
 import './style.css'
 import { Link } from 'react-router-dom'
 import HousesService from '@src/services/housesService'
+import {titleName} from "@src/constants/titleName";
+import DocumentTitle from "react-document-title";
 
 const Booking: FC = () => {
 	const dispatch = useAppDispatch()
@@ -43,6 +45,8 @@ const Booking: FC = () => {
 	return (
 		<Container className="d-flex gap-5 py-4 flex-lg-row flex-column">
 			<SidebarNavbar />
+			<DocumentTitle title={`${titleName} запросы на бронирование мест отдыха`} />
+
 			{isLoading ? (
 				<Loader />
 			) : houses !== ([] as IBookingHouse[]) && houses.length > 0 ? (

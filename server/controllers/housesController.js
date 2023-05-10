@@ -72,11 +72,11 @@ class HousesController {
 
 	async isBookingHouse(req, res, next) {
 		try {
-			const isBooking = await HousesService.isBookingHouse(
+			const booking = await HousesService.isBookingHouse(
 				req.user,
 				req.params.houseId
 			)
-			res.json(isBooking)
+			res.json(booking)
 		} catch (error) {
 			next(error)
 		}

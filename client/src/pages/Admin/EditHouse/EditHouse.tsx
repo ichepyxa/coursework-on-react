@@ -127,9 +127,9 @@ const EditHouse: FC = () => {
 
 	useEffect((): void => {
 		if (name.length > 0 || category.length > 0 || location.length > 0) {
-			setIsValidName(name.length > 2 ? true : false)
-			setIsValidnewCategory(category.length > 3 ? true : false)
-			setIsValidLocation(location.length > 10 ? true : false)
+			setIsValidName(name.length > 2)
+			setIsValidnewCategory(category.length > 3)
+			setIsValidLocation(location.length > 10)
 		}
 	}, [name, category, location])
 
