@@ -9,7 +9,7 @@ import {
 	IHousesFavoritesResponse,
 	IHousesResponse,
 	IHouseUpdateRequest,
-} from '@src/models/index'
+} from '@src/models'
 
 export default class HousesService {
 	static async getHouses(

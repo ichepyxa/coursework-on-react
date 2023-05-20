@@ -1,6 +1,6 @@
 const APIError = require('../exceptions/apiExceptions')
 const TokenService = require('../services/tokenService')
-const { users_roles: UsersRoles } = require('../models')
+const { users_roles: UsersRoles, users: Users} = require('../models')
 
 module.exports = function (roles) {
 	return async function (req, res, next) {
@@ -22,6 +22,18 @@ module.exports = function (roles) {
 			const userData = TokenService.validateAccessToken(accessToken)
 			if (!userData) {
 				return next(APIError.UnautorizedError())
+			}
+
+			const user = await Users.findOne({
+				where: {
+					email: userData.email
+				}
+			})
+
+			if (user.isBanned) {
+				return next(APIError.BadRequest(
+					`Аккаунт заблокирован`
+				))
 			}
 
 			const userRole = await UsersRoles.findByPk(userData.roleId)

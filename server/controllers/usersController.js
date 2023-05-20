@@ -142,6 +142,22 @@ class UsersController {
 			next(error)
 		}
 	}
+
+	async toggleBanned(req, res, next) {
+		try {
+			const errors = validationResult(req)
+			if (!errors.isEmpty()) {
+				throw APIError.BadRequest('Ошибка при входе в аккаунт', errors.array())
+			}
+
+			const { email } = req.body
+			await UsersService.toggleBanned(email)
+
+			res.json()
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = new UsersController()

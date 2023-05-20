@@ -38,7 +38,7 @@ class UsersService {
 			isPassedTest,
 			avatar,
 			roleId,
-			isAdmin,
+			isAdmin
 		}
 
 		const tokens = TokenService.generateTokens(payload)
@@ -55,7 +55,7 @@ class UsersService {
 
 		return {
 			count: users.length,
-			users: users.map(user => {
+			users: users.map(user  => {
 				return {
 					userId: user.userId,
 					username: user.username,
@@ -65,6 +65,7 @@ class UsersService {
 					isPassedTest: user.isPassedTest,
 					avatar: user.avatar,
 					roleId: user.roleId,
+					isBanned: user.isBanned
 				}
 			}),
 		}
@@ -86,6 +87,7 @@ class UsersService {
 			isPassedTest: user.isPassedTest,
 			avatar: user.avatar,
 			roleId: user.roleId,
+			isBanned: user.isBanned
 		}
 	}
 
@@ -152,6 +154,12 @@ class UsersService {
 		const isCorrectPassword = await bcypt.compare(password, user.password)
 		if (!isCorrectPassword) throw APIError.BadRequest('Неверный пароль')
 
+		if (user.isBanned) {
+			throw APIError.BadRequest(
+				`Аккаунт заблокирован`
+			)
+		}
+
 		const isAdmin = await checkIsAdmin(user)
 		const response = await this.generateResponse(
 			user.userId,
@@ -183,6 +191,12 @@ class UsersService {
 		if (!userData || !tokenFromDB) throw APIError.UnautorizedError()
 
 		const user = await Users.findOne({ where: { userId: userData.userId } })
+		if (user.isBanned) {
+			throw APIError.BadRequest(
+				`Аккаунт заблокирован`
+			)
+		}
+
 		const isAdmin = await checkIsAdmin(user)
 		const response = await this.generateResponse(
 			user.userId,
@@ -233,6 +247,14 @@ class UsersService {
 			isAdmin
 		)
 		return response
+	}
+
+	async toggleBanned(email) {
+		const user = await Users.findOne({ where: { email } })
+		if (!user) throw APIError.BadRequest('Пользователь не найден')
+		
+		user.isBanned = !user.isBanned
+		user.save()
 	}
 }
 

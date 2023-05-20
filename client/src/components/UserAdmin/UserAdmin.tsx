@@ -1,11 +1,12 @@
-import { FC, useState } from 'react'
+import {FC, useEffect, useState} from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, Modal } from 'react-bootstrap'
 
-import { IUserAdmin } from '@src/models/index'
+import {IUserAdmin} from '@src/models'
 import { API_DOMAIN } from '@src/constants/apiUrl'
 
 import './style.css'
+import UsersService from "@src/services/usersService";
 
 const UserAdmin: FC<IUserAdmin> = ({
 	username,
@@ -13,21 +14,36 @@ const UserAdmin: FC<IUserAdmin> = ({
 	email,
 	isPassedTest,
 	isActivated,
+	isBanned
 }) => {
-	const dispatch = useDispatch()
+	const [showIsBanned, setShowIsBanned] = useState(isBanned)
 	const [isShowModal, setIsShowModal] = useState(false)
 	const [isShowDetails, setIsShowDetails] = useState(false)
 	const [isPermission, setIsPermission] = useState(false)
 
+	const toggleBanned = async (): Promise<void> => {
+		if (!email) {
+			return
+		}
+
+		await UsersService.toggleBanned(email).then(response => {
+			if (response.status > 300) {
+				return
+			}
+
+			setShowIsBanned((state) => !state)
+		})
+	}
+
 	const toggleShowDetails = () => setIsShowDetails(!isShowDetails)
 
-	// useEffect(() => {
-	// 	if (isPermission) {
-	// 		blockUser()
-	// 		setIsShowModal(false)
-	// 		setIsPermission(false)
-	// 	}
-	// }, [isPermission])
+	useEffect(() => {
+		if (isPermission) {
+			toggleBanned()
+			setIsShowModal(false)
+			setIsPermission(false)
+		}
+	}, [isPermission])
 
 	return (
 		<>
@@ -84,28 +100,12 @@ const UserAdmin: FC<IUserAdmin> = ({
 							<span className="fw-semibold">Подтвержден:</span>{' '}
 							{isActivated ? 'да' : 'нет'}
 						</h6>
-						{/* <button
+						<button
 							onClick={() => setIsShowModal(true)}
-							className="btn btn-danger d-block ms-auto"
+							className={`btn d-block ms-auto ${showIsBanned ? "btn-success" : "btn-danger"}`}
 						>
-							Заблокировать
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								strokeWidth="2"
-								stroke="currentColor"
-								fill="none"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							>
-								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-								<rect x="5" y="11" width="14" height="10" rx="2"></rect>
-								<circle cx="12" cy="16" r="1"></circle>
-								<path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
-							</svg>
-						</button> */}
+							{showIsBanned ? "Разблокировать" : "Заблокировать"}
+						</button>
 					</div>
 				) : (
 					<></>
@@ -116,14 +116,14 @@ const UserAdmin: FC<IUserAdmin> = ({
 					<Modal.Title>Подтверждение</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					Вы действительно хотите заблокировать данного пользователя?
+					Вы действительно хотите {showIsBanned ? "разблокировать" : "заблокировать"} данного пользователя?
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="danger" onClick={() => setIsShowModal(false)}>
 						Нет
 					</Button>
 					<Button variant="primary" onClick={() => setIsPermission(true)}>
-						Да, заблокировать
+						Да, {showIsBanned ? "разблокировать" : "заблокировать"}
 					</Button>
 				</Modal.Footer>
 			</Modal>

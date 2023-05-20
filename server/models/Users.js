@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				defaultValue: '',
 			},
+			isBanned: {
+				type: DataTypes.BOOLEAN,
+				defaultValue: false,
+				allowNull: false,
+			},
 		},
 		{
 			charset: 'utf8',

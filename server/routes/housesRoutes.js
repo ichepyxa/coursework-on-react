@@ -25,7 +25,11 @@ router.get(
 	roleMiddleware(['USER']),
 	HousesController.isBookingHouse
 )
-router.post('/houses', roleMiddleware(['ADMIN']), HousesController.createHouse)
+router.post(
+	'/houses',
+	roleMiddleware(['ADMIN']),
+	HousesController.createHouse
+)
 router.post(
 	'/houses/favoritesHouses',
 	roleMiddleware(['USER']),

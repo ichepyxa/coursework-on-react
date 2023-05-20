@@ -5,7 +5,7 @@ import {
 	IAvatar,
 	IChangeUsernameResponse,
 	IUserResponse,
-} from '@src/models/index'
+} from '@src/models'
 
 export default class UsersService {
 	static async getUsers(): Promise<AxiosResponse<IUserResponse>> {
@@ -31,6 +31,14 @@ export default class UsersService {
 	): Promise<AxiosResponse<IChangeUsernameResponse>> {
 		return api.put<IChangeUsernameResponse>('/users/changeUsername', {
 			username,
+		})
+	}
+
+	static async toggleBanned(
+		email: string
+	): Promise<AxiosResponse<void>> {
+		return api.put<void>('/users/toggleBanned', {
+			email,
 		})
 	}
 

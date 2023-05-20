@@ -23,6 +23,7 @@ export interface IUserResponse {
 
 export interface IUserAdmin extends IUser {
 	role: string | undefined
+	isBanned: boolean | undefined
 }
 
 export interface IUsersResponse {
