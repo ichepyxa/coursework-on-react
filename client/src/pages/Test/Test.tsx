@@ -111,7 +111,7 @@ const Test: FC = () => {
 					<DocumentTitle title={`${titleName} результаты теста`} />
 					<div className="py-5 overflow-hidden">
 						<h2 className="text-center">Результаты</h2>
-						<HousesElement houses={testResult} />
+						{testResult.length > 0 ? <HousesElement houses={testResult} /> : <h5 className="my-4 text-center">Не удалось подобрать места отдыха</h5>}
 						<button
 							onClick={() => navigate(0)}
 							className="mt-4 mx-auto btn btn-outline-primary d-block px-5 py-2"

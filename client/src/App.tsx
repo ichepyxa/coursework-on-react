@@ -37,7 +37,6 @@ import './App.css'
 
 const App: FC = () => {
 	const isAuth = useAppSelector(state => state.user.isAuth)
-	const navigate = useNavigate()
 	const { isAdmin } = useAuth()
 
 	return (

@@ -1,5 +1,5 @@
 import { useAppSelector } from '../store/hook'
-import { IUser } from '../models/index'
+import { IUser } from '../models'
 
 export const useAuth = () => {
 	const {
