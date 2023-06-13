@@ -21,7 +21,7 @@ app.use(express.json())
 app.use(
 	cors({
 		credentials: true,
-		origin: config.CLIENT_URL,
+		origin: config.CLIENT_URL
 	})
 )
 app.use(cookieParser())

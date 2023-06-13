@@ -188,6 +188,7 @@ class UsersService {
 		const userData = TokenService.validateRefreshToken(refreshToken)
 		const tokenFromDB = await TokenService.findToken(refreshToken)
 
+
 		if (!userData || !tokenFromDB) throw APIError.UnautorizedError()
 
 		const user = await Users.findOne({ where: { userId: userData.userId } })

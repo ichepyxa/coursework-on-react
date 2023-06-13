@@ -1,8 +1,9 @@
 import axios from 'axios'
 
 import { API_URL } from '@src/constants/apiUrl'
-import { IUserResponse } from '@src/models/index'
+import { IUserResponse } from '@src/models'
 
+axios.defaults.withCredentials = true;
 const api = axios.create({
 	withCredentials: true,
 	baseURL: API_URL,

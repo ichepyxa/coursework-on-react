@@ -101,10 +101,6 @@ const LoginAdmin: FC = () => {
 				>
 					Войти
 				</Button>
-				<p className="small text-center text-gray-soft">
-					Забыли пароль?{' '}
-					<Link to="/admin/restorePassword">Восстановить пароль</Link>
-				</p>
 			</Form>
 		</Container>
 	)

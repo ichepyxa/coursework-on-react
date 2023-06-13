@@ -13,6 +13,7 @@ const Regions = require('../constants/Regions')
 const FilesService = require('./filesService')
 const mailService = require('./mailService')
 const {getUser} = require('./usersService')
+const APIError = require('../exceptions/apiExceptions')
 
 class HousesService {
   async getAllHouses() {

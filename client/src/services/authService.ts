@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 
 import api from '@src/lib/axios/index'
-import { IUserResponse } from '@src/models/index'
+import { IUserResponse } from '@src/models'
 
 export default class AuthService {
 	static async login(

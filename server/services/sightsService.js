@@ -8,6 +8,7 @@ const { Op } = require('sequelize')
 const Regions = require('../constants/Regions')
 const FilesService = require('./filesService')
 const config = require('../config/server_config')
+const APIError = require('../exceptions/apiExceptions')
 
 class SightsService {
 	async getAllSights() {

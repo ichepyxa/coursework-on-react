@@ -7,6 +7,8 @@ function addRefreshTokenInCookie(res, refreshToken) {
 	res.cookie('refreshToken', refreshToken, {
 		maxAge: 30 * 24 * 60 * 60 * 1000,
 		httpOnly: true,
+		sameSite: 'none',
+		secure: true,
 
 		// Doesn't work on hosting without it
 		// sameSite: 'none',
